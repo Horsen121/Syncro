@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Syncro</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <!--  Login page  -->
+    <string name="login_hello">Добро пожаловать!</string>
+    <string name="login_placeholder_email">Введите свой email...</string>
+    <string name="login_placeholder_password">Введите свой пароль...</string>
+    <string name="login_forgot">Забыли пароль?</string>
+    <string name="login_button_text">Войти</string>
+    <string name="login_register_text">Нет аккаунта?</string>
+    <string name="login_register_link">Зарегистрируйтесь сейчас!</string>
+    <string name="login_continue_variants">Или войдите с помощью:</string>
+</resources>
