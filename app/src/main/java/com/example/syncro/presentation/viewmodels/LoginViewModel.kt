@@ -27,4 +27,8 @@ class LoginViewModel @Inject constructor(
 
     }
 
+    fun signInWithGoogle() {
+
+    }
+
 }
