@@ -36,7 +36,8 @@ import com.example.syncro.application.Routing
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.models.elements.PasswordTextField
 import com.example.syncro.presentation.ui.models.elements.SimpleTextField
-import com.example.syncro.presentation.ui.models.elements.TextBodyLarge
+import com.example.syncro.presentation.ui.models.elements.TextBodyMedium
+import com.example.syncro.presentation.ui.models.elements.TextHeadLarge
 import com.example.syncro.presentation.ui.models.elements.TextHeadSmall
 import com.example.syncro.presentation.viewmodels.LoginViewModel
 
@@ -62,7 +63,7 @@ fun LoginScreen(
         )
         Spacer(modifier = Modifier.height(12.dp))
 
-        TextHeadSmall(text = stringResource(id = R.string.login_hello))
+        TextHeadLarge(text = stringResource(id = R.string.login_hello))
 
         Column(
             horizontalAlignment = Alignment.Start,
@@ -72,19 +73,21 @@ fun LoginScreen(
             SimpleTextField(
                 value = viewModel.login.value,
                 onValueChange = { viewModel.onLoginChange(it) },
-                placeholder = { TextBodyLarge(text = stringResource(id = R.string.login_placeholder_email)) }
+                placeholder = { TextBodyMedium(text = stringResource(id = R.string.login_placeholder_email)) },
+                modifier = Modifier.padding(5.dp, 0.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
 
             PasswordTextField(
                 value = viewModel.password.value,
                 onValueChange = { viewModel.onPasswordChange(it) },
-                placeholder = { TextBodyLarge(text = stringResource(id = R.string.login_placeholder_password)) }
+                placeholder = { TextBodyMedium(text = stringResource(id = R.string.login_placeholder_password)) },
+                modifier = Modifier.padding(5.dp, 0.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
 
 
-            TextBodyLarge(
+            TextBodyMedium(
                 text = stringResource(id = R.string.login_forgot),
                 color = Color.Blue
             )
@@ -103,9 +106,9 @@ fun LoginScreen(
         }
         Spacer(modifier = Modifier.height(12.dp))
 
-        TextBodyLarge(text = stringResource(id = R.string.login_register_text))
+        TextBodyMedium(text = stringResource(id = R.string.login_register_text))
         TextButton(onClick = { navController.navigate(Routing.RegistrationScreen.route) }) {
-            TextBodyLarge(text = stringResource(id = R.string.login_register_link), color = Color.Blue)
+            TextBodyMedium(text = stringResource(id = R.string.login_register_link), color = Color.Blue)
         }
 
         HorizontalDivider()
@@ -114,7 +117,7 @@ fun LoginScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextBodyLarge(text = stringResource(id = R.string.login_continue_variants))
+            TextBodyMedium(text = stringResource(id = R.string.login_continue_variants))
 
             Row(
                 horizontalArrangement = Arrangement.Center,

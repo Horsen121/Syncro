@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.screens.LoginScreen
+import com.example.syncro.presentation.ui.screens.RegistrationScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,7 +32,15 @@ class MainActivity : ComponentActivity() {
                                 paddingValues = innerPadding
                             )
                         }
+                        composable(route = Routing.RegistrationScreen.route) {
+                            RegistrationScreen(
+                                navController = navController,
+                                paddingValues = innerPadding
+                            )
+                        }
                     }
+
+
                 }
             }
         }

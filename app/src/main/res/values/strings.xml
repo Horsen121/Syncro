@@ -2,13 +2,30 @@
     <string name="app_name">Syncro</string>
     <string name="title_activity_main">MainActivity</string>
 
+    <!--  Elements  -->
+    <string name="cancel">Отмена</string>
+
+
     <!--  Login page  -->
     <string name="login_hello">Добро пожаловать!</string>
-    <string name="login_placeholder_email">Введите свой email...</string>
-    <string name="login_placeholder_password">Введите свой пароль...</string>
+    <string name="login_placeholder_email">Введите свой email</string>
+    <string name="login_placeholder_password">Введите свой пароль</string>
     <string name="login_forgot">Забыли пароль?</string>
     <string name="login_button_text">Войти</string>
     <string name="login_register_text">Нет аккаунта?</string>
     <string name="login_register_link">Зарегистрируйтесь сейчас!</string>
     <string name="login_continue_variants">Или войдите с помощью:</string>
+
+    <!--  Register page  -->
+    <string name="reg_hello">Регистрация</string>
+    <string name="reg_desc">Создайте аккаунт, чтобы начать</string>
+    <string name="reg_name_head">Имя</string>
+    <string name="reg_name_pl">Введите имя</string>
+    <string name="reg_email_head">Email</string>
+    <string name="reg_email_pl">Введите email</string>
+    <string name="reg_pass_head">Пароль</string>
+    <string name="reg_pass_pl1">Введите пароль</string>
+    <string name="reg_pass_pl2">Повторите пароль</string>
+    <string name="reg_agreement">Я прочитал и согласен с Условиями и Политикой конфиденциальности.</string>
+    <string name="reg_button_text">Зарегистрироваться</string>
 </resources>

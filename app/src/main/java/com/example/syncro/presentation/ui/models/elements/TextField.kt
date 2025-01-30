@@ -2,6 +2,7 @@ package com.example.syncro.presentation.ui.models.elements
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,10 +24,11 @@ import com.example.syncro.application.ui.theme.SyncroTheme
 @Composable
 fun SimpleTextField(
     value: String,
+    modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit,
-    placeholder: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)?,
     isError: Boolean = false,
-    modifier: Modifier = Modifier
+    fillMaxWidth: Boolean = true
 ) {
     OutlinedTextField(
         value = value,
@@ -40,17 +43,18 @@ fun SimpleTextField(
             focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
-        modifier = modifier
+        modifier = if(fillMaxWidth) modifier.fillMaxWidth() else modifier
     )
 }
 
 @Composable
 fun PasswordTextField(
     value: String,
+    modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit,
-    placeholder: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)?,
     isError: Boolean = false,
-    modifier: Modifier = Modifier
+    fillMaxWidth: Boolean = true
 ) {
     OutlinedTextField(
         value = value,
@@ -66,7 +70,7 @@ fun PasswordTextField(
             focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
-        modifier = modifier
+        modifier = if(fillMaxWidth) modifier.fillMaxWidth() else modifier
     )
 }
 
@@ -77,9 +81,13 @@ fun TextFieldPreview() {
     SyncroTheme {
         Column {
             val text = remember { mutableStateOf("text") }
-            SimpleTextField(value = text.value, onValueChange = { text.value = it })
+            SimpleTextField(value = text.value, onValueChange = { text.value = it }, placeholder = { Text(
+                text = "sdfsdf"
+            )})
             Spacer(modifier = Modifier.height(10.dp))
-            PasswordTextField(value = text.value, onValueChange = { text.value = it })
+            PasswordTextField(value = text.value, onValueChange = { text.value = it }, placeholder = { Text(
+                text = "sdfsdf"
+            )})
         }
     }
 }
