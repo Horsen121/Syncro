@@ -6,6 +6,10 @@
     <string name="cancel">Отмена</string>
 
 
+    <!--  Routing names  -->
+    <string name="routing_group">Группа </string>
+    <string name="routing_groups">Группы </string>
+
     <!--  Login page  -->
     <string name="login_hello">Добро пожаловать!</string>
     <string name="login_placeholder_email">Введите свой email</string>
@@ -26,6 +30,9 @@
     <string name="reg_pass_head">Пароль</string>
     <string name="reg_pass_pl1">Введите пароль</string>
     <string name="reg_pass_pl2">Повторите пароль</string>
-    <string name="reg_agreement">Я прочитал и согласен с Условиями и Политикой конфиденциальности.</string>
+    <string name="reg_agreement_1">Я прочитал и согласен с </string>
+    <string name="reg_agreement_2"> Условиями </string>
+    <string name="reg_agreement_3"> и </string>
+    <string name="reg_agreement_4"> Политикой конфиденциальности</string>
     <string name="reg_button_text">Зарегистрироваться</string>
 </resources>

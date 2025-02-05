@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -43,98 +42,110 @@ import com.example.syncro.presentation.viewmodels.LoginViewModel
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
-    paddingValues: PaddingValues
+    navController: NavController
 ) {
     val viewModel = LoginViewModel()
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(0.dp, 0.dp, 0.dp, paddingValues.calculateBottomPadding())
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxHeight(0.35f)
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-
-        TextHeadLarge(text = stringResource(id = R.string.login_hello))
-
+    Scaffold(
+        modifier = Modifier.fillMaxSize()
+    ) { paddingValues ->
         Column(
-            horizontalAlignment = Alignment.Start,
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(10.dp, 20.dp)
+                .fillMaxSize()
+                .padding(0.dp, paddingValues.calculateTopPadding(), 0.dp, paddingValues.calculateBottomPadding())
         ) {
-            SimpleTextField(
-                value = viewModel.login.value,
-                onValueChange = { viewModel.onLoginChange(it) },
-                placeholder = { TextBodyMedium(text = stringResource(id = R.string.login_placeholder_email)) },
-                modifier = Modifier.padding(5.dp, 0.dp)
+            Image(
+                painter = painterResource(id = R.drawable.ic_launcher_background),
+                contentScale = ContentScale.Crop,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxHeight(0.35f)
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-            PasswordTextField(
-                value = viewModel.password.value,
-                onValueChange = { viewModel.onPasswordChange(it) },
-                placeholder = { TextBodyMedium(text = stringResource(id = R.string.login_placeholder_password)) },
-                modifier = Modifier.padding(5.dp, 0.dp)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
+            TextHeadLarge(text = stringResource(id = R.string.login_hello))
+
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .padding(10.dp, 20.dp)
+            ) {
+                SimpleTextField(
+                    value = viewModel.login.value,
+                    onValueChange = { viewModel.onLoginChange(it) },
+                    placeholder = { TextBodyMedium(
+                        text = stringResource(id = R.string.login_placeholder_email),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    ) },
+                    modifier = Modifier.padding(5.dp, 0.dp)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                PasswordTextField(
+                    value = viewModel.password.value,
+                    onValueChange = { viewModel.onPasswordChange(it) },
+                    placeholder = { TextBodyMedium(
+                        text = stringResource(id = R.string.login_placeholder_password),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    ) },
+                    modifier = Modifier.padding(5.dp, 0.dp)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
 
 
-            TextBodyMedium(
-                text = stringResource(id = R.string.login_forgot),
-                color = Color.Blue
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-        }
+                TextBodyMedium(
+                    text = stringResource(id = R.string.login_forgot),
+                    color = Color.Blue
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
-        Button(
-            onClick = { viewModel.signIn() },
-            modifier = Modifier
-                .fillMaxWidth(0.8f)
-        ) {
-            TextHeadSmall(
-                text = stringResource(id = R.string.login_button_text),
-                color = MaterialTheme.colorScheme.background
-            )
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-
-        TextBodyMedium(text = stringResource(id = R.string.login_register_text))
-        TextButton(onClick = { navController.navigate(Routing.RegistrationScreen.route) }) {
-            TextBodyMedium(text = stringResource(id = R.string.login_register_link), color = Color.Blue)
-        }
-
-        HorizontalDivider()
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TextBodyMedium(text = stringResource(id = R.string.login_continue_variants))
-
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
+            Button(
+                onClick = { viewModel.signIn() },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
             ) {
-                IconButton(
-                    onClick = { viewModel.signInWithGoogle() }
+                TextHeadSmall(
+                    text = stringResource(id = R.string.login_button_text),
+                    color = MaterialTheme.colorScheme.background
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+
+            TextBodyMedium(text = stringResource(id = R.string.login_register_text))
+            TextButton(onClick = { navController.navigate(Routing.RegistrationScreen.route) }) {
+                TextBodyMedium(
+                    text = stringResource(id = R.string.login_register_link),
+                    color = Color.Blue
+                )
+            }
+
+            HorizontalDivider()
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TextBodyMedium(text = stringResource(id = R.string.login_continue_variants))
+
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
                 ) {
-                    Image(
-                        imageVector = Icons.Default.AccountCircle,
-                        contentScale = ContentScale.Crop,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .height(48.dp)
-                    )
+                    IconButton(
+                        onClick = { viewModel.signInWithGoogle() }
+                    ) {
+                        Image(
+                            imageVector = Icons.Default.AccountCircle,
+                            contentScale = ContentScale.Crop,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .height(48.dp)
+                        )
+                    }
                 }
             }
         }
@@ -152,8 +163,7 @@ fun LoginScreenPreview() {
     SyncroTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) {
             LoginScreen(
-                rememberNavController(),
-                PaddingValues(0.dp, 0.dp,0.dp,20.dp)
+                rememberNavController()
             )
         }
     }
