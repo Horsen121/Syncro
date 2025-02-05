@@ -38,6 +38,8 @@ fun SimpleTextField(
         shape = MaterialTheme.shapes.medium,
         isError = isError,
         colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedBorderColor = MaterialTheme.colorScheme.primary,
             focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -65,6 +67,10 @@ fun PasswordTextField(
         shape = MaterialTheme.shapes.medium,
         isError = isError,
         colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+            focusedTrailingIconColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTrailingIconColor = MaterialTheme.colorScheme.onBackground,
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedBorderColor = MaterialTheme.colorScheme.primary,
             focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -80,7 +86,7 @@ fun PasswordTextField(
 fun TextFieldPreview() {
     SyncroTheme {
         Column {
-            val text = remember { mutableStateOf("text") }
+            val text = remember { mutableStateOf("") }
             SimpleTextField(value = text.value, onValueChange = { text.value = it }, placeholder = { Text(
                 text = "sdfsdf"
             )})

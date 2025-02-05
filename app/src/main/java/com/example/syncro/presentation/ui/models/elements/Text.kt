@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -87,6 +88,22 @@ fun TextBodyLarge(
 @Composable
 fun TextBodyMedium(
     text: String,
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.onBackground,
+    textAlign: TextAlign? = TextAlign.Unspecified
+) {
+    Text(
+        text = text,
+        color = color,
+        textAlign = textAlign,
+        fontWeight = FontWeight.Normal,
+        style = MaterialTheme.typography.titleMedium,
+        modifier = modifier
+    )
+}
+@Composable
+fun TextBodyMedium(
+    text: AnnotatedString,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onBackground,
     textAlign: TextAlign? = TextAlign.Unspecified
