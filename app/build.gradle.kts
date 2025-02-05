@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.kapt")
+    id("androidx.room")
 }
 
 android {
@@ -49,6 +50,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
 }
 
 kapt {
@@ -93,4 +98,9 @@ dependencies {
     // For local unit tests
     testImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.android.compiler)
+
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    testImplementation(libs.androidx.room.testing)
 }
