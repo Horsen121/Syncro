@@ -5,4 +5,7 @@ sealed class Routing(val route: String) {
     data object RegistrationScreen: Routing("registration_screen")
     data object GroupsScreen: Routing("groups_screen")
     data object GroupScreen: Routing("group_screen")
+    data object TaskScreen: Routing("task_screen")
+    data object SolutionScreen: Routing("solution_screen")
+    data object GroupChatScreen: Routing("group_chat_screen")
 }

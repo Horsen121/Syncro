@@ -13,8 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.screens.GroupsScreen
-import com.example.syncro.presentation.ui.screens.LoginScreen
-import com.example.syncro.presentation.ui.screens.RegistrationScreen
+import com.example.syncro.presentation.ui.screens.logreg.LoginScreen
+import com.example.syncro.presentation.ui.screens.logreg.RegistrationScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

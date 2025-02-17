@@ -18,8 +18,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
 import com.example.syncro.application.Routing
 import com.example.syncro.application.ui.theme.SyncroTheme
-import com.example.syncro.presentation.ui.models.components.GroupListElement
-import com.example.syncro.presentation.ui.models.components.SimpleTopBar
+import com.example.syncro.presentation.ui.components.GroupListElement
+import com.example.syncro.presentation.ui.components.SimpleTopBar
 import com.example.syncro.presentation.viewmodels.GroupsViewModel
 
 @Composable

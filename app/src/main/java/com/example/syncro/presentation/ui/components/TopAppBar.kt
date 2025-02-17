@@ -1,4 +1,4 @@
-package com.example.syncro.presentation.ui.models.components
+package com.example.syncro.presentation.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.syncro.application.ui.theme.SyncroTheme
-import com.example.syncro.presentation.ui.models.elements.TextHeadMedium
+import com.example.syncro.presentation.ui.elements.TextHeadMedium
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

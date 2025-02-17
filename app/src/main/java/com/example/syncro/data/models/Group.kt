@@ -7,4 +7,10 @@ import androidx.room.PrimaryKey
 data class Group(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val name: String,
-)
+) {
+    
+    fun toDomain() {
+        // TODO: convert to domain model 
+    }
+    
+}

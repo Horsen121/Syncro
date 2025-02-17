@@ -1,4 +1,4 @@
-package com.example.syncro.presentation.ui.models.elements
+package com.example.syncro.presentation.ui.elements
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

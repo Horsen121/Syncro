@@ -4,6 +4,10 @@
 
     <!--  Elements  -->
     <string name="cancel">Отмена</string>
+    <string name="clear">Очистить</string>
+    <string name="ok">Ок</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 
 
     <!--  Routing names  -->
@@ -35,4 +39,30 @@
     <string name="reg_agreement_3"> и </string>
     <string name="reg_agreement_4"> Политикой конфиденциальности</string>
     <string name="reg_button_text">Зарегистрироваться</string>
+
+    <!--  Task page  -->
+    <string name="task_title">Задача</string>
+    <string name="task_name_title">Название задачи</string>
+    <string name="task_name_place">Введите название задачи</string>
+    <string name="task_description_title">Описание задачи</string>
+    <string name="task_description_place">Введите описание задачи</string>
+    <string name="task_difficulty">Сложность задачи</string>
+    <string name="task_files">Файлы</string>
+
+    <!--  Task page  -->
+    <string name="solution_title">Решение</string>
+    <string name="solution_name_title">Задача: </string>
+    <string name="solution_description_title">Описание решения</string>
+    <string name="solution_description_place">Введите описание решения</string>
+    <string name="solution_sources">Источники</string>
+    <string name="solution_files">Файлы</string>
+
+    <!--  Group page  -->
+    <string name="group_title">Группа</string>
+    <string name="group_menu_top_current">Текущие</string>
+    <string name="group_menu_top_plan">Будущие</string>
+    <string name="group_menu_top_done">Завершённые</string>
+    <string name="group_menu_bottom_solution_find">Найти решение</string>
+    <string name="group_menu_bottom_chat">Чат</string>
+    <string name="group_menu_bottom_people">Участники</string>
 </resources>

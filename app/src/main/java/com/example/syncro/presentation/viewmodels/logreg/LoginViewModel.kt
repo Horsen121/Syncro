@@ -1,4 +1,4 @@
-package com.example.syncro.presentation.viewmodels
+package com.example.syncro.presentation.viewmodels.logreg
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +33,10 @@ class LoginViewModel @Inject constructor(
 
     fun signInWithGoogle() {
         // TODO: go to googleSync screen
+    }
+
+    fun passwordChange() {
+        // TODO: go to passwordChange screen
     }
 
 }

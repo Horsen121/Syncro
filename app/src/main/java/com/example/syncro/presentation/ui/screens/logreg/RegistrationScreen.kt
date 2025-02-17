@@ -1,4 +1,4 @@
-package com.example.syncro.presentation.ui.screens
+package com.example.syncro.presentation.ui.screens.logreg
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -30,13 +30,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
 import com.example.syncro.application.Routing
 import com.example.syncro.application.ui.theme.SyncroTheme
-import com.example.syncro.presentation.ui.models.elements.CheckTextButton
-import com.example.syncro.presentation.ui.models.elements.PasswordTextField
-import com.example.syncro.presentation.ui.models.elements.SimpleTextField
-import com.example.syncro.presentation.ui.models.elements.TextBodyMedium
-import com.example.syncro.presentation.ui.models.elements.TextHeadMedium
-import com.example.syncro.presentation.ui.models.elements.TextHeadSmall
-import com.example.syncro.presentation.viewmodels.RegistrationViewModel
+import com.example.syncro.presentation.ui.elements.CheckTextButton
+import com.example.syncro.presentation.ui.elements.PasswordTextField
+import com.example.syncro.presentation.ui.elements.SimpleTextField
+import com.example.syncro.presentation.ui.elements.TextBodyMedium
+import com.example.syncro.presentation.ui.elements.TextHeadMedium
+import com.example.syncro.presentation.ui.elements.TextHeadSmall
+import com.example.syncro.presentation.viewmodels.logreg.RegistrationViewModel
 
 @Composable
 fun RegistrationScreen(
@@ -67,10 +67,7 @@ fun RegistrationScreen(
             SimpleTextField(
                 value = viewModel.name.value,
                 onValueChange = { viewModel.onNameChange(it) },
-                placeholder = { TextBodyMedium(
-                    text = stringResource(id = R.string.reg_name_pl),
-                    color = MaterialTheme.colorScheme.onPrimary
-                ) }
+                placeholder = { TextBodyMedium(text = stringResource(id = R.string.reg_name_pl)) }
             )
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -81,10 +78,7 @@ fun RegistrationScreen(
             SimpleTextField(
                 value = viewModel.email.value,
                 onValueChange = { viewModel.onEmailChange(it) },
-                placeholder = { TextBodyMedium(
-                    text = stringResource(id = R.string.reg_email_pl),
-                    color = MaterialTheme.colorScheme.onPrimary
-                ) }
+                placeholder = { TextBodyMedium(text = stringResource(id = R.string.reg_email_pl)) }
             )
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -95,19 +89,13 @@ fun RegistrationScreen(
             PasswordTextField(
                 value = viewModel.password1.value,
                 onValueChange = { viewModel.onPassword1Change(it) },
-                placeholder = { TextBodyMedium(
-                    text = stringResource(id = R.string.reg_pass_pl1),
-                    color = MaterialTheme.colorScheme.onPrimary
-                ) }
+                placeholder = { TextBodyMedium(text = stringResource(id = R.string.reg_pass_pl1)) }
             )
             Spacer(modifier = Modifier.height(12.dp))
             PasswordTextField(
                 value = viewModel.password2.value,
                 onValueChange = { viewModel.onPassword2Change(it) },
-                placeholder = { TextBodyMedium(
-                    text = stringResource(id = R.string.reg_pass_pl2),
-                    color = MaterialTheme.colorScheme.onPrimary
-                ) }
+                placeholder = { TextBodyMedium(text = stringResource(id = R.string.reg_pass_pl2)) }
             )
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -117,12 +105,12 @@ fun RegistrationScreen(
                 text = buildAnnotatedString {
                     append(stringResource(id = R.string.reg_agreement_1) + " ")
                     withStyle(SpanStyle(color = Color.Blue)) {
-                        addLink(LinkAnnotation.Url("32"), 1, 2) // TODO: add link to Req doc
+                        addLink(LinkAnnotation.Url(""), 1, 2) // TODO: add link to Req doc
                         append(stringResource(id = R.string.reg_agreement_2) + " ")
                     }
                     append(stringResource(id = R.string.reg_agreement_3) + " ")
                     withStyle(SpanStyle(color = Color.Blue)) {
-                        addLink(LinkAnnotation.Url("23"), 1, 2)  // TODO: add link to Policy doc
+                        addLink(LinkAnnotation.Url(""), 1, 2)  // TODO: add link to Policy doc
                         append(stringResource(id = R.string.reg_agreement_4))
                     }
                 }
@@ -139,7 +127,10 @@ fun RegistrationScreen(
                         color = MaterialTheme.colorScheme.background
                     )
                 }
-                Button(onClick = { viewModel.registration() }) {
+                Button(
+                    onClick = { viewModel.registration() },
+                    enabled = viewModel.agreement.value
+                ) {
                     Text(
                         text = stringResource(id = R.string.reg_button_text),
                         color = MaterialTheme.colorScheme.background

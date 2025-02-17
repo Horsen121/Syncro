@@ -1,4 +1,4 @@
-package com.example.syncro.presentation.ui.screens
+package com.example.syncro.presentation.ui.screens.logreg
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -33,12 +33,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
 import com.example.syncro.application.Routing
 import com.example.syncro.application.ui.theme.SyncroTheme
-import com.example.syncro.presentation.ui.models.elements.PasswordTextField
-import com.example.syncro.presentation.ui.models.elements.SimpleTextField
-import com.example.syncro.presentation.ui.models.elements.TextBodyMedium
-import com.example.syncro.presentation.ui.models.elements.TextHeadLarge
-import com.example.syncro.presentation.ui.models.elements.TextHeadSmall
-import com.example.syncro.presentation.viewmodels.LoginViewModel
+import com.example.syncro.presentation.ui.elements.PasswordTextField
+import com.example.syncro.presentation.ui.elements.SimpleTextField
+import com.example.syncro.presentation.ui.elements.TextBodyMedium
+import com.example.syncro.presentation.ui.elements.TextHeadLarge
+import com.example.syncro.presentation.ui.elements.TextHeadSmall
+import com.example.syncro.presentation.viewmodels.logreg.LoginViewModel
 
 @Composable
 fun LoginScreen(
@@ -74,10 +74,7 @@ fun LoginScreen(
                 SimpleTextField(
                     value = viewModel.login.value,
                     onValueChange = { viewModel.onLoginChange(it) },
-                    placeholder = { TextBodyMedium(
-                        text = stringResource(id = R.string.login_placeholder_email),
-                        color = MaterialTheme.colorScheme.onPrimary
-                    ) },
+                    placeholder = { TextBodyMedium(text = stringResource(id = R.string.login_placeholder_email)) },
                     modifier = Modifier.padding(5.dp, 0.dp)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -85,19 +82,19 @@ fun LoginScreen(
                 PasswordTextField(
                     value = viewModel.password.value,
                     onValueChange = { viewModel.onPasswordChange(it) },
-                    placeholder = { TextBodyMedium(
-                        text = stringResource(id = R.string.login_placeholder_password),
-                        color = MaterialTheme.colorScheme.onPrimary
-                    ) },
+                    placeholder = { TextBodyMedium(text = stringResource(id = R.string.login_placeholder_password)) },
                     modifier = Modifier.padding(5.dp, 0.dp)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
 
-                TextBodyMedium(
-                    text = stringResource(id = R.string.login_forgot),
-                    color = Color.Blue
-                )
+                TextButton(onClick = { viewModel.passwordChange() }) {
+                    TextBodyMedium(
+                        text = stringResource(id = R.string.login_forgot),
+                        color = Color.Blue
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(12.dp))
             }
 

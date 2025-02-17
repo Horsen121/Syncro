@@ -1,4 +1,4 @@
-package com.example.syncro.presentation.ui.models.elements
+package com.example.syncro.presentation.ui.elements
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -17,8 +18,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.LineBreak
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.syncro.application.ui.theme.SyncroTheme
 
 @Composable
@@ -28,7 +33,6 @@ fun SimpleTextField(
     onValueChange: (String) -> Unit,
     placeholder: @Composable (() -> Unit)?,
     isError: Boolean = false,
-    fillMaxWidth: Boolean = true
 ) {
     OutlinedTextField(
         value = value,
@@ -45,7 +49,40 @@ fun SimpleTextField(
             focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
-        modifier = if(fillMaxWidth) modifier.fillMaxWidth() else modifier
+        modifier = modifier.then(modifier.fillMaxWidth())
+    )
+}
+
+@Composable
+fun MultiLineTextField(
+    value: String,
+    modifier: Modifier = Modifier,
+    onValueChange: (String) -> Unit,
+    placeholder: @Composable (() -> Unit)?,
+    isError: Boolean = false,
+    minLines: Int = 4,
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = placeholder,
+        textStyle = LocalTextStyle.current.copy(textIndent = TextIndent(25.sp)),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            showKeyboardOnFocus = true
+        ),
+        shape = MaterialTheme.shapes.medium,
+        isError = isError,
+        minLines = minLines,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.primary,
+            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+        ),
+        modifier = modifier.then(modifier.fillMaxWidth())
     )
 }
 
@@ -56,7 +93,6 @@ fun PasswordTextField(
     onValueChange: (String) -> Unit,
     placeholder: @Composable (() -> Unit)?,
     isError: Boolean = false,
-    fillMaxWidth: Boolean = true
 ) {
     OutlinedTextField(
         value = value,
@@ -76,7 +112,7 @@ fun PasswordTextField(
             focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
-        modifier = if(fillMaxWidth) modifier.fillMaxWidth() else modifier
+        modifier = modifier.then(modifier.fillMaxWidth())
     )
 }
 
@@ -93,6 +129,10 @@ fun TextFieldPreview() {
             Spacer(modifier = Modifier.height(10.dp))
             PasswordTextField(value = text.value, onValueChange = { text.value = it }, placeholder = { Text(
                 text = "sdfsdf"
+            )})
+            Spacer(modifier = Modifier.height(10.dp))
+            MultiLineTextField(value = text.value, onValueChange = { text.value = it }, placeholder = { Text(
+                text = "sdfsdf dfs fsg sdf \ng fsdg sg dfsg"
             )})
         }
     }
