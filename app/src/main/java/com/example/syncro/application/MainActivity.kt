@@ -8,11 +8,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.screens.GroupsScreen
+import com.example.syncro.presentation.ui.screens.group.AddEditGroupScreen
+import com.example.syncro.presentation.ui.screens.group.GroupScreen
 import com.example.syncro.presentation.ui.screens.logreg.LoginScreen
 import com.example.syncro.presentation.ui.screens.logreg.RegistrationScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +53,34 @@ class MainActivity : ComponentActivity() {
                             navController = navController
                         )
                     }
-                    
+                    composable(
+                        route = Routing.GroupScreen.route + "?groupId={groupId}",
+                        arguments = listOf(
+                    	    navArgument(name = "groupId") {
+                    	        type = NavType.LongType
+                    	        defaultValue = -1L
+                    	    },
+                        )
+                    ) {
+                        GroupScreen(
+                    	    navController = navController,
+                            savedInstanceState = it.savedStateHandle
+                        )
+                    }
+                    composable(
+                        route = Routing.AddEditGroupScreen.route + "?groupId={groupId}",
+                        arguments = listOf(
+                            navArgument(name = "groupId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                        )
+                    ) {
+                        AddEditGroupScreen(
+                            navController = navController,
+                            savedInstanceState = it.savedStateHandle
+                        )
+                    }
                 }
             }
         }

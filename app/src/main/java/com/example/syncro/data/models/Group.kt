@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class Group(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val name: String,
+    val isAdmin: Boolean = false
 ) {
     
     fun toDomain() {

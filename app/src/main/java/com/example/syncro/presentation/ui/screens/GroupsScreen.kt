@@ -19,7 +19,7 @@ import com.example.syncro.R
 import com.example.syncro.application.Routing
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.components.GroupListElement
-import com.example.syncro.presentation.ui.components.SimpleTopBar
+import com.example.syncro.presentation.ui.components.TopBarSimple
 import com.example.syncro.presentation.viewmodels.GroupsViewModel
 
 @Composable
@@ -30,7 +30,7 @@ fun GroupsScreen(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { SimpleTopBar(text = stringResource(R.string.routing_groups)) }
+        topBar = { TopBarSimple(text = stringResource(R.string.routing_groups)) }
     ) { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -65,4 +65,15 @@
     <string name="group_menu_bottom_solution_find">Найти решение</string>
     <string name="group_menu_bottom_chat">Чат</string>
     <string name="group_menu_bottom_people">Участники</string>
+    <string name="group_menu_bottom_settings">Настройки</string>
+    <string name="group_menu_bottom_notifications">Напоминания</string>
+
+    <!--  AddEdit Group page  -->
+    <string name="add_edit_group_title">Создать</string>
+    <string name="add_edit_group_name_title">Название группы</string>
+    <string name="add_edit_group_name_place">Введите название группы</string>
+    <string name="add_edit_group_description_title">Описание группы</string>
+    <string name="add_edit_group_description_place">Введите описание группы</string>
+    <string name="add_edit_group_private">Приватная группа</string>
+    <string name="add_edit_group_button">Сохранить</string>
 </resources>

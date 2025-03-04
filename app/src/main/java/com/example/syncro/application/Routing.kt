@@ -8,4 +8,6 @@ sealed class Routing(val route: String) {
     data object TaskScreen: Routing("task_screen")
     data object SolutionScreen: Routing("solution_screen")
     data object GroupChatScreen: Routing("group_chat_screen")
+    data object AddEditGroupScreen: Routing("add_edit_group_screen")
+    data object SettingsScreen: Routing("settings_screen")
 }

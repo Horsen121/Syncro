@@ -1,4 +1,4 @@
-package com.example.syncro.presentation.ui.screens.group
+package com.example.syncro.presentation.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -28,12 +28,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
 import com.example.syncro.application.ui.theme.SyncroTheme
+import com.example.syncro.presentation.ui.components.TopBarBackButton
+import com.example.syncro.presentation.ui.components.TopBarText
 import com.example.syncro.presentation.ui.elements.DropMenu
 import com.example.syncro.presentation.ui.elements.SimpleTextField
 import com.example.syncro.presentation.ui.elements.TextBodyMedium
 import com.example.syncro.presentation.ui.elements.TextHeadMedium
 import com.example.syncro.presentation.ui.elements.TextHeadSmall
-import com.example.syncro.presentation.viewmodels.group.TaskViewModel
+import com.example.syncro.presentation.viewmodels.TaskViewModel
 import com.example.syncro.utils.TaskDifficult
 
 @Composable
@@ -44,7 +46,14 @@ fun TaskScreen(
     val viewModel = TaskViewModel()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        topBar = { TopBarText(
+            leftText = stringResource(R.string.cancel),
+            centerText = stringResource(R.string.task_title),
+            rightText = stringResource(R.string.clear),
+            navController = navController,
+            rightAction = { viewModel.Clear() }
+        ) }
     ) { paddingValues ->
         Column(
             horizontalAlignment = Alignment.Start,
@@ -57,27 +66,27 @@ fun TaskScreen(
                     paddingValues.calculateBottomPadding()
                 )
         ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                TextButton(onClick = { navController.navigateUp() }) {
-                    TextBodyMedium(
-                        text = stringResource(R.string.cancel),
-                        color = Color.Blue
-                    )
-                }
-                TextHeadMedium(
-                    text = stringResource(R.string.task_title)
-                )
-                TextButton(onClick = { viewModel.Clear() }) {
-                    TextBodyMedium(
-                        text = stringResource(R.string.clear)
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
+//            Row(
+//                horizontalArrangement = Arrangement.SpaceBetween,
+//                verticalAlignment = Alignment.CenterVertically,
+//                modifier = Modifier.fillMaxWidth()
+//            ) {
+//                TextButton(onClick = { navController.navigateUp() }) {
+//                    TextBodyMedium(
+//                        text = stringResource(R.string.cancel),
+//                        color = Color.Blue
+//                    )
+//                }
+//                TextHeadMedium(
+//                    text = stringResource(R.string.task_title)
+//                )
+//                TextButton(onClick = { viewModel.Clear() }) {
+//                    TextBodyMedium(
+//                        text = stringResource(R.string.clear)
+//                    )
+//                }
+//            }
+//            Spacer(modifier = Modifier.height(24.dp))
 
             TextHeadSmall(
                 text = stringResource(R.string.task_name_title)

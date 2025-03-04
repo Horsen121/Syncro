@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.application.ui.theme.SyncroTheme
+import com.example.syncro.presentation.ui.components.TopBarBackButton
 import com.example.syncro.presentation.viewmodels.group.GroupChatViewModel
 
 @Composable
@@ -22,7 +23,8 @@ fun GroupChatScreen(
 ) {
     val viewModel = GroupChatViewModel()
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        topBar = { TopBarBackButton("", navController) }
     ) { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -37,7 +39,6 @@ fun GroupChatScreen(
 
 @Preview(
     showBackground = true,
-    showSystemUi = true,
 )
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

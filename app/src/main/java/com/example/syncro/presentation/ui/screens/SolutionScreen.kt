@@ -1,6 +1,5 @@
-package com.example.syncro.presentation.ui.screens.group
+package com.example.syncro.presentation.ui.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,8 +32,7 @@ import com.example.syncro.presentation.ui.elements.SimpleTextField
 import com.example.syncro.presentation.ui.elements.TextBodyMedium
 import com.example.syncro.presentation.ui.elements.TextHeadMedium
 import com.example.syncro.presentation.ui.elements.TextHeadSmall
-import com.example.syncro.presentation.viewmodels.group.SolutionViewModel
-import com.example.syncro.utils.TaskDifficult
+import com.example.syncro.presentation.viewmodels.SolutionViewModel
 
 @Composable
 fun SolutionScreen(
