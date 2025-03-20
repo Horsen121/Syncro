@@ -53,7 +53,12 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(0.dp, paddingValues.calculateTopPadding(), 0.dp, paddingValues.calculateBottomPadding())
+                .padding(
+                    0.dp,
+                    paddingValues.calculateTopPadding(),
+                    0.dp,
+                    paddingValues.calculateBottomPadding()
+                )
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_background),
@@ -99,7 +104,10 @@ fun LoginScreen(
             }
 
             Button(
-                onClick = { viewModel.signIn() },
+                onClick = {
+                    viewModel.signIn()
+                    navController.navigate(Routing.GroupsScreen.route) // TODO: change to  
+                          },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
             ) {

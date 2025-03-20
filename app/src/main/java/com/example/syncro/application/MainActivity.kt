@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = Routing.LoginScreen.route // TODO: change to condition
+                    startDestination = Routing.GroupScreen.route // TODO: change to condition
                 ) {
                     composable(route = Routing.LoginScreen.route) {
                         currentScreen = Routing.LoginScreen.route

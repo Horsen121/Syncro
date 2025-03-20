@@ -4,15 +4,31 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.syncro.data.datasourse.local.dao.GroupDaoLocal
+import com.example.syncro.data.datasourse.local.dao.ReminderDaoLocal
+import com.example.syncro.data.datasourse.local.dao.SolutionDaoLocal
+import com.example.syncro.data.datasourse.local.dao.TaskDaoLocal
 import com.example.syncro.data.models.Group
+import com.example.syncro.data.models.Reminder
+import com.example.syncro.data.models.Solution
+import com.example.syncro.data.models.Task
+import com.example.syncro.data.models.User
 
 @Database(
     entities = [
         Group::class,
+        Reminder::class,
+        Solution::class,
+        Task::class,
+        User::class
                ],
     version = 1
 )
 abstract class SyncroDB : RoomDatabase() {
+    abstract fun groupDao(): GroupDaoLocal
+    abstract fun reminderDao(): ReminderDaoLocal
+    abstract fun solutionDao(): SolutionDaoLocal
+    abstract fun taskDao(): TaskDaoLocal
 //    abstract fun userDao(): UserDao
 
     companion object {

@@ -5,11 +5,12 @@ import androidx.room.PrimaryKey
 import java.util.Date
 
 @Entity
-data class Group(
-    @PrimaryKey val group_id : Int,
-    val name: String,
+data class Solution(
+    @PrimaryKey val solution_id: Int,
+    val task_id: Int,
+    val user_id: Int,
+    val title: String,
     val description: String,
     val created_at: Date,
-    val created_by: Int,
-    val isAdmin: Boolean
+    val updated_at: Date
 )
