@@ -2,14 +2,13 @@ package com.example.syncro.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
 
 @Entity
 data class Group(
-    @PrimaryKey val group_id : Int,
+    @PrimaryKey(autoGenerate = true) val group_id : Long? = null,
     val name: String,
     val description: String,
-    val created_at: Date,
-    val created_by: Int,
+    val created_at: String,
+    val created_by: Long,
     val isAdmin: Boolean
-)
+): java.io.Serializable

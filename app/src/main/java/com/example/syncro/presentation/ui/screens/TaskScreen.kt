@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,20 +16,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
 import com.example.syncro.application.ui.theme.SyncroTheme
-import com.example.syncro.presentation.ui.components.TopBarBackButton
 import com.example.syncro.presentation.ui.components.TopBarText
 import com.example.syncro.presentation.ui.elements.DropMenu
 import com.example.syncro.presentation.ui.elements.SimpleTextField
@@ -41,9 +41,8 @@ import com.example.syncro.utils.TaskDifficult
 @Composable
 fun TaskScreen(
     navController: NavController,
-
+    viewModel: TaskViewModel = hiltViewModel()
 ) {
-    val viewModel = TaskViewModel()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -52,42 +51,27 @@ fun TaskScreen(
             centerText = stringResource(R.string.task_title),
             rightText = stringResource(R.string.clear),
             navController = navController,
-            rightAction = { viewModel.Clear() }
+            rightAction = { viewModel.clear() }
         ) }
     ) { paddingValues ->
         Column(
-            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .fillMaxHeight()
                 .padding(
-                    10.dp,
-                    paddingValues.calculateTopPadding(),
-                    10.dp,
+                    0.dp,
+                    paddingValues.calculateTopPadding() + 10.dp,
+                    0.dp,
                     paddingValues.calculateBottomPadding()
                 )
         ) {
-//            Row(
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//                verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier.fillMaxWidth()
-//            ) {
-//                TextButton(onClick = { navController.navigateUp() }) {
-//                    TextBodyMedium(
-//                        text = stringResource(R.string.cancel),
-//                        color = Color.Blue
-//                    )
-//                }
-//                TextHeadMedium(
-//                    text = stringResource(R.string.task_title)
-//                )
-//                TextButton(onClick = { viewModel.Clear() }) {
-//                    TextBodyMedium(
-//                        text = stringResource(R.string.clear)
-//                    )
-//                }
-//            }
-//            Spacer(modifier = Modifier.height(24.dp))
-
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.8f)
+            ) {
             TextHeadSmall(
                 text = stringResource(R.string.task_name_title)
             )
@@ -102,7 +86,7 @@ fun TaskScreen(
                 text = stringResource(R.string.task_description_title)
             )
             SimpleTextField(
-                value = viewModel.name.value,
+                value = viewModel.desc.value,
                 placeholder = { TextBodyMedium(stringResource(R.string.task_description_place)) },
                 onValueChange = { viewModel.onDescChange(it) }
             )
@@ -111,7 +95,7 @@ fun TaskScreen(
             DropMenu(
                 text = stringResource(R.string.task_difficulty),
                 elements = TaskDifficult.entries.map { el -> el.name },
-                current = TaskDifficult.Medium.ordinal,
+                current = viewModel.diff.value.ordinal,
                 open = viewModel.diffOpen.value,
                 onClick = { viewModel.onDiffOpenChange(it) },
                 onValueSelect = {
@@ -137,12 +121,21 @@ fun TaskScreen(
                 }
             }
         }
+            Button(
+                onClick = {
+                    viewModel.onSave().also {
+                        navController.navigateUp()
+                    }
+                }
+            ) {
+                TextHeadMedium(stringResource(R.string.add_edit_group_button))
+            }
+        }
     }
 }
 
 @Preview(
     showBackground = true,
-//    showSystemUi = true,
 )
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

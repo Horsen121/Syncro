@@ -22,14 +22,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.syncro.R
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.elements.TextBodyMedium
 import com.example.syncro.presentation.ui.elements.TextHeadMedium
@@ -136,7 +133,7 @@ fun TopBarText(
         )
     ) {
         Row(
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -148,7 +145,8 @@ fun TopBarText(
             }
             TextHeadMedium(
                 text = centerText,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.onPrimary,
+                fillMaxWidth = false
             )
             TextButton(onClick = { rightAction() }) {
                 TextBodyMedium(

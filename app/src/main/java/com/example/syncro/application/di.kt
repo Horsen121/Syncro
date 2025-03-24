@@ -53,7 +53,7 @@ object AppModule {
             SyncroDB::class.java,
             SyncroDB.DATABASE_NAME
         )
-            .createFromAsset("startSyncroDB.db")
+//            .createFromAsset("startSyncroDB.db")
             .build()
     }
 

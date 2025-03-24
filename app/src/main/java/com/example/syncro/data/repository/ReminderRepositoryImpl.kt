@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 class ReminderRepositoryImpl(
     private val daoLocal: ReminderDaoLocal
 ): ReminderRepository {
-    override fun getRemindersByUser(id: Long): Flow<List<Reminder>> {
-        return daoLocal.getReminders(id)
+    override fun getRemindersByUser(): Flow<List<Reminder>> {
+        return daoLocal.getReminders()
     }
 
     override suspend fun getReminderById(id: Long): Reminder? {

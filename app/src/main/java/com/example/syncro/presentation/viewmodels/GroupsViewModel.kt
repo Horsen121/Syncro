@@ -3,18 +3,33 @@ package com.example.syncro.presentation.viewmodels
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.syncro.data.models.Group
+import com.example.syncro.domain.usecases.GroupUseCases
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+@HiltViewModel
 class GroupsViewModel @Inject constructor(
-//    private val repository: MyRepository
+    private val groupUseCases: GroupUseCases
 ) : ViewModel() {
 
-    private var _groups = mutableStateOf<List<Group>>(listOf(Group(1, "Test1"), Group(2, "Test2"), Group(3, "Test3"))) // Group emptyList()
+    private var _groups = mutableStateOf<List<Group>>(emptyList())
     val groups: State<List<Group>> = _groups
-//
-//    fun on_varChange(text: String) {
-//        _var.value = text
-//    }
 
+    init {
+        loadGroups()
+    }
+
+    fun update() {
+        loadGroups()
+    }
+
+    private fun loadGroups() {
+        groupUseCases.getGroups().onEach {
+            _groups.value = it
+        }.launchIn(viewModelScope)
+    }
 }

@@ -2,13 +2,24 @@ package com.example.syncro.presentation.viewmodels
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.syncro.data.models.Task
+import com.example.syncro.domain.usecases.TaskUseCases
 import com.example.syncro.utils.TaskDifficult
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class TaskViewModel @Inject constructor(
-//    private val repository: MyRepository
+    private val taskUseCases: TaskUseCases,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private var userId = 1L // TODO: change to
+    private var groupId = -1L
 
     private var _name = mutableStateOf("")
     val name: State<String> = _name
@@ -23,6 +34,22 @@ class TaskViewModel @Inject constructor(
 
     private var _files = mutableStateOf<List<String>>(emptyList())
     val files: State<List<String>> = _files
+
+    init {
+        savedStateHandle.get<Long>("taskId").let { id ->
+            if (id != null && id != -1L) {
+                viewModelScope.launch {
+                    taskUseCases.getTask(id)?.also { task ->
+                        _name.value = task.title
+                        _desc.value = task.description
+                    }
+                }
+            }
+        }
+        savedStateHandle.get<Long>("groupId").let { id ->
+            if (id != null) groupId = id
+        }
+    }
 
 
     fun onNameChange(text: String) {
@@ -48,7 +75,24 @@ class TaskViewModel @Inject constructor(
         _files.value -= file
     }
 
-    fun Clear() {
+    fun onSave() {
+        viewModelScope.launch {
+            taskUseCases.addTask(
+                Task(
+                    group_id = groupId,
+                    title = _name.value,
+                    description = _desc.value,
+                    created_at = "",
+                    created_by = userId,
+                    start_time = "",
+                    end_time = "",
+                    priority = _diff.value.name
+                )
+            )
+        }
+    }
+
+    fun clear() {
         _name.value = ""
         _desc.value = ""
         _diff.value = TaskDifficult.Medium

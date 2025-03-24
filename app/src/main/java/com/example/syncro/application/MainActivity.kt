@@ -1,5 +1,6 @@
 package com.example.syncro.application
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,7 +16,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.screens.GroupsScreen
+import com.example.syncro.presentation.ui.screens.SolutionScreen
+import com.example.syncro.presentation.ui.screens.TaskScreen
 import com.example.syncro.presentation.ui.screens.group.AddEditGroupScreen
+import com.example.syncro.presentation.ui.screens.group.GroupChatScreen
 import com.example.syncro.presentation.ui.screens.group.GroupScreen
 import com.example.syncro.presentation.ui.screens.logreg.LoginScreen
 import com.example.syncro.presentation.ui.screens.logreg.RegistrationScreen
@@ -23,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,7 +38,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = Routing.GroupScreen.route // TODO: change to condition
+                    startDestination = Routing.LoginScreen.route // TODO: change to condition
                 ) {
                     composable(route = Routing.LoginScreen.route) {
                         currentScreen = Routing.LoginScreen.route
@@ -56,15 +61,14 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = Routing.GroupScreen.route + "?groupId={groupId}",
                         arguments = listOf(
-                    	    navArgument(name = "groupId") {
-                    	        type = NavType.LongType
-                    	        defaultValue = -1L
-                    	    },
+                            navArgument(name = "groupId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
                         )
                     ) {
                         GroupScreen(
-                    	    navController = navController,
-                            savedInstanceState = it.savedStateHandle
+                            navController = navController
                         )
                     }
                     composable(
@@ -77,8 +81,58 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         AddEditGroupScreen(
-                            navController = navController,
-                            savedInstanceState = it.savedStateHandle
+                            navController = navController
+                        )
+                    }
+                    composable(
+                        route = Routing.TaskScreen.route + "?groupId={groupId}&taskId={taskId}",
+                        arguments = listOf(
+                            navArgument(name = "groupId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                            navArgument(name = "taskId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                        )
+                    ) {
+                        TaskScreen(
+                            navController = navController
+                        )
+                    }
+                    composable(
+                        route = Routing.SolutionScreen.route + "?groupId={groupId}&taskId={taskId}&solutionId={solutionId}",
+                        arguments = listOf(
+                            navArgument(name = "groupId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                            navArgument(name = "taskId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                            navArgument(name = "solutionId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                        )
+                    ) {
+                        SolutionScreen(
+                            navController = navController
+                        )
+                    }
+                    composable(
+                        route = Routing.GroupChatScreen.route + "?groupId={groupId}",
+                        arguments = listOf(
+                            navArgument(name = "groupId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                        )
+                    ) {
+                        GroupChatScreen(
+                            navController = navController
                         )
                     }
                 }

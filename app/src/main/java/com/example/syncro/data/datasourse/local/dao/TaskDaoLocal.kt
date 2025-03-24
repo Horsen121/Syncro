@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDaoLocal {
-    @Query("SELECT * FROM task WHERE group_id = :id")
+    @Query("SELECT * FROM `task` WHERE group_id = :id")
     fun getTasks(id: Long): Flow<List<Task>>
 
-    @Query("SELECT * FROM task WHERE task_id = :id")
+    @Query("SELECT * FROM `task` WHERE task_id = :id")
     suspend fun getTaskById(id: Long): Task?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

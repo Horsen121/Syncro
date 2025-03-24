@@ -4,7 +4,7 @@ import com.example.syncro.data.models.Reminder
 import kotlinx.coroutines.flow.Flow
 
 interface ReminderRepository {
-    fun getRemindersByUser(id: Long): Flow<List<Reminder>>
+    fun getRemindersByUser(): Flow<List<Reminder>>
     suspend fun getReminderById(id: Long): Reminder?
     suspend fun insertReminder(item: Reminder): Long?
     suspend fun deleteReminder(item: Reminder)

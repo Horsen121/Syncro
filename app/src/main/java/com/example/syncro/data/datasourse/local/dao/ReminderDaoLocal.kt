@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ReminderDaoLocal {
     @Query("SELECT * FROM reminder")
-    fun getReminders(id: Long): Flow<List<Reminder>>
+    fun getReminders(): Flow<List<Reminder>>
 
     @Query("SELECT * FROM reminder WHERE reminder_id = :id")
     suspend fun getReminderById(id: Long): Reminder?

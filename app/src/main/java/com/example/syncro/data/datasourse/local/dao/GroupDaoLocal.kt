@@ -13,7 +13,7 @@ interface GroupDaoLocal {
     @Query("SELECT * FROM `group`")
     fun getGroups(): Flow<List<Group>>
 
-    @Query("SELECT * FROM task WHERE group_id = :id")
+    @Query("SELECT * FROM `group` WHERE group_id = :id")
     suspend fun getGroupById(id: Long): Group?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

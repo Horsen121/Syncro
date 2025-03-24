@@ -10,18 +10,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.components.TopBarBackButton
+import com.example.syncro.presentation.ui.elements.TextHeadLarge
 import com.example.syncro.presentation.viewmodels.group.GroupChatViewModel
 
 @Composable
 fun GroupChatScreen(
     navController: NavController,
-
+    viewModel: GroupChatViewModel = hiltViewModel()
 ) {
-    val viewModel = GroupChatViewModel()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { TopBarBackButton("", navController) }
@@ -32,7 +33,7 @@ fun GroupChatScreen(
                 .fillMaxSize()
                 .padding(0.dp, 0.dp, 0.dp, paddingValues.calculateBottomPadding())
         ) {
-
+            TextHeadLarge("Coming Soon")
         }
     }
 }

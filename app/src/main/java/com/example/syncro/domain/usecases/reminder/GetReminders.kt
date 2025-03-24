@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class GetReminders(
     private val repository: ReminderRepository
 ) {
-    operator fun invoke(id: Long): Flow<List<Reminder>> {
-        return repository.getRemindersByUser(id)
+    operator fun invoke(): Flow<List<Reminder>> {
+        return repository.getRemindersByUser()
     }
 }

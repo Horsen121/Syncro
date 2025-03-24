@@ -23,10 +23,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
 import com.example.syncro.application.ui.theme.SyncroTheme
+import com.example.syncro.presentation.ui.components.TopBarText
 import com.example.syncro.presentation.ui.elements.DropMenu
 import com.example.syncro.presentation.ui.elements.SimpleTextField
 import com.example.syncro.presentation.ui.elements.TextBodyMedium
@@ -37,11 +40,17 @@ import com.example.syncro.presentation.viewmodels.SolutionViewModel
 @Composable
 fun SolutionScreen(
     navController: NavController,
-
+    viewModel: SolutionViewModel = hiltViewModel()
 ) {
-    val viewModel = SolutionViewModel()
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        topBar = { TopBarText(
+            leftText = stringResource(R.string.cancel),
+            centerText = stringResource(R.string.solution_title),
+            rightText = stringResource(R.string.clear),
+            navController = navController,
+            rightAction = { viewModel.clear() }
+        ) }
     ) { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,28 +63,6 @@ fun SolutionScreen(
                     paddingValues.calculateBottomPadding()
                 )
         ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                TextButton(onClick = { navController.navigateUp() }) {
-                    TextBodyMedium(
-                        text = stringResource(R.string.cancel),
-                        color = Color.Blue
-                    )
-                }
-                TextHeadMedium(
-                    text = stringResource(R.string.solution_title)
-                )
-                TextButton(onClick = { viewModel.clear() }) {
-                    TextBodyMedium(
-                        text = stringResource(R.string.clear)
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-
             DropMenu(
                 text = stringResource(R.string.solution_title) + " ${viewModel.name.value}",
                 elements = viewModel.tasks.value,
@@ -102,9 +89,9 @@ fun SolutionScreen(
                 text = stringResource(R.string.solution_description_title)
             )
             SimpleTextField(
-                value = viewModel.name.value,
+                value = viewModel.desc.value,
                 placeholder = { TextBodyMedium(stringResource(R.string.solution_description_place)) },
-                onValueChange = { viewModel.onNameChange(it) }
+                onValueChange = { viewModel.onDescChange(it) }
             )
             Spacer(modifier = Modifier.height(12.dp))
 

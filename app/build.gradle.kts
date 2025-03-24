@@ -79,13 +79,16 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+//    implementation(libs.androidx.lifesycle.viewmodel.compose)
 
-    implementation(libs.androidx.navigation.compose)
 
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)

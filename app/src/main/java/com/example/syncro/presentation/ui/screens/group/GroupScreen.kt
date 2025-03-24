@@ -1,15 +1,25 @@
 package com.example.syncro.presentation.ui.screens.group
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -21,7 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.SavedStateHandle
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
@@ -37,9 +47,8 @@ import com.example.syncro.presentation.viewmodels.group.GroupViewModel.GroupData
 @Composable
 fun GroupScreen(
     navController: NavController,
-    savedInstanceState: SavedStateHandle
+    viewModel: GroupViewModel = hiltViewModel()
 ) {
-    val viewModel = GroupViewModel(savedInstanceState)
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { TopBarBackButton(text = stringResource(R.string.group_title) + " \"${viewModel.group.value?.name}\"", navController) },
@@ -47,7 +56,7 @@ fun GroupScreen(
             val actions = mutableListOf(
                 Triple(
                     stringResource(R.string.group_menu_bottom_chat),
-                    {navController.navigate(Routing.GroupChatScreen)},
+                    { navController.navigate(Routing.GroupChatScreen.route + "?groupId=${viewModel.group.value?.group_id}") },
                     Icons.Default.Email
                 ),
                 Triple(
@@ -65,11 +74,18 @@ fun GroupScreen(
                 actions.add(
                     Triple(
                         stringResource(R.string.group_menu_bottom_settings),
-                        { navController.navigate(Routing.AddEditGroupScreen.route + "?groupId=${viewModel.group.value?.id}") },
+                        { navController.navigate(Routing.AddEditGroupScreen.route + "?groupId=${viewModel.group.value?.group_id}") },
                         Icons.Default.Build
                     )
                 )
             SimpleBottomBar(actions)
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate(Routing.TaskScreen.route + "?groupId=${viewModel.group.value?.group_id}") }
+            ) {
+                Image(Icons.Default.Add, null)
+            }
         }
     ) { paddingValues ->
         Column(
@@ -86,6 +102,7 @@ fun GroupScreen(
             NavigationBar( // TODO: change to beautiful
                 modifier = Modifier
                     .padding(10.dp)
+                    .windowInsetsPadding(WindowInsets.navigationBars)
                     .clip(MaterialTheme.shapes.large)
             ) {
                 NavigationBarItem(
@@ -108,9 +125,17 @@ fun GroupScreen(
                 )
             }
 
-            LazyColumn {
-                items(viewModel.currentData.value) {elem ->
-                    GroupTask() // TODO: add parametrs
+            LazyColumn(
+                contentPadding = PaddingValues(top = 10.dp),
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .offset(y = -WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
+            ) {
+                items(viewModel.currentData.value) {task ->
+                    GroupTask(
+                        task = task,
+                        onClick = { navController.navigate(Routing.TaskScreen.route + "?groupId=${viewModel.group.value?.group_id}&taskId=${task.task_id}") }
+                    )
                 }
             }
         }
@@ -119,7 +144,6 @@ fun GroupScreen(
 
 @Preview(
     showBackground = true,
-//    showSystemUi = true,
 )
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -127,8 +151,7 @@ fun GroupScreenPreview() {
     SyncroTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) {
             GroupScreen(
-                rememberNavController(),
-                savedInstanceState = SavedStateHandle()
+                rememberNavController()
             )
         }
     }

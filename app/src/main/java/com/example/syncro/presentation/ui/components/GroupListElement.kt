@@ -47,7 +47,7 @@ private fun GroupListElementPreview() {
     SyncroTheme {
         Scaffold { _ ->
             GroupListElement(
-                group = Group(1, "Test1"),
+                group = Group(1, "Test1", "desk", "", 1L, true),
                 onClick = {  }
             )
         }
