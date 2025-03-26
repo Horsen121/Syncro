@@ -90,7 +90,8 @@ fun TextBodyMedium(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.onBackground,
-    textAlign: TextAlign? = TextAlign.Unspecified
+    textAlign: TextAlign? = TextAlign.Unspecified,
+    maxLines: Int = Int.MAX_VALUE
 ) {
     Text(
         text = text,
@@ -98,6 +99,7 @@ fun TextBodyMedium(
         textAlign = textAlign,
         fontWeight = FontWeight.Normal,
         style = MaterialTheme.typography.titleMedium,
+        maxLines = maxLines,
         modifier = modifier
     )
 }

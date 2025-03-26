@@ -128,7 +128,10 @@ fun RegistrationScreen(
                     )
                 }
                 Button(
-                    onClick = { viewModel.registration() },
+                    onClick = {
+                        viewModel.registration()
+                        navController.navigate(Routing.LoginScreen.route)
+                              },
                     enabled = viewModel.agreement.value
                 ) {
                     Text(

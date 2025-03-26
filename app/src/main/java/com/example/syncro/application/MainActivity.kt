@@ -23,6 +23,8 @@ import com.example.syncro.presentation.ui.screens.group.GroupChatScreen
 import com.example.syncro.presentation.ui.screens.group.GroupScreen
 import com.example.syncro.presentation.ui.screens.logreg.LoginScreen
 import com.example.syncro.presentation.ui.screens.logreg.RegistrationScreen
+import com.example.syncro.presentation.ui.screens.logreg.RemindersScreen
+import com.example.syncro.presentation.ui.screens.logreg.SolutionsScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -119,6 +121,36 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         SolutionScreen(
+                            navController = navController
+                        )
+                    }
+                    composable(
+                        route = Routing.SolutionsScreen.route + "?groupId={groupId}&taskId={taskId}",
+                        arguments = listOf(
+                            navArgument(name = "taskId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                            navArgument(name = "groupId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                        )
+                    ) {
+                        SolutionsScreen(
+                            navController = navController
+                        )
+                    }
+                    composable(
+                        route = Routing.RemindersScreen.route + "?groupId={groupId}",
+                        arguments = listOf(
+                            navArgument(name = "groupId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                        )
+                    ) {
+                        RemindersScreen(
                             navController = navController
                         )
                     }

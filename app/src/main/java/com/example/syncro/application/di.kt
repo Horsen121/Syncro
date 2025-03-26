@@ -31,6 +31,7 @@ import com.example.syncro.domain.usecases.solution.GetSolution
 import com.example.syncro.domain.usecases.solution.GetSolutions
 import com.example.syncro.domain.usecases.task.AddTask
 import com.example.syncro.domain.usecases.task.DeleteTask
+import com.example.syncro.domain.usecases.task.GetAllTasks
 import com.example.syncro.domain.usecases.task.GetTask
 import com.example.syncro.domain.usecases.task.GetTasks
 import dagger.Module
@@ -52,9 +53,7 @@ object AppModule {
             app,
             SyncroDB::class.java,
             SyncroDB.DATABASE_NAME
-        )
-//            .createFromAsset("startSyncroDB.db")
-            .build()
+        ).build()
     }
 
     @Singleton
@@ -79,6 +78,7 @@ object AppModule {
     @Singleton
     fun provideTaskUseCases(repository: TaskRepository): TaskUseCases {
         return TaskUseCases(
+            getAllTasks = GetAllTasks(repository),
             getTasks = GetTasks(repository),
             addTask = AddTask(repository),
             getTask= GetTask(repository),

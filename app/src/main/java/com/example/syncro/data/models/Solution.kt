@@ -5,11 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Solution(
-    @PrimaryKey val solution_id: Long? = null,
+    @PrimaryKey(autoGenerate = true) val solution_id: Long? = null,
     val task_id: Long,
     val user_id: Long,
     val title: String,
-    val description: String,
-    val created_at: String,
-    val updated_at: String
+    val description: String
 ): java.io.Serializable

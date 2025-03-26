@@ -13,6 +13,8 @@
     <!--  Routing names  -->
     <string name="routing_group">Группа </string>
     <string name="routing_groups">Группы </string>
+    <string name="routing_reminders">Напоминания</string>
+    <string name="routing_solutions">Решения</string>
 
     <!--  Login page  -->
     <string name="login_hello">Добро пожаловать!</string>
@@ -27,8 +29,8 @@
     <!--  Register page  -->
     <string name="reg_hello">Регистрация</string>
     <string name="reg_desc">Создайте аккаунт, чтобы начать</string>
-    <string name="reg_name_head">Имя</string>
-    <string name="reg_name_pl">Введите имя</string>
+    <string name="reg_name_head">Логин</string>
+    <string name="reg_name_pl">Введите логин</string>
     <string name="reg_email_head">Email</string>
     <string name="reg_email_pl">Введите email</string>
     <string name="reg_pass_head">Пароль</string>
@@ -39,23 +41,6 @@
     <string name="reg_agreement_3"> и </string>
     <string name="reg_agreement_4"> Политикой конфиденциальности</string>
     <string name="reg_button_text">Зарегистрироваться</string>
-
-    <!--  Task page  -->
-    <string name="task_title">Задача</string>
-    <string name="task_name_title">Название задачи</string>
-    <string name="task_name_place">Введите название задачи</string>
-    <string name="task_description_title">Описание задачи</string>
-    <string name="task_description_place">Введите описание задачи</string>
-    <string name="task_difficulty">Сложность задачи</string>
-    <string name="task_files">Файлы</string>
-
-    <!--  Task page  -->
-    <string name="solution_title">Решение</string>
-    <string name="solution_name_title">Задача: </string>
-    <string name="solution_description_title">Описание решения</string>
-    <string name="solution_description_place">Введите описание решения</string>
-    <string name="solution_sources">Источники</string>
-    <string name="solution_files">Файлы</string>
 
     <!--  Group page  -->
     <string name="group_title">Группа</string>
@@ -76,4 +61,28 @@
     <string name="add_edit_group_description_place">Введите описание группы</string>
     <string name="add_edit_group_private">Приватная группа</string>
     <string name="add_edit_group_button">Сохранить</string>
+
+    <!--  Task page  -->
+    <string name="task_title">Задача</string>
+    <string name="task_name_title">Название задачи</string>
+    <string name="task_name_place">Введите название задачи</string>
+    <string name="task_description_title">Описание задачи</string>
+    <string name="task_description_place">Введите описание задачи</string>
+    <string name="task_difficulty">Сложность задачи</string>
+    <string name="task_start">Начало задачи</string>
+    <string name="task_deadline">Окончание задачи</string>
+    <string name="task_reminder_date">Напоминание</string>
+    <string name="task_files">Файлы</string>
+
+    <!--  Solution page  -->
+    <string name="solution_title">Решение</string>
+    <string name="solution_title_title">Описание решения</string>
+    <string name="solution_title_place">Введите описание решения</string>
+    <string name="solution_description_title">Описание решения</string>
+    <string name="solution_description_place">Введите описание решения</string>
+    <string name="solution_sources">Источники</string>
+    <string name="solution_files">Файлы</string>
+
+    <!--  Cards  -->
+    <string name="card_task_solutions">Решения</string>
 </resources>

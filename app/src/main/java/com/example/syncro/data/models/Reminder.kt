@@ -9,7 +9,6 @@ data class Reminder(
     val task_id: Long,
     val group_id: Long,
     val reminder_time: String,
-    val created_at: String,
     val message: String,
     val is_sent: Boolean
 ): java.io.Serializable

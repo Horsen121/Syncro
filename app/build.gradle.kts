@@ -85,8 +85,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-//    implementation(libs.androidx.lifesycle.viewmodel.compose)
-
 
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)

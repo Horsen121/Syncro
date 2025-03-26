@@ -18,6 +18,7 @@ class AddEditGroupViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private var userId = -1L
+    private var countPeople = 1
 
     private var _name = mutableStateOf("")
     val name: State<String> = _name
@@ -40,6 +41,7 @@ class AddEditGroupViewModel @Inject constructor(
                         _desc.value = group.description
 //                        _isPrivate.value = group.isPrivate
                         _isAdmin.value = group.isAdmin
+                        countPeople = group.countPeople
                     }
                 }
             }
@@ -72,9 +74,9 @@ class AddEditGroupViewModel @Inject constructor(
                     group_id = null,
                     name = _name.value,
                     description = _desc.value,
-                    created_at = LocalDateTime.now().toString(),
-                    created_by = 1, // userId, TODO: change to value
-                    isAdmin = _isAdmin.value
+                    isAdmin = _isAdmin.value,
+                    created_by = userId,
+                    countPeople = countPeople
                 )
             )
         }

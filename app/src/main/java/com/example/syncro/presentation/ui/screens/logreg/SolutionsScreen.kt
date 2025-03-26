@@ -1,4 +1,4 @@
-package com.example.syncro.presentation.ui.screens
+package com.example.syncro.presentation.ui.screens.logreg
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -26,35 +24,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.syncro.R
 import com.example.syncro.application.Routing
-import com.example.syncro.presentation.ui.components.GroupListElement
-import com.example.syncro.presentation.ui.components.SimpleBottomBar
-import com.example.syncro.presentation.ui.components.TopBarSimple
-import com.example.syncro.presentation.viewmodels.GroupsViewModel
+import com.example.syncro.presentation.ui.components.SolutionListElement
+import com.example.syncro.presentation.ui.components.TopBarBackButton
+import com.example.syncro.presentation.viewmodels.SolutionsViewModel
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun GroupsScreen(
+fun SolutionsScreen(
     navController: NavController,
-    viewModel: GroupsViewModel = hiltViewModel()
+    viewModel: SolutionsViewModel = hiltViewModel()
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { TopBarSimple(text = stringResource(R.string.routing_groups)) },
-        bottomBar = {
-            val actions = mutableListOf(
-                Triple(
-                    stringResource(R.string.group_menu_bottom_notifications),
-                    { navController.navigate(Routing.RemindersScreen.route) },
-                    Icons.Default.Notifications
-                ),
-                Triple(
-                    stringResource(R.string.group_menu_bottom_settings),
-                    { navController.navigate(Routing.SettingsScreen.route) },
-                    Icons.Default.AccountCircle
-                )
-            )
-            SimpleBottomBar(actions)
-        }
+        topBar = { TopBarBackButton(text = stringResource(R.string.routing_solutions), navController) }
     ) { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,10 +52,11 @@ fun GroupsScreen(
             LazyColumn(
                 contentPadding = PaddingValues(10.dp)
             ) {
-                items(viewModel.groups.value) { group ->
-                    GroupListElement(
-                        group = group,
-                        onClick = { navController.navigate(Routing.GroupScreen.route + "?groupId=${group.group_id}") }
+                items(viewModel.solutions.value) { solution ->
+                    SolutionListElement(
+                        solution = solution,
+                        onClick = { navController.navigate(Routing.SolutionScreen.route
+                                + "?groupId=${viewModel.getGroupId()}&taskId=${viewModel.getTaskId()}&solutionId=${solution.solution_id}") }
                     )
                     Spacer(Modifier.height(10.dp))
                 }
@@ -86,7 +69,9 @@ fun GroupsScreen(
             contentAlignment = Alignment.BottomEnd
         ) {
             FloatingActionButton(
-                onClick = { navController.navigate(Routing.AddEditGroupScreen.route) }
+                onClick = { navController.navigate(Routing.SolutionScreen.route +
+                        "?groupId=${viewModel.getGroupId()}&taskId=${viewModel.getTaskId()}")
+                }
             ) {
                 Image(Icons.Default.Add, null)
             }

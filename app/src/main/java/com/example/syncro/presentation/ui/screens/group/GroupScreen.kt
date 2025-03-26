@@ -1,13 +1,13 @@
 package com.example.syncro.presentation.ui.screens.group
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -17,6 +17,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.FloatingActionButton
@@ -29,14 +31,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
 import com.example.syncro.application.Routing
-import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.components.GroupTask
 import com.example.syncro.presentation.ui.components.SimpleBottomBar
 import com.example.syncro.presentation.ui.components.TopBarBackButton
@@ -61,12 +60,12 @@ fun GroupScreen(
                 ),
                 Triple(
                     stringResource(R.string.group_menu_bottom_notifications),
-                    {  },
+                    { navController.navigate(Routing.RemindersScreen.route + "?groupId=${viewModel.group.value?.group_id}") },
                     Icons.Default.Notifications
                 ),
                 Triple(
                     stringResource(R.string.group_menu_bottom_people),
-                    { },
+                    { navController.navigate(Routing.PeoplesScreen.route + "?groupId=${viewModel.group.value?.group_id}") },
                     Icons.Default.Email
                 )
             )
@@ -99,7 +98,7 @@ fun GroupScreen(
                     paddingValues.calculateBottomPadding()
                 )
         ) {
-            NavigationBar( // TODO: change to beautiful
+            NavigationBar(
                 modifier = Modifier
                     .padding(10.dp)
                     .windowInsetsPadding(WindowInsets.navigationBars)
@@ -109,50 +108,37 @@ fun GroupScreen(
                     selected = viewModel.currentTopNavBar.value == GroupData.Current,
                     onClick = { viewModel.getData(GroupData.Current) },
                     label = { TextBodySmall(stringResource(R.string.group_menu_top_current)) },
-                    icon = {}
+                    icon = { Image(Icons.Default.Notifications, null) }
                 )
                 NavigationBarItem(
                     selected = viewModel.currentTopNavBar.value == GroupData.Plan,
                     onClick = { viewModel.getData(GroupData.Plan) },
                     label = { TextBodySmall(stringResource(R.string.group_menu_top_plan)) },
-                    icon = {}
+                    icon = { Image(Icons.Default.DateRange, null) }
                 )
                 NavigationBarItem(
                     selected = viewModel.currentTopNavBar.value == GroupData.Done,
                     onClick = { viewModel.getData(GroupData.Done) },
                     label = { TextBodySmall(stringResource(R.string.group_menu_top_done)) },
-                    icon = {}
+                    icon = { Image(Icons.Default.Check, null) }
                 )
             }
 
             LazyColumn(
                 contentPadding = PaddingValues(top = 10.dp),
                 modifier = Modifier
-                    .fillMaxWidth(0.9f)
+                    .fillMaxSize(0.9f)
                     .offset(y = -WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
             ) {
                 items(viewModel.currentData.value) {task ->
                     GroupTask(
                         task = task,
-                        onClick = { navController.navigate(Routing.TaskScreen.route + "?groupId=${viewModel.group.value?.group_id}&taskId=${task.task_id}") }
+                        onClick = { navController.navigate(Routing.TaskScreen.route + "?groupId=${viewModel.group.value?.group_id}&taskId=${task.task_id}") },
+                        onSolutionClick = { navController.navigate(Routing.SolutionsScreen.route + "?groupId=${viewModel.group.value?.group_id}&taskId=${task.task_id}") }
                     )
+                    Spacer(Modifier.height(10.dp))
                 }
             }
-        }
-    }
-}
-
-@Preview(
-    showBackground = true,
-)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun GroupScreenPreview() {
-    SyncroTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) {
-            GroupScreen(
-                rememberNavController()
-            )
         }
     }
 }

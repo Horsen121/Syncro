@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextIndent
@@ -28,24 +30,32 @@ import androidx.compose.ui.unit.sp
 import com.example.syncro.application.ui.theme.SyncroTheme
 
 @Composable
-fun SimpleTextField(
+fun SimpleTextField( // TODO: hide keyboard
     value: String,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit,
     placeholder: @Composable (() -> Unit)?,
     isError: Boolean = false,
+    maxLength: Int = Int.MAX_VALUE
 ) {
     OutlinedTextField(
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = {
+            if (it.length <= maxLength)
+                onValueChange(it)
+        },
         placeholder = placeholder,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, capitalization = KeyboardCapitalization.Sentences),
         shape = MaterialTheme.shapes.medium,
         isError = isError,
+        supportingText = {
+            if (maxLength != Int.MAX_VALUE)
+                "${value.length} / $maxLength"
+        },
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = MaterialTheme.colorScheme.onBackground,
             unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            focusedBorderColor = if (value.length <= maxLength) MaterialTheme.colorScheme.primary else Color.Red,
             unfocusedBorderColor = MaterialTheme.colorScheme.primary,
             focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -131,9 +141,12 @@ fun TextFieldPreview() {
     SyncroTheme {
         Column {
             val text = remember { mutableStateOf("") }
-            SimpleTextField(value = text.value, onValueChange = { text.value = it }, placeholder = { Text(
-                text = "sdfsdf"
-            )})
+            SimpleTextField(
+                value = text.value,
+                onValueChange = { text.value = it },
+                placeholder = { Text("sdfsdf")},
+                maxLength = 50
+            )
             Spacer(modifier = Modifier.height(10.dp))
             PasswordTextField(value = text.value, onValueChange = { text.value = it }, placeholder = { Text(
                 text = "sdfsdf"

@@ -1,34 +1,26 @@
 package com.example.syncro.presentation.ui.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.syncro.application.ui.theme.SyncroTheme
-import com.example.syncro.data.models.Group
+import com.example.syncro.data.models.Reminder
 import com.example.syncro.presentation.ui.elements.TextBodyMedium
 import com.example.syncro.presentation.ui.elements.TextHeadMedium
 
 @Composable
-fun GroupListElement(
-    group: Group,
+fun ReminderListElement(
+    reminder: Pair<Reminder, String>,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -43,31 +35,23 @@ fun GroupListElement(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
             Column(
-                modifier = Modifier.padding(10.dp, 0.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 0.dp)
             ) {
                 TextHeadMedium(
-                    text = group.name,
-                    textAlign = TextAlign.Start,
-                    fillMaxWidth = false
+                    text = reminder.second
                 )
                 TextBodyMedium(
-                    text = group.description,
+                    text = reminder.first.message,
+                    textAlign = TextAlign.Start,
+                )
+                TextBodyMedium(
+                    text = reminder.first.reminder_time,
                     textAlign = TextAlign.Start,
                 )
             }
-            Spacer(Modifier.width(24.dp))
-
-            Row {
-                TextBodyMedium(group.countPeople.toString())
-                Image(Icons.Default.Person, null)
-            }
-        }
     }
 }
 
@@ -76,8 +60,9 @@ fun GroupListElement(
 private fun GroupListElementPreview() {
     SyncroTheme {
         Scaffold { _ ->
-            GroupListElement(
-                group = Group(1, "Test1", "desk", 10, 1L,true),
+            ReminderListElement(
+                reminder = Pair(
+                    Reminder(1, 1, 1, "25/03/25", "asdgdsfasd", false), "Task1"),
                 onClick = {  }
             )
         }

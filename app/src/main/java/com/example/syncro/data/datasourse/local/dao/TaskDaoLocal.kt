@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDaoLocal {
+    @Query("SELECT * FROM `task`")
+    fun getAllTasks(): Flow<List<Task>>
+
     @Query("SELECT * FROM `task` WHERE group_id = :id")
     fun getTasks(id: Long): Flow<List<Task>>
 

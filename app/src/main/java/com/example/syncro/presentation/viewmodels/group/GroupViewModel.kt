@@ -58,13 +58,17 @@ class GroupViewModel @Inject constructor(
 
             GroupData.Plan -> {
                 loadTasks().also {
-                    _currentTopNavBar.value = GroupData.Plan
+                    loadTasks().also {
+                        _currentTopNavBar.value = GroupData.Plan
+                    }
                 }
             }
 
             GroupData.Done -> {
                 loadTasks().also {
-                    _currentTopNavBar.value = GroupData.Done
+                    loadTasks().also {
+                        _currentTopNavBar.value = GroupData.Done
+                    }
                 }
             }
         }

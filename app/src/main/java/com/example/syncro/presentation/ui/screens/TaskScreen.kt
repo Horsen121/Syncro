@@ -1,6 +1,5 @@
 package com.example.syncro.presentation.ui.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,13 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
-import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.components.TopBarText
 import com.example.syncro.presentation.ui.elements.DropMenu
 import com.example.syncro.presentation.ui.elements.SimpleTextField
@@ -57,8 +53,7 @@ fun TaskScreen(
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxSize()
                 .padding(
                     0.dp,
                     paddingValues.calculateTopPadding() + 10.dp,
@@ -72,55 +67,69 @@ fun TaskScreen(
                     .fillMaxWidth()
                     .fillMaxHeight(0.8f)
             ) {
-            TextHeadSmall(
-                text = stringResource(R.string.task_name_title)
-            )
-            SimpleTextField(
-                value = viewModel.name.value,
-                placeholder = { TextBodyMedium(stringResource(R.string.task_name_place)) },
-                onValueChange = { viewModel.onNameChange(it) }
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            TextHeadSmall(
-                text = stringResource(R.string.task_description_title)
-            )
-            SimpleTextField(
-                value = viewModel.desc.value,
-                placeholder = { TextBodyMedium(stringResource(R.string.task_description_place)) },
-                onValueChange = { viewModel.onDescChange(it) }
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-
-            DropMenu(
-                text = stringResource(R.string.task_difficulty),
-                elements = TaskDifficult.entries.map { el -> el.name },
-                current = viewModel.diff.value.ordinal,
-                open = viewModel.diffOpen.value,
-                onClick = { viewModel.onDiffOpenChange(it) },
-                onValueSelect = {
-                    viewModel.onDiffChange(TaskDifficult.valueOf(it))
-                },
-                modifier = Modifier.fillMaxWidth(0.9f)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.clickable { } // TODO: open a fileManager
-            ) {
-                TextHeadSmall(text = stringResource(R.string.task_files))
-                Image(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null
+                TextHeadSmall(
+                    text = stringResource(R.string.task_name_title)
                 )
-            }
-            LazyColumn {
-                items(viewModel.files.value) { file ->
-                    // TODO: add element
+                SimpleTextField(
+                    value = viewModel.name.value,
+                    placeholder = { TextBodyMedium(stringResource(R.string.task_name_place)) },
+                    onValueChange = { viewModel.onNameChange(it) },
+                    maxLength = 30
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                TextHeadSmall(
+                    text = stringResource(R.string.task_description_title)
+                )
+                SimpleTextField(
+                    value = viewModel.desc.value,
+                    placeholder = { TextBodyMedium(stringResource(R.string.task_description_place)) },
+                    onValueChange = { viewModel.onDescChange(it) },
+                    maxLength = 100
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+
+                DropMenu(
+                    text = stringResource(R.string.task_difficulty),
+                    elements = TaskDifficult.entries.map { el -> el.name },
+                    current = viewModel.diff.value.ordinal,
+                    open = viewModel.diffOpen.value,
+                    onClick = { viewModel.onDiffOpenChange(it) },
+                    onValueSelect = {
+                        viewModel.onDiffChange(TaskDifficult.valueOf(it))
+                    },
+                    modifier = Modifier.fillMaxWidth(0.9f)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                TextHeadSmall(
+                    text = stringResource(R.string.task_start)
+                )
+
+
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.clickable { } // TODO: open a fileManager
+                ) {
+                    TextHeadSmall(text = stringResource(R.string.task_files))
+                    Image(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null
+                    )
+                }
+                LazyColumn {
+                    items(viewModel.files.value) { file ->
+                        // TODO: add element
+                    }
+                }
+                Spacer(Modifier.height(24.dp))
+
+                Button(
+                    onClick = {  } // TODO: open file dialog
+                ) {
+                    Image(Icons.Default.Add, null)
                 }
             }
-        }
             Button(
                 onClick = {
                     viewModel.onSave().also {
@@ -130,21 +139,6 @@ fun TaskScreen(
             ) {
                 TextHeadMedium(stringResource(R.string.add_edit_group_button))
             }
-        }
-    }
-}
-
-@Preview(
-    showBackground = true,
-)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun TaskScreenPreview() {
-    SyncroTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) {
-            TaskScreen(
-                rememberNavController()
-            )
         }
     }
 }

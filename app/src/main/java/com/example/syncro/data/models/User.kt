@@ -8,7 +8,5 @@ data class User(
     @PrimaryKey val user_id: Long,
     val email: String,
     val password_hash: String,
-    val full_name: String,
-    val created_at: String,
-    val last_login: String
+    val name: String
 ): java.io.Serializable

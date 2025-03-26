@@ -79,14 +79,14 @@ class TaskViewModel @Inject constructor(
         viewModelScope.launch {
             taskUseCases.addTask(
                 Task(
+                    task_id = null,
                     group_id = groupId,
                     title = _name.value,
                     description = _desc.value,
-                    created_at = "",
                     created_by = userId,
                     start_time = "",
                     end_time = "",
-                    priority = _diff.value.name
+                    difficult = _diff.value.name
                 )
             )
         }

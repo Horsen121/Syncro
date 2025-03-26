@@ -70,7 +70,8 @@ fun AddEditGroupScreen(
                 SimpleTextField(
                     value = viewModel.name.value,
                     placeholder = { TextBodyMedium(stringResource(R.string.add_edit_group_name_place)) },
-                    onValueChange = { viewModel.onNameChange(it) }
+                    onValueChange = { viewModel.onNameChange(it) },
+                    maxLength = 30
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -80,7 +81,8 @@ fun AddEditGroupScreen(
                 SimpleTextField(
                     value = viewModel.desc.value,
                     placeholder = { TextBodyMedium(stringResource(R.string.add_edit_group_description_place)) },
-                    onValueChange = { viewModel.onDescChange(it) }
+                    onValueChange = { viewModel.onDescChange(it) },
+                    maxLength = 100
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 

@@ -8,6 +8,10 @@ import kotlinx.coroutines.flow.Flow
 class TaskRepositoryImpl(
     private val daoLocal: TaskDaoLocal,
 ): TaskRepository {
+    override fun getAllTasks(): Flow<List<Task>> {
+        return daoLocal.getAllTasks()
+    }
+
     override fun getTasksByGroup(id: Long): Flow<List<Task>> {
         return daoLocal.getTasks(id)
     }

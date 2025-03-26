@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ReminderDaoLocal {
-    @Query("SELECT * FROM reminder")
+    @Query("SELECT * FROM `reminder`")
     fun getReminders(): Flow<List<Reminder>>
 
-    @Query("SELECT * FROM reminder WHERE reminder_id = :id")
+    @Query("SELECT * FROM `reminder` WHERE reminder_id = :id")
     suspend fun getReminderById(id: Long): Reminder?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
