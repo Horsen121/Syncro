@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -65,8 +66,9 @@ fun GroupScreen(
                 ),
                 Triple(
                     stringResource(R.string.group_menu_bottom_people),
-                    { navController.navigate(Routing.PeoplesScreen.route + "?groupId=${viewModel.group.value?.group_id}") },
-                    Icons.Default.Email
+                    { navController.navigate(Routing.PeoplesScreen.route
+                            + "?groupId=${viewModel.group.value?.group_id}&groupName=${viewModel.group.value?.name}&isAdmin=${viewModel.group.value?.isAdmin}") },
+                    Icons.Default.Person
                 )
             )
             if(viewModel.group.value?.isAdmin == true)

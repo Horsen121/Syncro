@@ -9,7 +9,6 @@ import com.example.syncro.data.models.Group
 import com.example.syncro.domain.usecases.GroupUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,6 +16,7 @@ class AddEditGroupViewModel @Inject constructor(
     private val groupUseCases: GroupUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    private var groupId = -1L
     private var userId = -1L
     private var countPeople = 1
 
@@ -35,6 +35,7 @@ class AddEditGroupViewModel @Inject constructor(
     init {
         savedStateHandle.get<Long>("groupId")?.let { groupId ->
             if (groupId != -1L) {
+                this.groupId = groupId
                 viewModelScope.launch {
                     groupUseCases.getGroup(groupId)?.also { group ->
                         _name.value = group.name
@@ -71,7 +72,7 @@ class AddEditGroupViewModel @Inject constructor(
         viewModelScope.launch {
             groupUseCases.addGroup(
                 Group(
-                    group_id = null,
+                    group_id = groupId,
                     name = _name.value,
                     description = _desc.value,
                     isAdmin = _isAdmin.value,

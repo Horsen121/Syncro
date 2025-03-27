@@ -1,4 +1,4 @@
-package com.example.syncro.presentation.viewmodels
+package com.example.syncro.presentation.viewmodels.group
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

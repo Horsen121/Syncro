@@ -19,21 +19,31 @@ fun CheckTextButton(
     onCheckedChange: (Boolean) -> Unit,
     text: String,
     textColor: Color = Color.Unspecified,
-    arrangement: Arrangement.Horizontal = Arrangement.Start
+    arrangement: Arrangement.Horizontal = Arrangement.Start,
+    leftTextPosition: Boolean = false,
+    fillMaxWidth: Boolean = true
 ) {
     Row(
         horizontalArrangement = arrangement,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
+        modifier = if(fillMaxWidth) Modifier.fillMaxWidth() else Modifier
     ) {
-        Checkbox(
-            checked = checked,
-            onCheckedChange = onCheckedChange
-        )
+        if (!leftTextPosition) {
+            Checkbox(
+                checked = checked,
+                onCheckedChange = onCheckedChange
+            )
+        }
         TextBodyMedium(
             text = text,
             color = textColor
         )
+        if (leftTextPosition) {
+            Checkbox(
+                checked = checked,
+                onCheckedChange = onCheckedChange
+            )
+        }
     }
 }
 

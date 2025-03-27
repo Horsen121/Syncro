@@ -1,4 +1,4 @@
-package com.example.syncro.presentation.ui.screens.logreg
+package com.example.syncro.presentation.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column

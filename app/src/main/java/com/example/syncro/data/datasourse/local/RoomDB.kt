@@ -8,6 +8,7 @@ import com.example.syncro.data.datasourse.local.dao.GroupDaoLocal
 import com.example.syncro.data.datasourse.local.dao.ReminderDaoLocal
 import com.example.syncro.data.datasourse.local.dao.SolutionDaoLocal
 import com.example.syncro.data.datasourse.local.dao.TaskDaoLocal
+import com.example.syncro.data.datasourse.local.dao.UserDaoLocal
 import com.example.syncro.data.models.Group
 import com.example.syncro.data.models.Reminder
 import com.example.syncro.data.models.Solution
@@ -29,7 +30,7 @@ abstract class SyncroDB : RoomDatabase() {
     abstract fun reminderDao(): ReminderDaoLocal
     abstract fun solutionDao(): SolutionDaoLocal
     abstract fun taskDao(): TaskDaoLocal
-//    abstract fun userDao(): UserDao
+    abstract fun userDao(): UserDaoLocal
 
     companion object {
         private var instance: SyncroDB? = null

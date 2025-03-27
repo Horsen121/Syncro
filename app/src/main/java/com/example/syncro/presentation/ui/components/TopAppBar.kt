@@ -109,7 +109,8 @@ fun TopBarBackButton(
             ) {
                 TextHeadMedium(
                     text = text,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fillMaxWidth = false
                 )
             }
         }

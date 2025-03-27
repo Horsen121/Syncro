@@ -16,15 +16,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.screens.GroupsScreen
-import com.example.syncro.presentation.ui.screens.SolutionScreen
-import com.example.syncro.presentation.ui.screens.TaskScreen
+import com.example.syncro.presentation.ui.screens.PeoplesScreen
+import com.example.syncro.presentation.ui.screens.group.SolutionScreen
+import com.example.syncro.presentation.ui.screens.group.TaskScreen
 import com.example.syncro.presentation.ui.screens.group.AddEditGroupScreen
 import com.example.syncro.presentation.ui.screens.group.GroupChatScreen
 import com.example.syncro.presentation.ui.screens.group.GroupScreen
 import com.example.syncro.presentation.ui.screens.logreg.LoginScreen
 import com.example.syncro.presentation.ui.screens.logreg.RegistrationScreen
-import com.example.syncro.presentation.ui.screens.logreg.RemindersScreen
-import com.example.syncro.presentation.ui.screens.logreg.SolutionsScreen
+import com.example.syncro.presentation.ui.screens.RemindersScreen
+import com.example.syncro.presentation.ui.screens.SolutionsScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -83,6 +84,19 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         AddEditGroupScreen(
+                            navController = navController
+                        )
+                    }
+                    composable(
+                        route = Routing.GroupChatScreen.route + "?groupId={groupId}",
+                        arguments = listOf(
+                            navArgument(name = "groupId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                        )
+                    ) {
+                        GroupChatScreen(
                             navController = navController
                         )
                     }
@@ -155,15 +169,23 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(
-                        route = Routing.GroupChatScreen.route + "?groupId={groupId}",
+                        route = Routing.PeoplesScreen.route + "?groupId={groupId}&groupName={groupName}&isAdmin={isAdmin}",
                         arguments = listOf(
                             navArgument(name = "groupId") {
                                 type = NavType.LongType
                                 defaultValue = -1L
                             },
+                            navArgument(name = "groupName") {
+                                type = NavType.StringType
+                                defaultValue = ""
+                            },
+                            navArgument(name = "isAdmin") {
+                                type = NavType.BoolType
+                                defaultValue = false
+                            },
                         )
                     ) {
-                        GroupChatScreen(
+                        PeoplesScreen(
                             navController = navController
                         )
                     }

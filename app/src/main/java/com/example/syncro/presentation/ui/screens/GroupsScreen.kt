@@ -2,7 +2,6 @@ package com.example.syncro.presentation.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -54,6 +53,13 @@ fun GroupsScreen(
                 )
             )
             SimpleBottomBar(actions)
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate(Routing.AddEditGroupScreen.route) }
+            ) {
+                Image(Icons.Default.Add, null)
+            }
         }
     ) { paddingValues ->
         Column(
@@ -77,18 +83,6 @@ fun GroupsScreen(
                     )
                     Spacer(Modifier.height(10.dp))
                 }
-            }
-        }
-        BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(end = 8.dp, bottom = 64.dp),
-            contentAlignment = Alignment.BottomEnd
-        ) {
-            FloatingActionButton(
-                onClick = { navController.navigate(Routing.AddEditGroupScreen.route) }
-            ) {
-                Image(Icons.Default.Add, null)
             }
         }
     }

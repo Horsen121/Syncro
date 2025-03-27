@@ -9,14 +9,17 @@ import com.example.syncro.data.repository.GroupRepositoryImpl
 import com.example.syncro.data.repository.ReminderRepositoryImpl
 import com.example.syncro.data.repository.SolutionRepositoryImpl
 import com.example.syncro.data.repository.TaskRepositoryImpl
+import com.example.syncro.data.repository.UserRepositoryImpl
 import com.example.syncro.domain.repository.GroupRepository
 import com.example.syncro.domain.repository.ReminderRepository
 import com.example.syncro.domain.repository.SolutionRepository
 import com.example.syncro.domain.repository.TaskRepository
+import com.example.syncro.domain.repository.UserRepository
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.domain.usecases.ReminderUseCases
 import com.example.syncro.domain.usecases.SolutionUseCases
 import com.example.syncro.domain.usecases.TaskUseCases
+import com.example.syncro.domain.usecases.UserUseCases
 import com.example.syncro.domain.usecases.group.AddGroup
 import com.example.syncro.domain.usecases.group.DeleteGroup
 import com.example.syncro.domain.usecases.group.GetGroup
@@ -34,6 +37,10 @@ import com.example.syncro.domain.usecases.task.DeleteTask
 import com.example.syncro.domain.usecases.task.GetAllTasks
 import com.example.syncro.domain.usecases.task.GetTask
 import com.example.syncro.domain.usecases.task.GetTasks
+import com.example.syncro.domain.usecases.user.AddUser
+import com.example.syncro.domain.usecases.user.DeleteUser
+import com.example.syncro.domain.usecases.user.GetUser
+import com.example.syncro.domain.usecases.user.GetUsers
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -131,6 +138,22 @@ object AppModule {
             addReminder = AddReminder(repository),
             getReminder= GetReminder(repository),
             deleteReminder = DeleteReminder(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(db: SyncroDB): UserRepository {
+        return UserRepositoryImpl(db.userDao())
+    }
+    @Provides
+    @Singleton
+    fun provideUserUseCases(repository: UserRepository): UserUseCases {
+        return UserUseCases(
+            getUsers = GetUsers(repository),
+            addUser = AddUser(repository),
+            getUser = GetUser(repository),
+            deleteUser = DeleteUser(repository)
         )
     }
 }

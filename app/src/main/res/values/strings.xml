@@ -5,6 +5,7 @@
     <!--  Elements  -->
     <string name="cancel">Отмена</string>
     <string name="clear">Очистить</string>
+    <string name="back">Назад</string>
     <string name="ok">Ок</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
@@ -83,6 +84,10 @@
     <string name="solution_sources">Источники</string>
     <string name="solution_files">Файлы</string>
 
+    <!--  Peoples page  -->
+    <string name="users_add">Пригласить</string>
+
     <!--  Cards  -->
     <string name="card_task_solutions">Решения</string>
+    <string name="card_user">Админ</string>
 </resources>
