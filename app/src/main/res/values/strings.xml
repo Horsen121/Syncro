@@ -16,6 +16,7 @@
     <string name="routing_groups">Группы </string>
     <string name="routing_reminders">Напоминания</string>
     <string name="routing_solutions">Решения</string>
+    <string name="routing_settings">Настройки</string>
 
     <!--  Login page  -->
     <string name="login_hello">Добро пожаловать!</string>
@@ -86,6 +87,12 @@
 
     <!--  Peoples page  -->
     <string name="users_add">Пригласить</string>
+
+    <!--  Settings page  -->
+    <string name="settings_logout">Выйти из учётной записи</string>
+    <string name="settings_logout_confirm">Вы уверенны, что хотите выйти из учётной записи?</string>
+    <string name="settings_exit">Выйти</string>
+    <string name="settings_exit_confirm">Вы уверенны, что хотите выйти?</string>
 
     <!--  Cards  -->
     <string name="card_task_solutions">Решения</string>

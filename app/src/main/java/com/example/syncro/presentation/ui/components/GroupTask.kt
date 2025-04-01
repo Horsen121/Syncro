@@ -78,7 +78,7 @@ private fun GroupListElementPreview() {
     SyncroTheme {
         Scaffold { _ ->
             GroupTask(
-                task = Task(1, 1, "Task", "desk", 1, "25/03/25","31/03/25", TaskDifficult.Easy.name),
+                task = Task(1, 1, "Task", "desk", 1, "25/03/25","31/03/25", "",TaskDifficult.Easy.name),
                 onClick = {  },
                 onSolutionClick = {  }
             )

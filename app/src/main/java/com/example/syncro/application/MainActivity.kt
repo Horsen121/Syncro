@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.syncro.application.ui.theme.SyncroTheme
+import com.example.syncro.data.models.User
 import com.example.syncro.presentation.ui.screens.GroupsScreen
 import com.example.syncro.presentation.ui.screens.PeoplesScreen
 import com.example.syncro.presentation.ui.screens.group.SolutionScreen
@@ -25,8 +26,15 @@ import com.example.syncro.presentation.ui.screens.group.GroupScreen
 import com.example.syncro.presentation.ui.screens.logreg.LoginScreen
 import com.example.syncro.presentation.ui.screens.logreg.RegistrationScreen
 import com.example.syncro.presentation.ui.screens.RemindersScreen
+import com.example.syncro.presentation.ui.screens.SettingsScreen
 import com.example.syncro.presentation.ui.screens.SolutionsScreen
 import dagger.hilt.android.AndroidEntryPoint
+
+object CurrentUser {
+    var id = 1L
+    var name = "UserName"
+    var email = "e.mail@mail.ru"
+}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -186,6 +194,13 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         PeoplesScreen(
+                            navController = navController
+                        )
+                    }
+                    composable(
+                        route = Routing.SettingsScreen.route
+                    ) {
+                        SettingsScreen(
                             navController = navController
                         )
                     }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.syncro.application.CurrentUser
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +29,10 @@ class LoginViewModel @Inject constructor(
     fun signIn() {
         viewModelScope.launch {
             // TODO: send signIn values to server
+
+            CurrentUser.id
+            CurrentUser.name
+            CurrentUser.email
         }
     }
 

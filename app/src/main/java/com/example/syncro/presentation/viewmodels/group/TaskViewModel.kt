@@ -10,6 +10,7 @@ import com.example.syncro.domain.usecases.TaskUseCases
 import com.example.syncro.utils.TaskDifficult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +27,15 @@ class TaskViewModel @Inject constructor(
 
     private var _desc = mutableStateOf("")
     val desc: State<String> = _desc
+
+    private var _startTime = mutableStateOf<LocalDateTime?>(null)
+    val startTime: State<LocalDateTime?> = _startTime
+
+    private var _endTime = mutableStateOf<LocalDateTime?>(null)
+    val endTime: State<LocalDateTime?> = _endTime
+
+    private var _reminderTime = mutableStateOf<LocalDateTime?>(null)
+    val reminderTime: State<LocalDateTime?> = _reminderTime
 
     private var _diff = mutableStateOf(TaskDifficult.Medium)
     val diff: State<TaskDifficult> = _diff
@@ -67,6 +77,18 @@ class TaskViewModel @Inject constructor(
         _diffOpen.value = open
     }
 
+    fun onStartTimeChange(value: LocalDateTime?) {
+        _startTime.value = value
+    }
+
+    fun onEndTimeChange(value: LocalDateTime?) {
+        _endTime.value = value
+    }
+
+    fun onReminderTimeChange(value: LocalDateTime?) {
+        _reminderTime.value = value
+    }
+
     fun onFileAdd(file: String) {
         _files.value += file
     }
@@ -84,8 +106,9 @@ class TaskViewModel @Inject constructor(
                     title = _name.value,
                     description = _desc.value,
                     created_by = userId,
-                    start_time = "",
-                    end_time = "",
+                    start_time = _startTime.value.toString(),
+                    end_time = _endTime.value.toString(),
+                    reminderTime = _reminderTime.value.toString(),
                     difficult = _diff.value.name
                 )
             )
@@ -97,6 +120,9 @@ class TaskViewModel @Inject constructor(
         _desc.value = ""
         _diff.value = TaskDifficult.Medium
         _diffOpen.value = false
+        _startTime.value = null
+        _endTime.value = null
+        _reminderTime.value = null
         _files.value = emptyList()
     }
 

@@ -14,5 +14,6 @@ data class Task(
     val start_time: String,
     val end_time: String,
     val difficult: String,
+    val reminderTime: String,
     val isComplited: Boolean = false
 ): java.io.Serializable
