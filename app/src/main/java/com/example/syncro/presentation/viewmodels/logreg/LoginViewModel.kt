@@ -30,9 +30,9 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             // TODO: send signIn values to server
 
-            CurrentUser.id
-            CurrentUser.name
-            CurrentUser.email
+            CurrentUser.id = 1L
+            CurrentUser.name = "UserName"
+            CurrentUser.email = "e.mail@mail.ru"
         }
     }
 

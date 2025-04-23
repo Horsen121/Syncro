@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.syncro.application.CurrentUser
 import com.example.syncro.data.models.Group
 import com.example.syncro.domain.usecases.GroupUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +17,7 @@ class AddEditGroupViewModel @Inject constructor(
     private val groupUseCases: GroupUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private var groupId = -1L
-    private var userId = -1L
+    private var groupId: Long? = null
     private var countPeople = 1
 
     private var _name = mutableStateOf("")
@@ -47,9 +47,6 @@ class AddEditGroupViewModel @Inject constructor(
                 }
             }
         }
-        savedStateHandle.get<Long>("userId")?.let {
-            if (it != -1L) userId = it
-        }
     }
 
     fun onNameChange(text: String) {
@@ -76,7 +73,7 @@ class AddEditGroupViewModel @Inject constructor(
                     name = _name.value,
                     description = _desc.value,
                     isAdmin = _isAdmin.value,
-                    created_by = userId,
+                    created_by = CurrentUser.id,
                     countPeople = countPeople
                 )
             )

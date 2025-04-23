@@ -1,7 +1,10 @@
 package com.example.syncro.presentation.ui.screens.group
 
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.syncro.R
+import com.example.syncro.presentation.ui.components.FileCard
 import com.example.syncro.presentation.ui.components.TopBarText
 import com.example.syncro.presentation.ui.elements.DrawChangeRow
 import com.example.syncro.presentation.ui.elements.DropMenu
@@ -400,28 +404,37 @@ fun TaskScreen(
 
 
                 Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.clickable { } // TODO: open a fileManager
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     TextHeadSmall(text = stringResource(R.string.task_files))
-                    Image(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null
-                    )
                 }
-                LazyColumn {
+                LazyColumn(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     items(viewModel.files.value) { file ->
-                        // TODO: add element
+                        FileCard(
+                            file,
+                            onClick = { viewModel.onFileRemove(file) }
+                        )
                     }
                 }
                 Spacer(Modifier.height(24.dp))
 
+                val getFile = rememberLauncherForActivityResult(
+                    ActivityResultContracts.StartActivityForResult()
+                ) { result ->
+                    result.let { viewModel.onFileAdd(it.data?.data?.path!!) }
+                }
                 Button(
-                    onClick = {  } // TODO: open file dialog
+                    onClick = {
+                        getFile.launch(Intent(Intent.ACTION_PICK))
+                    }
                 ) {
                     Image(Icons.Default.Add, null)
                 }
             }
+
             Button(
                 onClick = {
                     viewModel.onSave().also {

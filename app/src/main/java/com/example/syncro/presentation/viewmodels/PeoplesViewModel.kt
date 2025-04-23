@@ -28,6 +28,9 @@ class PeoplesViewModel @Inject constructor(
     private var _users = mutableStateOf<List<User>>(emptyList())
     val users: State<List<User>> = _users
 
+    private var _search = mutableStateOf<List<Pair<String,String>>>(emptyList())
+    val search: State<List<Pair<String,String>>> = _search
+
     init {
         savedStateHandle.get<Long?>("groupId").let { id ->
             if (id != null && id != -1L) {
@@ -47,27 +50,32 @@ class PeoplesViewModel @Inject constructor(
         }
     }
 
-    fun add() { // TODO: remove!!!
+    fun add(user: String) { // TODO: remove!!!
         viewModelScope.launch {
             val num = Random.nextInt().toString()
+            val addUser = user.split(".")[0]
             userUseCases.addUser(
                 User(
                     group_id = groupId,
-                    name = "User$num",
-                    email = "user.$num@mail.ru"
+                    name = addUser,
+                    email = "$addUser.$num@mail.ru"
                 )
             )
         }
-        invite()
     }
 
-    fun invite() {
+    fun search(user: String) {
+        _search.value += Pair(user, "$user.email@mail.ru")
+    }
+
+    fun invite(user: String) {
         viewModelScope.launch {
             val group = groupUseCases.getGroup(groupId)!!
             groupUseCases.addGroup(
                 group.copy(countPeople = group.countPeople + 1)
             )
         }
+        add(user)
     }
 
     fun changeIsAdmin(id: Long) {

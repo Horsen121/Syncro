@@ -5,22 +5,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.syncro.application.CurrentUser
+import com.example.syncro.data.models.File
 import com.example.syncro.data.models.Task
+import com.example.syncro.domain.usecases.FileUseCases
 import com.example.syncro.domain.usecases.TaskUseCases
 import com.example.syncro.utils.TaskDifficult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskViewModel @Inject constructor(
     private val taskUseCases: TaskUseCases,
+    private val fileUseCases: FileUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private var userId = 1L // TODO: change to
     private var groupId = -1L
+    private var taskId: Long? = null
 
     private var _name = mutableStateOf("")
     val name: State<String> = _name
@@ -46,18 +51,30 @@ class TaskViewModel @Inject constructor(
     val files: State<List<String>> = _files
 
     init {
-        savedStateHandle.get<Long>("taskId").let { id ->
-            if (id != null && id != -1L) {
-                viewModelScope.launch {
-                    taskUseCases.getTask(id)?.also { task ->
-                        _name.value = task.title
-                        _desc.value = task.description
+        runBlocking {
+            savedStateHandle.get<Long>("taskId").let { id ->
+                if (id != null && id != -1L) {
+                    taskId = id
+                    viewModelScope.launch {
+                        taskUseCases.getTask(id)?.also { task ->
+                            _name.value = task.title
+                            _desc.value = task.description
+                        }
                     }
                 }
             }
         }
-        savedStateHandle.get<Long>("groupId").let { id ->
-            if (id != null) groupId = id
+        runBlocking {
+            savedStateHandle.get<Long>("groupId").let { id ->
+                if (id != null) groupId = id
+            }
+        }
+        if (groupId != null && taskId != null) {
+            viewModelScope.launch {
+                fileUseCases.getFiles(groupId, taskId!!).collect {
+                    _files.value += it.map { f -> f.path }
+                }
+            }
         }
     }
 
@@ -101,17 +118,27 @@ class TaskViewModel @Inject constructor(
         viewModelScope.launch {
             taskUseCases.addTask(
                 Task(
-                    task_id = null,
+                    task_id = taskId,
                     group_id = groupId,
                     title = _name.value,
                     description = _desc.value,
-                    created_by = userId,
+                    created_by = CurrentUser.id,
                     start_time = _startTime.value.toString(),
                     end_time = _endTime.value.toString(),
                     reminderTime = _reminderTime.value.toString(),
                     difficult = _diff.value.name
                 )
-            )
+            ).let { id ->
+                _files.value.forEach {
+                    fileUseCases.addFile(
+                        File(
+                            group_id = groupId,
+                            task_id = id!!,
+                            path = it
+                        )
+                    )
+                }
+            }
         }
     }
 

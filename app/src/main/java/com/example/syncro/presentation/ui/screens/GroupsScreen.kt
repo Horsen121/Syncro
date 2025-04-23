@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,6 +30,7 @@ import com.example.syncro.application.Routing
 import com.example.syncro.presentation.ui.components.GroupListElement
 import com.example.syncro.presentation.ui.components.SimpleBottomBar
 import com.example.syncro.presentation.ui.components.TopBarSimple
+import com.example.syncro.presentation.ui.elements.SimpleSearchBar
 import com.example.syncro.presentation.viewmodels.GroupsViewModel
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
@@ -68,11 +71,21 @@ fun GroupsScreen(
                 .fillMaxSize()
                 .padding(
                     0.dp,
-                    paddingValues.calculateTopPadding(),
+                    paddingValues.calculateTopPadding()+10.dp,
                     0.dp,
                     paddingValues.calculateBottomPadding()
                 )
         ) {
+            val searchState = remember { TextFieldState() }
+            SimpleSearchBar(
+                textFieldState = searchState,
+                onSearch = {
+                    searchState.edit { replace(0, length, it) }
+                    viewModel.search(it)
+                },
+                onClick = { viewModel.join(it) },
+                searchResults = viewModel.search.value
+            )
             LazyColumn(
                 contentPadding = PaddingValues(10.dp)
             ) {

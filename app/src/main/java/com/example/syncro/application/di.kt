@@ -5,21 +5,32 @@ import android.content.Context
 import androidx.annotation.StringRes
 import androidx.room.Room
 import com.example.syncro.data.datasourse.local.SyncroDB
+import com.example.syncro.data.repository.FileRepositoryImpl
 import com.example.syncro.data.repository.GroupRepositoryImpl
 import com.example.syncro.data.repository.ReminderRepositoryImpl
 import com.example.syncro.data.repository.SolutionRepositoryImpl
+import com.example.syncro.data.repository.SourceFileRepositoryImpl
 import com.example.syncro.data.repository.TaskRepositoryImpl
+import com.example.syncro.data.repository.TokenRepositoryImpl
 import com.example.syncro.data.repository.UserRepositoryImpl
+import com.example.syncro.domain.repository.FileRepository
 import com.example.syncro.domain.repository.GroupRepository
 import com.example.syncro.domain.repository.ReminderRepository
 import com.example.syncro.domain.repository.SolutionRepository
+import com.example.syncro.domain.repository.SourceFileRepository
 import com.example.syncro.domain.repository.TaskRepository
+import com.example.syncro.domain.repository.TokenRepository
 import com.example.syncro.domain.repository.UserRepository
+import com.example.syncro.domain.usecases.FileUseCases
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.domain.usecases.ReminderUseCases
 import com.example.syncro.domain.usecases.SolutionUseCases
+import com.example.syncro.domain.usecases.SourceFileUseCases
 import com.example.syncro.domain.usecases.TaskUseCases
+import com.example.syncro.domain.usecases.TokenUseCases
 import com.example.syncro.domain.usecases.UserUseCases
+import com.example.syncro.domain.usecases.file.AddFile
+import com.example.syncro.domain.usecases.file.GetFiles
 import com.example.syncro.domain.usecases.group.AddGroup
 import com.example.syncro.domain.usecases.group.DeleteGroup
 import com.example.syncro.domain.usecases.group.GetGroup
@@ -32,11 +43,15 @@ import com.example.syncro.domain.usecases.solution.AddSolution
 import com.example.syncro.domain.usecases.solution.DeleteSolution
 import com.example.syncro.domain.usecases.solution.GetSolution
 import com.example.syncro.domain.usecases.solution.GetSolutions
+import com.example.syncro.domain.usecases.source_file.AddSourceFile
+import com.example.syncro.domain.usecases.source_file.GetSourceFiles
 import com.example.syncro.domain.usecases.task.AddTask
 import com.example.syncro.domain.usecases.task.DeleteTask
 import com.example.syncro.domain.usecases.task.GetAllTasks
 import com.example.syncro.domain.usecases.task.GetTask
 import com.example.syncro.domain.usecases.task.GetTasks
+import com.example.syncro.domain.usecases.token.AddToken
+import com.example.syncro.domain.usecases.token.GetToken
 import com.example.syncro.domain.usecases.user.AddUser
 import com.example.syncro.domain.usecases.user.DeleteUser
 import com.example.syncro.domain.usecases.user.GetUser
@@ -95,6 +110,20 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideFileRepository(db: SyncroDB): FileRepository {
+        return FileRepositoryImpl(db.fileDao())
+    }
+    @Provides
+    @Singleton
+    fun provideFileUseCases(repository: FileRepository): FileUseCases {
+        return FileUseCases(
+            getFiles = GetFiles(repository),
+            addFile = AddFile(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
     fun provideGroupRepository(db: SyncroDB): GroupRepository {
         return GroupRepositoryImpl(db.groupDao())
     }
@@ -127,6 +156,20 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideSourceFileRepository(db: SyncroDB): SourceFileRepository {
+        return SourceFileRepositoryImpl(db.sourceFileDao())
+    }
+    @Provides
+    @Singleton
+    fun provideSourceFileUseCases(repository: SourceFileRepository): SourceFileUseCases {
+        return SourceFileUseCases(
+            getSourceFiles = GetSourceFiles(repository),
+            addSourceFile = AddSourceFile(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
     fun provideReminderRepository(db: SyncroDB): ReminderRepository {
         return ReminderRepositoryImpl(db.reminderDao())
     }
@@ -154,6 +197,20 @@ object AppModule {
             addUser = AddUser(repository),
             getUser = GetUser(repository),
             deleteUser = DeleteUser(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideTokenRepository(db: SyncroDB): TokenRepository {
+        return TokenRepositoryImpl(db.tokenDao())
+    }
+    @Provides
+    @Singleton
+    fun provideTokenUseCases(repository: TokenRepository): TokenUseCases {
+        return TokenUseCases(
+            getToken = GetToken(repository),
+            addToken = AddToken(repository)
         )
     }
 }

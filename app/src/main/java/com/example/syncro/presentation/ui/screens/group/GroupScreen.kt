@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
@@ -28,6 +29,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +42,7 @@ import com.example.syncro.application.Routing
 import com.example.syncro.presentation.ui.components.GroupTask
 import com.example.syncro.presentation.ui.components.SimpleBottomBar
 import com.example.syncro.presentation.ui.components.TopBarBackButton
+import com.example.syncro.presentation.ui.elements.SimpleSearchBar
 import com.example.syncro.presentation.ui.elements.TextBodySmall
 import com.example.syncro.presentation.viewmodels.group.GroupViewModel
 import com.example.syncro.presentation.viewmodels.group.GroupViewModel.GroupData
@@ -95,7 +98,7 @@ fun GroupScreen(
                 .fillMaxSize()
                 .padding(
                     0.dp,
-                    paddingValues.calculateTopPadding(),
+                    paddingValues.calculateTopPadding()+10.dp,
                     0.dp,
                     paddingValues.calculateBottomPadding()
                 )

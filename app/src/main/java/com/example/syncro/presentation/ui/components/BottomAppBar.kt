@@ -17,7 +17,7 @@ import com.example.syncro.presentation.ui.elements.TextBodySmall
 fun SimpleBottomBar(
     options: List<Triple<String, () -> Unit, ImageVector>>,
 ) {
-    NavigationBar(// TODO: change to beautiful
+    NavigationBar(
         modifier = Modifier
             .padding(10.dp)
             .clip(MaterialTheme.shapes.large)

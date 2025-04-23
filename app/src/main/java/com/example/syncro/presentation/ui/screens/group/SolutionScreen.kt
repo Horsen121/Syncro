@@ -1,7 +1,9 @@
 package com.example.syncro.presentation.ui.screens.group
 
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +30,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
 import com.example.syncro.application.ui.theme.SyncroTheme
+import com.example.syncro.presentation.ui.components.FileCard
 import com.example.syncro.presentation.ui.components.TopBarText
 import com.example.syncro.presentation.ui.elements.SimpleTextField
 import com.example.syncro.presentation.ui.elements.TextBodyMedium
@@ -90,25 +93,30 @@ fun SolutionScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.clickable { } // TODO: open a fileManager
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     TextHeadSmall(text = stringResource(R.string.solution_files))
-                    Image(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null
-                    )
                 }
 
                 LazyColumn {
                     items(viewModel.sources.value) { source ->
-                        // TODO: add elem
+                        FileCard(
+                            source,
+                            onClick = { viewModel.onSourceRemove(source) }
+                        )
                     }
                 }
                 Spacer(Modifier.height(24.dp))
 
+                val getFile = rememberLauncherForActivityResult(
+                    ActivityResultContracts.StartActivityForResult()
+                ) { result ->
+                    result.let { viewModel.onSourceAdd(it.data?.data?.path!!) }
+                }
                 Button(
-                    onClick = { } // TODO: open file dialog
+                    onClick = {
+                        getFile.launch(Intent(Intent.ACTION_PICK))
+                    }
                 ) {
                     Image(Icons.Default.Add, null)
                 }

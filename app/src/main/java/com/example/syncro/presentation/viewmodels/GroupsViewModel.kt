@@ -19,8 +19,19 @@ class GroupsViewModel @Inject constructor(
     private var _groups = mutableStateOf<List<Group>>(emptyList())
     val groups: State<List<Group>> = _groups
 
+    private var _search = mutableStateOf<List<Pair<String,String>>>(emptyList())
+    val search: State<List<Pair<String,String>>> = _search
+
     init {
         loadGroups()
+    }
+
+    fun search(group: String) {
+
+    }
+
+    fun join(group: String) {
+
     }
 
     fun update() {

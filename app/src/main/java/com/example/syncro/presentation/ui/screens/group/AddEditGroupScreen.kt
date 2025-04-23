@@ -1,6 +1,5 @@
 package com.example.syncro.presentation.ui.screens.group
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,13 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
-import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.components.TopBarText
 import com.example.syncro.presentation.ui.elements.CheckTextButton
 import com.example.syncro.presentation.ui.elements.SimpleTextField
@@ -108,21 +104,6 @@ fun AddEditGroupScreen(
             ) {
                 TextHeadMedium(stringResource(R.string.add_edit_group_button))
             }
-        }
-    }
-}
-
-@Preview(
-    showBackground = true,
-)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun AddEditGroupScreenPreview() {
-    SyncroTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) {
-            AddEditGroupScreen(
-                rememberNavController()
-            )
         }
     }
 }
