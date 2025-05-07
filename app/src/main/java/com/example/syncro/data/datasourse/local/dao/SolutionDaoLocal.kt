@@ -13,8 +13,8 @@ interface SolutionDaoLocal {
     @Query("SELECT * FROM `solution` WHERE task_id = :id")
     fun getSolutions(id: Long): Flow<List<Solution>>
 
-    @Query("SELECT * FROM `solution` WHERE solution_id = :id")
-    suspend fun getSolutionById(id: Long): Solution?
+    @Query("SELECT * FROM `solution` WHERE group_id = :groupId AND task_id = :taskId AND solution_id = :solId")
+    suspend fun getSolutionById(groupId: Long, taskId: Long, solId: Long): Solution?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSolution(item: Solution): Long

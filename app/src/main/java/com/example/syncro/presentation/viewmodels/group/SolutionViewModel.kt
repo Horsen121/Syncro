@@ -21,9 +21,9 @@ class SolutionViewModel @Inject constructor(
     private val sourceFileUseCases: SourceFileUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private var groupId = -1L
-    private var taskId = -1L
-    private var solutionId: Long? = null
+    var groupId = -1L
+    var taskId = -1L
+    var solutionId: Long? = null
 
     private var _task = mutableStateOf("")
     val task: State<String> = _task
@@ -33,9 +33,6 @@ class SolutionViewModel @Inject constructor(
 
     private var _desc = mutableStateOf("")
     val desc: State<String> = _desc
-
-//    private var _files = mutableStateOf<List<String>>(emptyList())
-//    val files: State<List<String>> = _files
 
     private var _sources = mutableStateOf<List<String>>(emptyList())
     val sources: State<List<String>> = _sources
@@ -60,7 +57,7 @@ class SolutionViewModel @Inject constructor(
                 if (id != null && id != -1L) {
                     solutionId = id
                     viewModelScope.launch {
-                        solutionUseCases.getSolution(id)?.also { solution ->
+                        solutionUseCases.getSolution(groupId,taskId,id)?.also { solution ->
                             _name.value = solution.title
                             _desc.value = solution.description
                         }
@@ -76,53 +73,4 @@ class SolutionViewModel @Inject constructor(
             }
         }
     }
-
-    fun onNameChange(text: String) {
-        _name.value = text
-    }
-
-    fun onDescChange(text: String) {
-        _desc.value = text
-    }
-
-    fun onSourceAdd(source: String) {
-        _sources.value += source
-    }
-
-    fun onSourceRemove(source: String) {
-        _sources.value -= source
-    }
-
-    fun onSave() {
-        viewModelScope.launch {
-            solutionUseCases.addSolution(
-                Solution(
-                    solution_id = solutionId,
-                    task_id = taskId,
-                    user_id = CurrentUser.id,
-                    title = _name.value,
-                    description = _desc.value
-                )
-            ).let { id ->
-                _sources.value.forEach {
-                    sourceFileUseCases.addSourceFile(
-                        SourceFile(
-                            group_id = groupId,
-                            task_id = taskId,
-                            solution_id = id!!,
-                            path = it
-                        )
-                    )
-                }
-            }
-        }
-    }
-
-    fun clear() {
-        _name.value = ""
-        _desc.value = ""
-//        _files.value = emptyList()
-        _sources.value = emptyList()
-    }
-
 }

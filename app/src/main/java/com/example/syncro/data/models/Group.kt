@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
+@kotlinx.serialization.Serializable
 data class Group(
     @PrimaryKey(autoGenerate = true) val group_id : Long? = null,
     val name: String,
@@ -11,4 +12,4 @@ data class Group(
     val countPeople: Int,
     val created_by: Long,
     val isAdmin: Boolean
-): java.io.Serializable
+)

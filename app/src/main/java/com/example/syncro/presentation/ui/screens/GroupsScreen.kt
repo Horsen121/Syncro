@@ -83,7 +83,9 @@ fun GroupsScreen(
                     searchState.edit { replace(0, length, it) }
                     viewModel.search(it)
                 },
-                onClick = { viewModel.join(it) },
+                onClick = {
+//                    navController.navigate(Routing.GroupScreen.route + "?groupId=${group.group_id}")
+                },
                 searchResults = viewModel.search.value
             )
             LazyColumn(

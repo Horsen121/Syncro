@@ -23,6 +23,8 @@ import com.example.syncro.presentation.ui.screens.SolutionsScreen
 import com.example.syncro.presentation.ui.screens.group.AddEditGroupScreen
 import com.example.syncro.presentation.ui.screens.group.GroupChatScreen
 import com.example.syncro.presentation.ui.screens.group.GroupScreen
+import com.example.syncro.presentation.ui.screens.group.AddEditSolutionScreen
+import com.example.syncro.presentation.ui.screens.group.AddEditTaskScreen
 import com.example.syncro.presentation.ui.screens.group.SolutionScreen
 import com.example.syncro.presentation.ui.screens.group.TaskScreen
 import com.example.syncro.presentation.ui.screens.logreg.LoginScreen
@@ -109,6 +111,23 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(
+                        route = Routing.AddEditTaskScreen.route + "?groupId={groupId}&taskId={taskId}",
+                        arguments = listOf(
+                            navArgument(name = "groupId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                            navArgument(name = "taskId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                        )
+                    ) {
+                        AddEditTaskScreen(
+                            navController = navController
+                        )
+                    }
+                    composable(
                         route = Routing.TaskScreen.route + "?groupId={groupId}&taskId={taskId}",
                         arguments = listOf(
                             navArgument(name = "groupId") {
@@ -122,6 +141,27 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         TaskScreen(
+                            navController = navController
+                        )
+                    }
+                    composable(
+                        route = Routing.AddEditSolutionScreen.route + "?groupId={groupId}&taskId={taskId}&solutionId={solutionId}",
+                        arguments = listOf(
+                            navArgument(name = "groupId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                            navArgument(name = "taskId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                            navArgument(name = "solutionId") {
+                                type = NavType.LongType
+                                defaultValue = -1L
+                            },
+                        )
+                    ) {
+                        AddEditSolutionScreen(
                             navController = navController
                         )
                     }

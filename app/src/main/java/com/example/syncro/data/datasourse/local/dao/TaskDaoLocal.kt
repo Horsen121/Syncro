@@ -16,8 +16,8 @@ interface TaskDaoLocal {
     @Query("SELECT * FROM `task` WHERE group_id = :id")
     fun getTasks(id: Long): Flow<List<Task>>
 
-    @Query("SELECT * FROM `task` WHERE task_id = :id")
-    suspend fun getTaskById(id: Long): Task?
+    @Query("SELECT * FROM `task` WHERE group_id = :groupId AND task_id = :taskId")
+    suspend fun getTaskById(groupId: Long, taskId: Long): Task?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTask(item: Task): Long

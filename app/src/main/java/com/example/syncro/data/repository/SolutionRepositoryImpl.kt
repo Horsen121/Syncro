@@ -12,8 +12,8 @@ class SolutionRepositoryImpl(
         return daoLocal.getSolutions(id)
     }
 
-    override suspend fun getSolutionById(id: Long): Solution? {
-        return daoLocal.getSolutionById(id)
+    override suspend fun getSolutionById(groupId: Long, taskId: Long, solId: Long): Solution? {
+        return daoLocal.getSolutionById(groupId, taskId, solId)
     }
 
     override suspend fun insertSolution(item: Solution): Long {

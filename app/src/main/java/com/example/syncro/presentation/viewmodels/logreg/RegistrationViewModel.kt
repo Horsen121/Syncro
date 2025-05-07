@@ -4,9 +4,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.syncro.data.datasourse.remote.RemoteApi
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class RegistrationViewModel @Inject constructor(
 //    private val repository: MyRepository
 ) : ViewModel() {
@@ -26,6 +29,9 @@ class RegistrationViewModel @Inject constructor(
     private var _agreement = mutableStateOf(false)
     val agreement: State<Boolean> = _agreement
 
+    private var _response = mutableStateOf("")
+    val response: State<String> = _response
+
     fun onNameChange(text: String) {
         _name.value = text
     }
@@ -44,7 +50,13 @@ class RegistrationViewModel @Inject constructor(
     
     fun registration() {
         viewModelScope.launch {
-            // TODO: send register values to server
+            try {
+                RemoteApi.retrofitService.register(_email.value, _password1.value, _name.value).let {
+                    _response.value = it
+                }
+            } catch (e: Exception) {
+                _response.value = e.message ?: "42.2"
+            }
         }
     }
 }

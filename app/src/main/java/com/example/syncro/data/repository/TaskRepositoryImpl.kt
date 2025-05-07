@@ -16,8 +16,8 @@ class TaskRepositoryImpl(
         return daoLocal.getTasks(id)
     }
 
-    override suspend fun getTaskById(id: Long): Task? {
-        return daoLocal.getTaskById(id)
+    override suspend fun getTaskById(groupId: Long, taskId: Long): Task? {
+        return daoLocal.getTaskById(groupId, taskId)
     }
 
     override suspend fun insertTask(item: Task): Long {

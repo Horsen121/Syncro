@@ -3,10 +3,12 @@ package com.example.syncro.presentation.ui.screens.group
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
@@ -14,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
@@ -23,12 +24,18 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Button
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,19 +49,38 @@ import com.example.syncro.application.Routing
 import com.example.syncro.presentation.ui.components.GroupTask
 import com.example.syncro.presentation.ui.components.SimpleBottomBar
 import com.example.syncro.presentation.ui.components.TopBarBackButton
-import com.example.syncro.presentation.ui.elements.SimpleSearchBar
+import com.example.syncro.presentation.ui.components.TopBarText
+import com.example.syncro.presentation.ui.elements.TextBodyMedium
 import com.example.syncro.presentation.ui.elements.TextBodySmall
 import com.example.syncro.presentation.viewmodels.group.GroupViewModel
 import com.example.syncro.presentation.viewmodels.group.GroupViewModel.GroupData
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GroupScreen(
     navController: NavController,
     viewModel: GroupViewModel = hiltViewModel()
 ) {
+    val openLiveDialog = remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { TopBarBackButton(text = stringResource(R.string.group_title) + " \"${viewModel.group.value?.name}\"", navController) },
+        topBar = {
+            if (!viewModel.isMember.value) {
+                TopBarBackButton(
+                    text = stringResource(R.string.group_title) + " \"${viewModel.group.value?.name}\"",
+                    navController
+                )
+            } else {
+                TopBarText(
+                    leftText = stringResource(R.string.back),
+                    centerText = stringResource(R.string.group_title) + " \"${viewModel.group.value?.name}\"",
+                    rightText = stringResource(R.string.group_live),
+                    navController = navController,
+                    rightAction = { openLiveDialog.value = true }
+                )
+            }
+        },
         bottomBar = {
             val actions = mutableListOf(
                 Triple(
@@ -86,7 +112,10 @@ fun GroupScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate(Routing.TaskScreen.route + "?groupId=${viewModel.group.value?.group_id}") }
+                onClick = {
+                    if (viewModel.isMember.value)
+                        navController.navigate(Routing.AddEditTaskScreen.route + "?groupId=${viewModel.group.value?.group_id}")
+                }
             ) {
                 Image(Icons.Default.Add, null)
             }
@@ -103,6 +132,34 @@ fun GroupScreen(
                     paddingValues.calculateBottomPadding()
                 )
         ) {
+            if (openLiveDialog.value) {
+                DatePickerDialog(
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.disJoin()
+                            }
+                        ) {
+                            TextBodyMedium(stringResource(R.string.ok))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { openLiveDialog.value = false }) {
+                            TextBodyMedium(stringResource(R.string.cancel))
+                        }
+                    },
+                    onDismissRequest = { openLiveDialog.value = false },
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 15.dp, vertical = 10.dp)
+                    ) {
+                        TextBodyMedium("    " + stringResource(R.string.settings_exit_confirm))
+                    }
+                }
+            }
+
             NavigationBar(
                 modifier = Modifier
                     .padding(10.dp)
@@ -139,9 +196,25 @@ fun GroupScreen(
                     GroupTask(
                         task = task,
                         onClick = { navController.navigate(Routing.TaskScreen.route + "?groupId=${viewModel.group.value?.group_id}&taskId=${task.task_id}") },
-                        onSolutionClick = { navController.navigate(Routing.SolutionsScreen.route + "?groupId=${viewModel.group.value?.group_id}&taskId=${task.task_id}") }
+                        onSolutionClick = {
+                            if (viewModel.isMember.value)
+                                navController.navigate(Routing.SolutionsScreen.route + "?groupId=${viewModel.group.value?.group_id}&taskId=${task.task_id}")
+                        }
                     )
                     Spacer(Modifier.height(10.dp))
+                }
+            }
+
+            if (!viewModel.isMember.value) {
+                Button(
+                    onClick = {
+                        viewModel.join()
+                    }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.group_menu_bottom_join),
+                        color = MaterialTheme.colorScheme.background
+                    )
                 }
             }
         }

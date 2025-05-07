@@ -30,10 +30,6 @@ class GroupsViewModel @Inject constructor(
 
     }
 
-    fun join(group: String) {
-
-    }
-
     fun update() {
         loadGroups()
     }

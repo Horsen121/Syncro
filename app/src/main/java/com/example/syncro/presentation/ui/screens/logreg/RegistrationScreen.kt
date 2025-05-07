@@ -1,6 +1,7 @@
 package com.example.syncro.presentation.ui.screens.logreg
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -127,11 +129,18 @@ fun RegistrationScreen(
                         color = MaterialTheme.colorScheme.background
                     )
                 }
+                val context = LocalContext.current
                 Button(
                     onClick = {
-                        viewModel.registration()
-                        navController.navigate(Routing.LoginScreen.route)
-                              },
+                        if (viewModel.password1.value == viewModel.password2.value) {
+                            viewModel.registration()
+                            if (viewModel.response.value != "") {
+                                Toast.makeText(context, viewModel.response.value, Toast.LENGTH_LONG)
+                                    .show()
+                                navController.navigate(Routing.LoginScreen.route)
+                            }
+                        }
+                    },
                     enabled = viewModel.agreement.value
                 ) {
                     Text(

@@ -1,6 +1,6 @@
 package com.example.syncro.presentation.ui.screens.logreg
 
-import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -26,15 +26,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
 import com.example.syncro.application.Routing
-import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.presentation.ui.elements.PasswordTextField
 import com.example.syncro.presentation.ui.elements.SimpleTextField
 import com.example.syncro.presentation.ui.elements.TextBodyMedium
@@ -44,10 +43,9 @@ import com.example.syncro.presentation.viewmodels.logreg.LoginViewModel
 
 @Composable
 fun LoginScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val viewModel = LoginViewModel()
-
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
@@ -63,11 +61,12 @@ fun LoginScreen(
                 )
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                contentScale = ContentScale.Crop,
+                painter = painterResource(id = R.drawable.logo_image),
+                contentScale = ContentScale.FillWidth, // Crop
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxHeight(0.35f)
+                    .fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -105,11 +104,14 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
+            val context = LocalContext.current
             Button(
                 onClick = {
-                    viewModel.signIn()
-                    navController.navigate(Routing.GroupsScreen.route) // TODO: change to  
-                          },
+//                    viewModel.signIn()
+//                    if (viewModel.response.value != "")
+//                        Toast.makeText(context, viewModel.response.value, Toast.LENGTH_LONG).show()
+                         navController.navigate(Routing.GroupsScreen.route)
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
             ) {
@@ -156,23 +158,6 @@ fun LoginScreen(
                     }
                 }
             }
-        }
-    }
-}
-
-
-@Preview(
-    showBackground = true,
-    showSystemUi = true,
-)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun LoginScreenPreview() {
-    SyncroTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) {
-            LoginScreen(
-                rememberNavController()
-            )
         }
     }
 }

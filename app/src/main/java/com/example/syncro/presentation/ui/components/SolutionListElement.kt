@@ -57,7 +57,7 @@ private fun SolutionListElementPreview() {
     SyncroTheme {
         Scaffold { _ ->
             SolutionListElement(
-                solution = Solution(1, 1, 1, "Solution1", "asdgdsfasd"),
+                solution = Solution(1, 1, 1, 1,"Solution1", "asdgdsfasd"),
                 onClick = {  }
             )
         }

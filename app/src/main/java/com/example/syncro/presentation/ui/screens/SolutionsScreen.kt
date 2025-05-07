@@ -69,7 +69,7 @@ fun SolutionsScreen(
             contentAlignment = Alignment.BottomEnd
         ) {
             FloatingActionButton(
-                onClick = { navController.navigate(Routing.SolutionScreen.route +
+                onClick = { navController.navigate(Routing.AddEditSolutionScreen.route +
                         "?groupId=${viewModel.getGroupId()}&taskId=${viewModel.getTaskId()}")
                 }
             ) {

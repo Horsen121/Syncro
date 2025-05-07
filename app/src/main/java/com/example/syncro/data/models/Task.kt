@@ -5,6 +5,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(indices = [Index(value = ["group_id"], unique = false)])
+@kotlinx.serialization.Serializable
 data class Task(
     @PrimaryKey(autoGenerate = true) val task_id: Long? = null,
     val group_id: Long,
@@ -16,4 +17,4 @@ data class Task(
     val difficult: String,
     val reminderTime: String,
     val isComplited: Boolean = false
-): java.io.Serializable
+)

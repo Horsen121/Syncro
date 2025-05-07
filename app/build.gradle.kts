@@ -1,9 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     id("com.google.dagger.hilt.android")
-    id("org.jetbrains.kotlin.kapt")
+//    id("org.jetbrains.kotlin.kapt")
+    id("com.google.devtools.ksp")
     id("androidx.room")
+    id("kotlinx-serialization")
 }
 
 android {
@@ -56,13 +59,13 @@ android {
     }
 }
 
-kapt {
-    useBuildCache = true
-    correctErrorTypes = true
-    arguments {
-//        arg("dagger.formatGeneratedSource", "disabled")
-    }
-}
+//kapt {
+//    useBuildCache = true
+//    correctErrorTypes = true
+//    arguments {
+////        arg("dagger.formatGeneratedSource", "disabled")
+//    }
+//}
 
 dependencies {
 
@@ -92,16 +95,25 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler) // kapt
     // For instrumentation tests
     androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.android.compiler)
+//    kaptAndroidTest(libs.hilt.android.compiler)
     // For local unit tests
     testImplementation(libs.hilt.android.testing)
-    kaptTest(libs.hilt.android.compiler)
+//    kaptTest(libs.hilt.android.compiler)
 
     implementation(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler) // kapt
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.room.testing)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.retrofit2.converter.kotlinx.serialization)
+    implementation(libs.okhttp)
+
+//    implementation(libs.kotlin.metadata.jvm)
 }
