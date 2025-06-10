@@ -113,6 +113,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.retrofit2.converter.kotlinx.serialization)
+    implementation(libs.retrofit2.converter.gson)
     implementation(libs.okhttp)
 
 //    implementation(libs.kotlin.metadata.jvm)

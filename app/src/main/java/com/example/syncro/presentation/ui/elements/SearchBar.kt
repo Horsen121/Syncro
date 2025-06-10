@@ -3,7 +3,6 @@ package com.example.syncro.presentation.ui.elements
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldState
@@ -81,7 +80,7 @@ fun SimpleSearchBar(
                 searchResults.forEach { result ->
                     ListItem(
                         headlineContent = { TextBodyLarge(result.first) },
-                        supportingContent = { TextBodyMedium(result.second) },
+//                        supportingContent = { TextBodyMedium(result.second) },
                         modifier = Modifier
                             .clickable {
                                 textFieldState.edit { replace(0, length, result.first) }

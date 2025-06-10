@@ -1,90 +1,197 @@
 package com.example.syncro.data.datasourse.remote
 
-import com.example.syncro.application.CurrentUser
+import com.example.syncro.data.datasourse.remote.models.AddMemberRequest
+import com.example.syncro.data.datasourse.remote.models.CreateGroupRequest
+import com.example.syncro.data.datasourse.remote.models.CreateGroupResponse
+import com.example.syncro.data.datasourse.remote.models.CreateSolutionRequest
+import com.example.syncro.data.datasourse.remote.models.CreateTaskRequest
+import com.example.syncro.data.datasourse.remote.models.FindGroupResponse
+import com.example.syncro.data.datasourse.remote.models.LoginRequest
+import com.example.syncro.data.datasourse.remote.models.LoginResponse
+import com.example.syncro.data.datasourse.remote.models.RegisterRequest
+import com.example.syncro.data.datasourse.remote.models.RegisterResponse
+import com.example.syncro.data.datasourse.remote.models.UpdSolutionRequest
 import com.example.syncro.data.models.File
 import com.example.syncro.data.models.Group
 import com.example.syncro.data.models.Solution
 import com.example.syncro.data.models.SourceFile
 import com.example.syncro.data.models.Task
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody
+import com.example.syncro.data.models.User
+import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
+import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Headers
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 
-private const val BASE_URL = "http://85.92.108.147:3000/"
+private const val BASE_URL = "http://194.87.250.206:3000/"
 
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+    .addConverterFactory(GsonConverterFactory.create())
     .baseUrl(BASE_URL)
     .build()
 
-//"email": "user1@example.com",
-//"full_name": "Test User 1",
-//"password": "password123"
-
 interface RemoteApiService {
-    @FormUrlEncoded
-    @POST("auth/register")// /email={email}&full_name={full_name}&password={password}")
-    suspend fun register(@Field("email") email: String, @Field("full_name") name: String, @Field("password") password: String): String
+    // Auth
+    @POST("auth/register")
+    suspend fun register(@Body body: RegisterRequest): Response<RegisterResponse>
 
-    @FormUrlEncoded
-//    @Headers("Content-Type: application/json")
-    @POST("auth/login-pwd") // /email={email}&password={password}
-    suspend fun login(@Field("email") email: String, @Field("password") password: String): String
-//    suspend fun login(@Body body: String): String
+    @POST("auth/login-pwd")
+    suspend fun login(@Body body: LoginRequest): Response<LoginResponse>
+
+    // Groups
+    @PUT("")
+    suspend fun joinGroup(
+        @Header("Authorization: Bearer") token: String,
+        groupId: Long
+    ): Boolean
 
     @PUT("")
-    suspend fun joinGroup(groupId: Long, token: String = CurrentUser.token): Boolean
-
-    @PUT("")
-    suspend fun disJoinGroup(groupId: Long, token: String = CurrentUser.token): Boolean
-
-    @GET("")
-    suspend fun getGroupsByUser(token: String = CurrentUser.token): List<Group>
+    suspend fun disJoinGroup(
+        @Header("Authorization: Bearer") token: String,
+        groupId: Long
+    ): Boolean
 
     @GET("")
-    suspend fun getTasksByGroup(groupId: Long, token: String = CurrentUser.token): List<Task>
+    suspend fun findGroup(
+        @Header("Authorization: Bearer") token: String,
+        group: String
+    ): Response<List<FindGroupResponse>>
+
+    @POST("api/groups")
+    suspend fun createGroup(
+        @Header("Authorization: Bearer") token: String,
+        @Body body: CreateGroupRequest
+    ): Response<CreateGroupResponse>
+
+    @PUT("api/groups/{group_id}")
+    suspend fun updGroupById(
+        @Header("Authorization: Bearer") token: String,
+        @Body body: CreateGroupRequest
+    ): Response<Group>
+
+    @GET("api/groups")
+    suspend fun getGroupsByUser(
+        @Header("Authorization: Bearer") token: String
+    ): Response<List<Group>>
+
+    @GET("api/groups/{group_id}")
+    suspend fun getGroup(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long
+    ): Response<Group>
+
+    @GET("api/groups/{group_id}/members")
+    suspend fun getMembersOfGroup(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long
+    ): Response<List<User>>
+
+    @POST("api/groups/{group_id}/members")
+    suspend fun addMemberToGroup(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long,
+        @Body body: AddMemberRequest
+    ): Response<User>
+
+    @PUT("api/groups/{group_id}/members/{user_id}")
+    suspend fun addAdminToGroup(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long,
+        @Path("user_id") user_id: Long
+    ): Response<String>
+
+    @DELETE("api/groups/{group_id}/members/{user_id}")
+    suspend fun deleteAdminOfGroup(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long,
+        @Path("user_id") user_id: Long
+    ): Response<String>
+
+    // Tasks
+    @POST("api/groups/{group_id}/tasks")
+    suspend fun addTaskToGroup(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long,
+        @Body body: CreateTaskRequest
+    ): Response<Task>
+
+    @PUT("api/groups/{groupID}/tasks/{taskID}")
+    suspend fun updTaskById(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long,
+        @Body body: CreateTaskRequest
+    ): Response<Task>
+
+    @GET("api/groups/{group_id}/tasks")
+    suspend fun getTasksByGroup(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long
+    ): Response<List<Task>>
+
+    @GET("api/groups/{group_id}/tasks/{task_id}")
+    suspend fun getTaskById(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long,
+        @Path("task_id") task_id: Long
+    ): Response<Task>
 
     @GET("")
-    suspend fun getFilesByTask(groupId: Long, taskId: Long, token: String = CurrentUser.token): List<File>
+    suspend fun getFilesByTask(
+
+    ): List<File>
+
+    @POST("")
+    suspend fun addTaskFiles(
+
+    ): Boolean
+
+    // Solutions
+    @GET("api/groups/{group_id}/tasks/{task_id}/solutions")
+    suspend fun getSolutionsByTask(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long,
+        @Path("task_id") taskId: Long
+    ): Response<List<Solution>>
+
+    @GET("api/groups/{group_id}/tasks/{task_id}/solutions/{solution_id}")
+    suspend fun getSolutionById(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long,
+        @Path("task_id") taskId: Long,
+        @Path("solution_id") solution_id: Long
+    ): Response<Solution>
+
+    @POST("api/groups/{group_id}/tasks/{task_id}/solutions")
+    suspend fun addSolutionToTask(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long,
+        @Path("task_id") taskId: Long,
+        @Body body: CreateSolutionRequest
+    ): Response<Solution>
+
+    @PUT("api/groups/{group_id}/tasks/{task_id}/solutions/{solution_id}")
+    suspend fun updSolutionById(
+        @Header("Authorization: Bearer") token: String,
+        @Path("group_id") groupId: Long,
+        @Path("task_id") taskId: Long,
+        @Path("solution_id") solution_id: Long,
+        @Body body: UpdSolutionRequest
+    ): Response<Solution>
 
     @GET("")
-    suspend fun getSolutionsByTask(groupId: Long, taskId: Long, token: String = CurrentUser.token): List<Solution>
+    suspend fun getSourcesBySolution(
 
-    @GET("")
-    suspend fun getSourcesBySolution(groupId: Long, taskId: Long, solId: Long, token: String = CurrentUser.token): List<SourceFile>
-
-    @POST("")
-    suspend fun createGroup(name: String, description: String, isPrivate: Boolean, token: String = CurrentUser.token): Boolean
+    ): List<SourceFile>
 
     @POST("")
-    suspend fun createTask(groupId: Long, title: String, description: String, start: String, end: String, difficult: Byte, reminder: String, token: String = CurrentUser.token): Long
+    suspend fun addSolutionSources(
 
-    @POST("")
-    suspend fun createSolution(groupId: Long, taskId: Long, title: String, description: String, token: String = CurrentUser.token): Long
-
-    @POST("")
-    suspend fun addTaskFiles(groupId: Long, taskId: Long, files: List<File>, token: String = CurrentUser.token): Boolean
-
-    @POST("")
-    suspend fun addSolutionSources(groupId: Long, taskId: Long, solId: Long, sources: List<SourceFile>, token: String = CurrentUser.token): Boolean
-
-    @PUT("")
-    suspend fun changeGroup(groupId: Long, name: String, description: String, isPrivate: Boolean, token: String = CurrentUser.token): Boolean
-
-    @PUT("")
-    suspend fun changeTask(groupId: Long, taskId: Long, title: String, description: String, start: String, end: String, difficult: Byte, reminder: String, token: String = CurrentUser.token): Long
-
-    @PUT("")
-    suspend fun changeSolution(groupId: Long, taskId: Long, solId: Long, title: String, description: String, token: String = CurrentUser.token): Long
+    ): Boolean
 }
 
 object RemoteApi {

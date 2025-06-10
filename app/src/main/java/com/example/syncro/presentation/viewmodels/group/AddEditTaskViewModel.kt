@@ -6,6 +6,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.syncro.application.CurrentUser
+import com.example.syncro.data.datasourse.remote.RemoteApi
+import com.example.syncro.data.datasourse.remote.models.CreateTaskRequest
 import com.example.syncro.data.models.File
 import com.example.syncro.data.models.Task
 import com.example.syncro.domain.usecases.FileUseCases
@@ -55,22 +57,27 @@ class AddEditTaskViewModel @Inject constructor(
             savedStateHandle.get<Long>("groupId").let { id ->
                 if (id != null) groupId = id
             }
-        }
-        runBlocking {
             savedStateHandle.get<Long>("taskId").let { id ->
-                if (id != null && id != -1L) {
-                    taskId = id
-                    viewModelScope.launch {
-                        taskUseCases.getTask(groupId,id)?.also { task ->
+                if (id != null && id != -1L) taskId = id
+            }
+        }
+
+        if (taskId != null) {
+            viewModelScope.launch {
+                RemoteApi.retrofitService.getTaskById(CurrentUser.token, groupId, taskId!!).let {
+                    if (it.isSuccessful) {
+                        it.body().let { task ->
+                            _name.value = task!!.title
+                            _desc.value = task.description
+                        }
+                    } else {
+                        taskUseCases.getTask(groupId, taskId!!)?.also { task ->
                             _name.value = task.title
                             _desc.value = task.description
                         }
                     }
                 }
-            }
-        }
-        if (groupId != null && taskId != null) {
-            viewModelScope.launch {
+
                 fileUseCases.getFiles(groupId, taskId!!).collect {
                     _files.value += it.map { f -> f.path }
                 }
@@ -116,27 +123,72 @@ class AddEditTaskViewModel @Inject constructor(
 
     fun onSave() {
         viewModelScope.launch {
-            taskUseCases.addTask(
-                Task(
-                    task_id = taskId,
-                    group_id = groupId,
-                    title = _name.value,
-                    description = _desc.value,
-                    created_by = CurrentUser.id,
-                    start_time = _startTime.value.toString(),
-                    end_time = _endTime.value.toString(),
-                    reminderTime = _reminderTime.value.toString(),
-                    difficult = _diff.value.name
-                )
-            ).let { id ->
-                _files.value.forEach {
-                    fileUseCases.addFile(
-                        File(
-                            group_id = groupId,
-                            task_id = id!!,
-                            path = it
-                        )
-                    )
+            val body = CreateTaskRequest(
+                title = _name.value,
+                description = _desc.value,
+                start_time = _startTime.value.toString(),
+                end_time = _endTime.value.toString(),
+                priority = _diff.value.name,
+                context = ""
+            )
+
+            if (taskId != null) {
+                RemoteApi.retrofitService.updTaskById(CurrentUser.token, groupId, body).let {
+                    if (it.isSuccessful) {
+                        taskUseCases.addTask(
+                            Task(
+                                task_id = taskId,
+                                group_id = groupId,
+                                title = _name.value,
+                                description = _desc.value,
+                                created_by = CurrentUser.id,
+                                start_time = _startTime.value.toString(),
+                                end_time = _endTime.value.toString(),
+                                reminderTime = _reminderTime.value.toString(),
+                                difficult = _diff.value.name
+                            )
+                        ).let { id ->
+                            _files.value.forEach { file ->
+                                fileUseCases.addFile(
+                                    File(
+                                        group_id = groupId,
+                                        task_id = id!!,
+                                        path = file
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            } else {
+                RemoteApi.retrofitService.addTaskToGroup(CurrentUser.token, groupId, body).let {
+                    if (it.isSuccessful) {
+                        it.body().let { task ->
+                            taskUseCases.addTask(
+                                Task(
+                                    task_id = task!!.task_id,
+                                    group_id = groupId,
+                                    title = _name.value,
+                                    description = _desc.value,
+                                    created_by = CurrentUser.id,
+                                    start_time = _startTime.value.toString(),
+                                    end_time = _endTime.value.toString(),
+                                    reminderTime = _reminderTime.value.toString(),
+                                    difficult = _diff.value.name
+                                )
+                            ).let { id ->
+                                _files.value.forEach { file ->
+                                    fileUseCases.addFile(
+                                        File(
+                                            group_id = groupId,
+                                            task_id = id!!,
+                                            path = file
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

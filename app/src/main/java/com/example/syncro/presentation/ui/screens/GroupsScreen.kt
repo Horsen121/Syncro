@@ -84,7 +84,7 @@ fun GroupsScreen(
                     viewModel.search(it)
                 },
                 onClick = {
-//                    navController.navigate(Routing.GroupScreen.route + "?groupId=${group.group_id}")
+                    navController.navigate(Routing.GroupScreen.route + "?groupId=${it.toLong()}")
                 },
                 searchResults = viewModel.search.value
             )

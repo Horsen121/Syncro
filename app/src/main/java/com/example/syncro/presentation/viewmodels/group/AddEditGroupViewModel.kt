@@ -6,6 +6,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.syncro.application.CurrentUser
+import com.example.syncro.data.datasourse.remote.RemoteApi
+import com.example.syncro.data.datasourse.remote.models.CreateGroupRequest
 import com.example.syncro.data.models.Group
 import com.example.syncro.domain.usecases.GroupUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,12 +39,24 @@ class AddEditGroupViewModel @Inject constructor(
             if (groupId != -1L) {
                 this.groupId = groupId
                 viewModelScope.launch {
-                    groupUseCases.getGroup(groupId)?.also { group ->
-                        _name.value = group.name
-                        _desc.value = group.description
+                    RemoteApi.retrofitService.getGroup(CurrentUser.token, groupId).let {
+                        if (it.isSuccessful) {
+                            it.body().let { group ->
+                                _name.value = group!!.name
+                                _desc.value = group.description
 //                        _isPrivate.value = group.isPrivate
-                        _isAdmin.value = group.isAdmin
-                        countPeople = group.countPeople
+                                _isAdmin.value = group.isAdmin
+                                countPeople = group.countPeople
+                            }
+                        } else {
+                            groupUseCases.getGroup(groupId)?.also { group ->
+                                _name.value = group.name
+                                _desc.value = group.description
+//                        _isPrivate.value = group.isPrivate
+                                _isAdmin.value = group.isAdmin
+                                countPeople = group.countPeople
+                            }
+                        }
                     }
                 }
             }
@@ -66,17 +80,40 @@ class AddEditGroupViewModel @Inject constructor(
     }
 
     fun onSave() {
+//        CoroutineScope(Dispatchers.Main).launch {
         viewModelScope.launch {
-            groupUseCases.addGroup(
-                Group(
-                    group_id = groupId,
-                    name = _name.value,
-                    description = _desc.value,
-                    isAdmin = _isAdmin.value,
-                    created_by = CurrentUser.id,
-                    countPeople = countPeople
-                )
-            )
+            val body = CreateGroupRequest(_name.value, _desc.value)
+
+            try {
+                if (groupId != null) {
+                    RemoteApi.retrofitService.updGroupById(CurrentUser.token, body).let {
+                        if (it.isSuccessful) {
+                            groupUseCases.addGroup(it.body()!!)
+                        }
+                    }
+                } else {
+                    RemoteApi.retrofitService.createGroup(CurrentUser.token, body).let {
+                        if (it.isSuccessful) {
+                            val response = it.body()!!
+
+                            groupUseCases.addGroup(
+                                Group(
+                                    group_id = response.group_id,
+                                    name = response.name,
+                                    description = response.description,
+                                    isAdmin = response.is_admin,
+                                    created_by = CurrentUser.id,
+                                    countPeople = countPeople
+                                )
+                            )
+
+//                        _response.value = true
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+//                _response.value = false
+            }
         }
     }
 

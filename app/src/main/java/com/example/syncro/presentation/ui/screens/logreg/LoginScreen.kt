@@ -104,13 +104,10 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
-            val context = LocalContext.current
+//            val context = LocalContext.current
             Button(
                 onClick = {
-//                    viewModel.signIn()
-//                    if (viewModel.response.value != "")
-//                        Toast.makeText(context, viewModel.response.value, Toast.LENGTH_LONG).show()
-                         navController.navigate(Routing.GroupsScreen.route)
+                    viewModel.signIn()
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
@@ -120,6 +117,7 @@ fun LoginScreen(
                     color = MaterialTheme.colorScheme.background
                 )
             }
+            if (viewModel.response.value) navController.navigate(Routing.GroupsScreen.route)
             Spacer(modifier = Modifier.height(12.dp))
 
             TextBodyMedium(text = stringResource(id = R.string.login_register_text))

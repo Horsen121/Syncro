@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.syncro.application.CurrentUser
+import com.example.syncro.data.datasourse.remote.RemoteApi
+import com.example.syncro.data.datasourse.remote.models.AddMemberRequest
 import com.example.syncro.data.models.User
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.domain.usecases.UserUseCases
@@ -12,8 +15,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class PeoplesViewModel @Inject constructor(
@@ -32,35 +35,30 @@ class PeoplesViewModel @Inject constructor(
     val search: State<List<Pair<String,String>>> = _search
 
     init {
-        savedStateHandle.get<Long?>("groupId").let { id ->
-            if (id != null && id != -1L) {
-                groupId = id
-                loadUsers()
+        runBlocking {
+            savedStateHandle.get<Long?>("groupId").let { id ->
+                if (id != null && id != -1L) {
+                    groupId = id
+                    loadUsers()
+                }
+            }
+            savedStateHandle.get<Boolean>("isAdmin").let {
+                if (it != null) {
+                    isAdmin = it
+                }
+            }
+            savedStateHandle.get<String>("groupName").let {
+                if (it != null) {
+                    groupName = it
+                }
             }
         }
-        savedStateHandle.get<Boolean>("isAdmin").let {
-            if (it != null) {
-                isAdmin = it
-            }
-        }
-        savedStateHandle.get<String>("groupName").let {
-            if (it != null) {
-                groupName = it
-            }
-        }
-    }
-
-    fun add(user: String) { // TODO: remove!!!
         viewModelScope.launch {
-            val num = Random.nextInt().toString()
-            val addUser = user.split(".")[0]
-            userUseCases.addUser(
-                User(
-                    group_id = groupId,
-                    name = addUser,
-                    email = "$addUser.$num@mail.ru"
-                )
-            )
+            RemoteApi.retrofitService.getMembersOfGroup(CurrentUser.token, groupId).let {
+                if(it.isSuccessful) {
+                    _users.value = it.body()!!
+                }
+            }
         }
     }
 
@@ -70,20 +68,39 @@ class PeoplesViewModel @Inject constructor(
 
     fun invite(user: String) {
         viewModelScope.launch {
-            val group = groupUseCases.getGroup(groupId)!!
-            groupUseCases.addGroup(
-                group.copy(countPeople = group.countPeople + 1)
-            )
+            RemoteApi.retrofitService.addMemberToGroup(CurrentUser.token, groupId, AddMemberRequest(user, false)).let {
+                if (it.isSuccessful) {
+                    userUseCases.addUser(it.body()!!)
+
+                    val group = groupUseCases.getGroup(groupId)!!
+                    groupUseCases.addGroup(
+                        group.copy(countPeople = group.countPeople + 1)
+                    )
+                }
+            }
         }
-        add(user)
     }
 
     fun changeIsAdmin(id: Long) {
         viewModelScope.launch {
-            _users.value.find { u -> u.user_id == id }?.let {
-                userUseCases.addUser(
-                    it.copy(isAdmin = !it.isAdmin)
-                )
+            _users.value.find { u -> u.user_id == id }?.let { user ->
+                if (user.isAdmin) {
+                    RemoteApi.retrofitService.addAdminToGroup(CurrentUser.token, groupId, id).let {
+                        if (it.isSuccessful) {
+                            userUseCases.addUser(
+                                user.copy(isAdmin = true)
+                            )
+                        }
+                    }
+                } else {
+                    RemoteApi.retrofitService.deleteAdminOfGroup(CurrentUser.token, groupId, id).let {
+                        if (it.isSuccessful) {
+                            userUseCases.addUser(
+                                user.copy(isAdmin = false)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
