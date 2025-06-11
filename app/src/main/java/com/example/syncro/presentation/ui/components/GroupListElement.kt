@@ -57,7 +57,7 @@ fun GroupListElement(
                     fillMaxWidth = false
                 )
                 TextBodyMedium(
-                    text = group.description,
+                    text = group.description ?: "",
                     textAlign = TextAlign.Start,
                 )
             }

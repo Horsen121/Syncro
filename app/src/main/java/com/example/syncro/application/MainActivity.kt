@@ -5,10 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,10 +17,10 @@ import com.example.syncro.presentation.ui.screens.RemindersScreen
 import com.example.syncro.presentation.ui.screens.SettingsScreen
 import com.example.syncro.presentation.ui.screens.SolutionsScreen
 import com.example.syncro.presentation.ui.screens.group.AddEditGroupScreen
-import com.example.syncro.presentation.ui.screens.group.GroupChatScreen
-import com.example.syncro.presentation.ui.screens.group.GroupScreen
 import com.example.syncro.presentation.ui.screens.group.AddEditSolutionScreen
 import com.example.syncro.presentation.ui.screens.group.AddEditTaskScreen
+import com.example.syncro.presentation.ui.screens.group.GroupChatScreen
+import com.example.syncro.presentation.ui.screens.group.GroupScreen
 import com.example.syncro.presentation.ui.screens.group.SolutionScreen
 import com.example.syncro.presentation.ui.screens.group.TaskScreen
 import com.example.syncro.presentation.ui.screens.logreg.LoginScreen
@@ -46,27 +42,22 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SyncroTheme {
-                var currentScreen by remember { mutableStateOf(Routing.LoginScreen.route) } // TODO: change to condition
-
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
                     startDestination = Routing.LoginScreen.route // TODO: change to condition
                 ) {
                     composable(route = Routing.LoginScreen.route) {
-                        currentScreen = Routing.LoginScreen.route
                         LoginScreen(
                             navController = navController
                         )
                     }
                     composable(route = Routing.RegistrationScreen.route) {
-                        currentScreen = Routing.RegistrationScreen.route
                         RegistrationScreen(
                             navController = navController
                         )
                     }
                     composable(route = Routing.GroupsScreen.route) {
-                        currentScreen = Routing.GroupsScreen.route
                         GroupsScreen(
                             navController = navController
                         )

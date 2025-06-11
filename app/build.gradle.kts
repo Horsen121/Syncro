@@ -117,4 +117,5 @@ dependencies {
     implementation(libs.okhttp)
 
 //    implementation(libs.kotlin.metadata.jvm)
+    implementation(libs.accompanist.swiperefresh)
 }

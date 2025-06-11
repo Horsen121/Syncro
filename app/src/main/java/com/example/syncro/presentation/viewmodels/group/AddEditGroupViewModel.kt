@@ -12,6 +12,7 @@ import com.example.syncro.data.models.Group
 import com.example.syncro.domain.usecases.GroupUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +22,12 @@ class AddEditGroupViewModel @Inject constructor(
 ) : ViewModel() {
     private var groupId: Long? = null
     private var countPeople = 1
+
+    private var _response = mutableStateOf(false)
+    val response: State<Boolean> = _response
+
+    private var _error = mutableStateOf("")
+    val error: State<String> = _error
 
     private var _name = mutableStateOf("")
     val name: State<String> = _name
@@ -80,8 +87,7 @@ class AddEditGroupViewModel @Inject constructor(
     }
 
     fun onSave() {
-//        CoroutineScope(Dispatchers.Main).launch {
-        viewModelScope.launch {
+        runBlocking {
             val body = CreateGroupRequest(_name.value, _desc.value)
 
             try {
@@ -89,6 +95,10 @@ class AddEditGroupViewModel @Inject constructor(
                     RemoteApi.retrofitService.updGroupById(CurrentUser.token, body).let {
                         if (it.isSuccessful) {
                             groupUseCases.addGroup(it.body()!!)
+
+                            _response.value = true
+                        } else {
+                            _response.value = false
                         }
                     }
                 } else {
@@ -107,12 +117,15 @@ class AddEditGroupViewModel @Inject constructor(
                                 )
                             )
 
-//                        _response.value = true
+                            _response.value = true
+                        } else {
+                            _response.value = false
                         }
                     }
                 }
             } catch (e: Exception) {
-//                _response.value = false
+                _response.value = false
+                _error.value = e.message ?: "42"
             }
         }
     }

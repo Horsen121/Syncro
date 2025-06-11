@@ -3,14 +3,13 @@ package com.example.syncro.presentation.viewmodels.logreg
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.syncro.application.CurrentUser
 import com.example.syncro.data.datasourse.remote.RemoteApi
 import com.example.syncro.data.datasourse.remote.models.LoginRequest
 import com.example.syncro.data.models.Token
 import com.example.syncro.domain.usecases.TokenUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +26,9 @@ class LoginViewModel @Inject constructor(
     private var _response = mutableStateOf(false)
     val response: State<Boolean> = _response
 
+    private var _error = mutableStateOf("")
+    val error: State<String> = _error
+
     fun onLoginChange(text: String) {
         _login.value = text
     }
@@ -36,7 +38,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun signIn() {
-        viewModelScope.launch {
+        runBlocking {
             try {
                 val body = LoginRequest(_login.value, _password.value)
 
@@ -46,7 +48,8 @@ class LoginViewModel @Inject constructor(
 
                         CurrentUser.id = response.user_id
                         CurrentUser.email = _login.value
-                        CurrentUser.name = "test"//response.full_name TODO change
+                        CurrentUser.name = "42" // response.full_name
+                        CurrentUser.token = response.access_token
 
                         useCases.addToken(
                             Token(
@@ -57,10 +60,13 @@ class LoginViewModel @Inject constructor(
                             )
                         )
                         _response.value = true
+                    } else {
+                        _error.value = it.body()?.toString() ?: "42"
                     }
                 }
             } catch (e: Exception) {
                 _response.value = false
+                _error.value = e.message ?: "42"
             }
         }
     }

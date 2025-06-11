@@ -104,10 +104,16 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
-//            val context = LocalContext.current
+            val context = LocalContext.current
             Button(
                 onClick = {
-                    viewModel.signIn()
+                    viewModel.signIn().let {
+                        if(viewModel.response.value) {
+                            navController.navigate(Routing.GroupsScreen.route)
+                        } else {
+                            Toast.makeText(context, viewModel.error.value, Toast.LENGTH_LONG).show()
+                        }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)

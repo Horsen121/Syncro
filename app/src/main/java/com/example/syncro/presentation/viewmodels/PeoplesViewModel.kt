@@ -12,7 +12,6 @@ import com.example.syncro.data.models.User
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.domain.usecases.UserUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -39,7 +38,6 @@ class PeoplesViewModel @Inject constructor(
             savedStateHandle.get<Long?>("groupId").let { id ->
                 if (id != null && id != -1L) {
                     groupId = id
-                    loadUsers()
                 }
             }
             savedStateHandle.get<Boolean>("isAdmin").let {
@@ -53,13 +51,7 @@ class PeoplesViewModel @Inject constructor(
                 }
             }
         }
-        viewModelScope.launch {
-            RemoteApi.retrofitService.getMembersOfGroup(CurrentUser.token, groupId).let {
-                if(it.isSuccessful) {
-                    _users.value = it.body()!!
-                }
-            }
-        }
+        loadUsers()
     }
 
     fun search(user: String) {
@@ -113,8 +105,16 @@ class PeoplesViewModel @Inject constructor(
     }
 
     private fun loadUsers() {
-        userUseCases.getUsers(groupId).onEach {
-            _users .value = it
-        }.launchIn(viewModelScope)
+        viewModelScope.launch {
+            RemoteApi.retrofitService.getMembersOfGroup(CurrentUser.token, groupId).let {
+                if(it.isSuccessful) {
+                    _users.value = it.body() ?: emptyList()
+                } else {
+                    userUseCases.getUsers(groupId).onEach { user ->
+                        _users.value = user
+                    }
+                }
+            }
+        }
     }
 }

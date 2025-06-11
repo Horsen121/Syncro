@@ -14,8 +14,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,6 +32,9 @@ import com.example.syncro.presentation.ui.components.TopBarText
 import com.example.syncro.presentation.ui.components.UserListElement
 import com.example.syncro.presentation.ui.elements.SimpleSearchBar
 import com.example.syncro.presentation.viewmodels.PeoplesViewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -38,65 +44,83 @@ fun PeoplesScreen(
 ) {
     val openInviteDialog = remember { mutableStateOf(false) }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = { TopBarText(
-            leftText = stringResource(R.string.back),
-            centerText = stringResource(R.string.routing_group) + "\"${viewModel.getGroupName()}\"",
-            rightText = stringResource(R.string.users_add),
-            rightAction = { openInviteDialog.value = true },
-            navController = navController
-        ) }
-    ) { paddingValues ->
-        Column(
-            horizontalAlignment = Alignment.End,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    0.dp,
-                    paddingValues.calculateTopPadding() + 10.dp,
-                    0.dp,
-                    paddingValues.calculateBottomPadding()
+
+    var refreshing by remember { mutableStateOf(false) }
+    LaunchedEffect(refreshing) {
+        if (refreshing) {
+            viewModel.update()
+            delay(1000)
+            refreshing = false
+        }
+    }
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing = refreshing),
+        onRefresh = { refreshing = true },
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                TopBarText(
+                    leftText = stringResource(R.string.back),
+                    centerText = stringResource(R.string.routing_group) + "\"${viewModel.getGroupName()}\"",
+                    rightText = stringResource(R.string.users_add),
+                    rightAction = { openInviteDialog.value = true },
+                    navController = navController
                 )
-        ) {
-            if (openInviteDialog.value) {
-                Dialog(
-                    onDismissRequest = { openInviteDialog.value = false }
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .defaultMinSize(Dp.Unspecified, 200.dp)
+            }
+        ) { paddingValues ->
+            Column(
+                horizontalAlignment = Alignment.End,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        0.dp,
+                        paddingValues.calculateTopPadding() + 10.dp,
+                        0.dp,
+                        paddingValues.calculateBottomPadding()
+                    )
+            ) {
+                if (openInviteDialog.value) {
+                    Dialog(
+                        onDismissRequest = { openInviteDialog.value = false }
                     ) {
-                        val searchState = remember { TextFieldState() }
-                        SimpleSearchBar(
-                            textFieldState = searchState,
-                            onSearch = {
-                                searchState.edit { replace(0, length, it) }
-                                viewModel.search(it)
-                            },
-                            onClick = {
-                                viewModel.invite(it)
-                                openInviteDialog.value = false
-                            },
-                            searchResults = viewModel.search.value
-                        )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .defaultMinSize(Dp.Unspecified, 200.dp)
+                        ) {
+                            val searchState = remember { TextFieldState() }
+                            SimpleSearchBar(
+                                textFieldState = searchState,
+                                onSearch = {
+                                    searchState.edit { replace(0, length, it) }
+                                    viewModel.search(it)
+                                },
+                                onClick = {
+                                    viewModel.invite(it)
+                                    openInviteDialog.value = false
+                                },
+                                searchResults = viewModel.search.value
+                            )
+                        }
                     }
                 }
-            }
 
-            LazyColumn(
-                horizontalAlignment = Alignment.Start,
-                contentPadding = PaddingValues(10.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(viewModel.users.value) { user ->
-                    UserListElement(
-                        user = user,
-                        isAdmin = viewModel.getIsAdmin(),
-                        onClick = { viewModel.changeIsAdmin(user.user_id!!) }
-                    )
-                    Spacer(Modifier.height(10.dp))
+                LazyColumn(
+                    horizontalAlignment = Alignment.Start,
+                    contentPadding = PaddingValues(10.dp),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(viewModel.users.value) { user ->
+                        UserListElement(
+                            user = user,
+                            isAdmin = viewModel.getIsAdmin(),
+                            onClick = { viewModel.changeIsAdmin(user.user_id!!) }
+                        )
+                        Spacer(Modifier.height(10.dp))
+                    }
                 }
             }
         }

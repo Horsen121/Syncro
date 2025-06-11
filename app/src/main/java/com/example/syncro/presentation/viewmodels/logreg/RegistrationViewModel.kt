@@ -3,10 +3,10 @@ package com.example.syncro.presentation.viewmodels.logreg
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.syncro.data.datasourse.remote.RemoteApi
+import com.example.syncro.data.datasourse.remote.models.RegisterRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,8 +29,8 @@ class RegistrationViewModel @Inject constructor(
     private var _agreement = mutableStateOf(false)
     val agreement: State<Boolean> = _agreement
 
-    private var _response = mutableStateOf("")
-    val response: State<String> = _response
+    private var _response = mutableStateOf(false)
+    val response: State<Boolean> = _response
 
     fun onNameChange(text: String) {
         _name.value = text
@@ -49,13 +49,14 @@ class RegistrationViewModel @Inject constructor(
     }
     
     fun registration() {
-        viewModelScope.launch {
+        runBlocking {
             try {
-                RemoteApi.retrofitService.register(_email.value, _password1.value, _name.value).let {
-                    _response.value = it
+                val body = RegisterRequest(_email.value, _password1.value, _name.value)
+                RemoteApi.retrofitService.register(body).let {
+                    if(it.isSuccessful) _response.value = true
                 }
             } catch (e: Exception) {
-                _response.value = e.message ?: "42.2"
+                _response.value = false
             }
         }
     }

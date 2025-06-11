@@ -1,7 +1,6 @@
 package com.example.syncro.presentation.viewmodels
 
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,16 +47,16 @@ class GroupsViewModel @Inject constructor(
     }
 
     private fun loadGroups() {
-        viewModelScope.launch {
+        runBlocking {
             RemoteApi.retrofitService.getGroupsByUser(CurrentUser.token).let {
                 if (it.isSuccessful) {
+                    _groups.value = it.body() ?: emptyList()
                     it.body()?.forEach { group ->
                         groupUseCases.addGroup(group)
-                        _groups.value += group
                     }
                 } else {
-                    groupUseCases.getGroups().onEach {
-                        _groups.value = it
+                    groupUseCases.getGroups().onEach { groups ->
+                        _groups.value = groups
                     }.launchIn(viewModelScope)
                 }
             }
