@@ -11,7 +11,6 @@ import com.example.syncro.domain.usecases.GroupUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -31,15 +30,19 @@ class GroupsViewModel @Inject constructor(
     }
 
     fun search(group: String) {
-        viewModelScope.launch {
+        runBlocking {
             RemoteApi.retrofitService.findGroup(CurrentUser.token, group).let { response ->
                 if(response.isSuccessful) {
                     response.body().let { res ->
-                        _search.value = res!!.map { Pair(it.name, it.id.toString()) }
+                        _search.value = res!!.map { Pair(it.name, it.group_id.toString()) }
                     }
                 }
             }
         }
+    }
+
+    fun clear() {
+        _search.value = emptyList()
     }
 
     fun update() {
@@ -51,7 +54,7 @@ class GroupsViewModel @Inject constructor(
             RemoteApi.retrofitService.getGroupsByUser(CurrentUser.token).let {
                 if (it.isSuccessful) {
                     _groups.value = it.body() ?: emptyList()
-                    it.body()?.forEach { group ->
+                    _groups.value.forEach { group ->
                         groupUseCases.addGroup(group)
                     }
                 } else {

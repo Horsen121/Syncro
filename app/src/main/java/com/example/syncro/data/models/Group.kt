@@ -9,8 +9,8 @@ data class Group(
     @PrimaryKey(autoGenerate = true) val group_id : Long? = null,
     val name: String,
     val description: String,
-    val countPeople: Int,
+    val members_count: Int,
     val created_by: Long,
-    val isAdmin: Boolean,
+    val is_admin: Boolean,
     val is_member: Boolean = true
 )

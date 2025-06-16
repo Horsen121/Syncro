@@ -1,6 +1,7 @@
 package com.example.syncro.presentation.ui.screens.group
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -34,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
@@ -67,8 +69,8 @@ fun AddEditTaskScreen(
     val openDateEndDialog = remember { mutableStateOf(false) }
     val openTimeEndDialog = remember { mutableStateOf(false) }
 
-    val openDateReminderDialog = remember { mutableStateOf(false) }
-    val openTimeReminderDialog = remember { mutableStateOf(false) }
+//    val openDateReminderDialog = remember { mutableStateOf(false) }
+//    val openTimeReminderDialog = remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -132,7 +134,7 @@ fun AddEditTaskScreen(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Time of Task
+                // Time of start Task
                 var dateStartState by remember { mutableStateOf(viewModel.startTime.value) }
                 val pickerDateStartState = remember {DatePickerState(
                     initialSelectedDateMillis = dateStartState?.toEpochSecond(ZoneOffset.UTC),
@@ -274,13 +276,13 @@ fun AddEditTaskScreen(
                                     dateEndState?.withHour(pickerTimeEndState.hour)
                                     dateEndState?.withMinute(pickerTimeEndState.minute)
 
-                                    if(dateEndState != null && dateStartState != null && dateEndState!! < dateStartState) {
+                                    if(dateEndState != null && dateStartState != null && dateEndState!! > dateStartState) {
                                         viewModel.onEndTimeChange(dateEndState)
                                     } else dateEndState = viewModel.endTime.value
 
-                                    viewModel.onReminderTimeChange(
-                                        dateEndState?.minusHours(1)
-                                    )
+//                                    viewModel.onReminderTimeChange(
+//                                        dateEndState?.minusHours(1)
+//                                    )
 
                                     openTimeEndDialog.value = false
                                 }
@@ -314,92 +316,92 @@ fun AddEditTaskScreen(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Time of end Task
-                var dateReminderState by remember { mutableStateOf(viewModel.reminderTime.value) }
-                val pickerDateReminderState = remember { DatePickerState(
-                    initialSelectedDateMillis = dateReminderState?.toEpochSecond(ZoneOffset.UTC),
-                    locale = CalendarLocale(Locale.current.language)
-                ) }
-                val pickerTimeReminderState = remember { TimePickerState(
-                    initialHour = dateReminderState?.hour ?: LocalTime.now().hour,
-                    initialMinute = dateReminderState?.minute ?: LocalTime.now().minute,
-                    is24Hour = true
-                )}
-                if (openDateReminderDialog.value) {
-                    DatePickerDialog(
-                        confirmButton = {
-                            TextButton(
-                                onClick = {
-                                    dateReminderState = LocalDateTime.of(
-                                        LocalDateTime.ofEpochSecond(
-                                            pickerDateReminderState.selectedDateMillis!! /1000,
-                                            0, ZoneOffset.UTC).toLocalDate(),
-                                        LocalTime.of(
-                                            pickerTimeReminderState.hour,
-                                            pickerTimeReminderState.minute
-                                        )
-                                    )
-                                    openDateReminderDialog.value = false
-                                    openTimeReminderDialog.value = true
-                                }
-                            ) {
-                                TextBodyMedium(stringResource(R.string.ok))
-                            }
-                        },
-                        dismissButton = {
-                            TextButton(
-                                onClick = {
-                                    dateReminderState = viewModel.reminderTime.value
-                                    openDateReminderDialog.value = false
-                                }
-                            ) {
-                                TextBodyMedium(stringResource(R.string.cancel))
-                            }
-                        },
-                        onDismissRequest = { openDateReminderDialog.value = false }
-                    ) {
-                        DatePicker(state = pickerDateReminderState, modifier = Modifier.fillMaxSize())
-                    }
-                }
-                if (openTimeReminderDialog.value) {
-                    DatePickerDialog(
-                        confirmButton = {
-                            TextButton(
-                                onClick = {
-                                    dateReminderState?.withHour(pickerTimeReminderState.hour)
-                                    dateReminderState?.withMinute(pickerTimeReminderState.minute)
-                                    viewModel.onReminderTimeChange(dateReminderState)
-                                    openTimeReminderDialog.value = false
-                                }
-                            ) {
-                                TextBodyMedium(stringResource(R.string.ok))
-                            }
-                        },
-                        dismissButton = {
-                            TextButton(
-                                onClick = {
-                                    dateReminderState = viewModel.reminderTime.value
-                                    openTimeReminderDialog.value = false
-                                    openDateReminderDialog.value = true
-                                }
-                            ) {
-                                TextBodyMedium(stringResource(R.string.cancel))
-                            }
-                        },
-                        onDismissRequest = { openTimeReminderDialog.value = false }
-                    ) {
-                        TimePicker(state = pickerTimeReminderState, modifier = Modifier.fillMaxSize())
-                    }
-                }
-                DrawChangeRow(
-                    label = stringResource(id = R.string.task_reminder_date),
-                    value = if (viewModel.reminderTime.value != null) viewModel.reminderTime.value!!.toNormalString()
-                        .replace('-', '.').replace("T", "  ") else "",
-                    height = 48.dp
-                ) {
-                    openDateReminderDialog.value = true
-                }
-                Spacer(modifier = Modifier.height(12.dp))
+                // Time of Task Reminder
+//                var dateReminderState by remember { mutableStateOf(viewModel.reminderTime.value) }
+//                val pickerDateReminderState = remember { DatePickerState(
+//                    initialSelectedDateMillis = dateReminderState?.toEpochSecond(ZoneOffset.UTC),
+//                    locale = CalendarLocale(Locale.current.language)
+//                ) }
+//                val pickerTimeReminderState = remember { TimePickerState(
+//                    initialHour = dateReminderState?.hour ?: LocalTime.now().hour,
+//                    initialMinute = dateReminderState?.minute ?: LocalTime.now().minute,
+//                    is24Hour = true
+//                )}
+//                if (openDateReminderDialog.value) {
+//                    DatePickerDialog(
+//                        confirmButton = {
+//                            TextButton(
+//                                onClick = {
+//                                    dateReminderState = LocalDateTime.of(
+//                                        LocalDateTime.ofEpochSecond(
+//                                            pickerDateReminderState.selectedDateMillis!! /1000,
+//                                            0, ZoneOffset.UTC).toLocalDate(),
+//                                        LocalTime.of(
+//                                            pickerTimeReminderState.hour,
+//                                            pickerTimeReminderState.minute
+//                                        )
+//                                    )
+//                                    openDateReminderDialog.value = false
+//                                    openTimeReminderDialog.value = true
+//                                }
+//                            ) {
+//                                TextBodyMedium(stringResource(R.string.ok))
+//                            }
+//                        },
+//                        dismissButton = {
+//                            TextButton(
+//                                onClick = {
+//                                    dateReminderState = viewModel.reminderTime.value
+//                                    openDateReminderDialog.value = false
+//                                }
+//                            ) {
+//                                TextBodyMedium(stringResource(R.string.cancel))
+//                            }
+//                        },
+//                        onDismissRequest = { openDateReminderDialog.value = false }
+//                    ) {
+//                        DatePicker(state = pickerDateReminderState, modifier = Modifier.fillMaxSize())
+//                    }
+//                }
+//                if (openTimeReminderDialog.value) {
+//                    DatePickerDialog(
+//                        confirmButton = {
+//                            TextButton(
+//                                onClick = {
+//                                    dateReminderState?.withHour(pickerTimeReminderState.hour)
+//                                    dateReminderState?.withMinute(pickerTimeReminderState.minute)
+//                                    viewModel.onReminderTimeChange(dateReminderState)
+//                                    openTimeReminderDialog.value = false
+//                                }
+//                            ) {
+//                                TextBodyMedium(stringResource(R.string.ok))
+//                            }
+//                        },
+//                        dismissButton = {
+//                            TextButton(
+//                                onClick = {
+//                                    dateReminderState = viewModel.reminderTime.value
+//                                    openTimeReminderDialog.value = false
+//                                    openDateReminderDialog.value = true
+//                                }
+//                            ) {
+//                                TextBodyMedium(stringResource(R.string.cancel))
+//                            }
+//                        },
+//                        onDismissRequest = { openTimeReminderDialog.value = false }
+//                    ) {
+//                        TimePicker(state = pickerTimeReminderState, modifier = Modifier.fillMaxSize())
+//                    }
+//                }
+//                DrawChangeRow(
+//                    label = stringResource(id = R.string.task_reminder_date),
+//                    value = if (viewModel.reminderTime.value != null) viewModel.reminderTime.value!!.toNormalString()
+//                        .replace('-', '.').replace("T", "  ") else "",
+//                    height = 48.dp
+//                ) {
+//                    openDateReminderDialog.value = true
+//                }
+//                Spacer(modifier = Modifier.height(12.dp))
 
 
                 Row(
@@ -434,10 +436,15 @@ fun AddEditTaskScreen(
                 }
             }
 
+            val context = LocalContext.current
             Button(
                 onClick = {
-                    viewModel.onSave().also {
-                        navController.navigateUp()
+                    viewModel.onSave().let {
+                        if(viewModel.error.value == "") {
+                            navController.navigateUp()
+                        } else {
+                            Toast.makeText(context, viewModel.error.value, Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             ) {

@@ -2,7 +2,6 @@ package com.example.syncro.presentation.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -108,6 +107,7 @@ fun GroupsScreen(
                         viewModel.search(it)
                     },
                     onClick = {
+                        viewModel.clear()
                         navController.navigate(Routing.GroupScreen.route + "?groupId=${it.toLong()}")
                     },
                     searchResults = viewModel.search.value

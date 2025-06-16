@@ -52,6 +52,13 @@ class AddEditTaskViewModel @Inject constructor(
     private var _files = mutableStateOf<List<String>>(emptyList())
     val files: State<List<String>> = _files
 
+
+    private var _response = mutableStateOf(false)
+    val response: State<Boolean> = _response
+
+    private var _error = mutableStateOf("")
+    val error: State<String> = _error
+
     init {
         runBlocking {
             savedStateHandle.get<Long>("groupId").let { id ->
@@ -122,59 +129,31 @@ class AddEditTaskViewModel @Inject constructor(
     }
 
     fun onSave() {
-        viewModelScope.launch {
+        runBlocking {
             val body = CreateTaskRequest(
                 title = _name.value,
                 description = _desc.value,
-                start_time = _startTime.value.toString(),
-                end_time = _endTime.value.toString(),
-                priority = _diff.value.name,
+                start_time = "2025.06.15 10:00", //_startTime.value?.format(DateTimeFormatter.ofPattern("YYYY.MM.DD HH:MM")) ?: "2025.06.15 10:00",
+                end_time = "2025.06.16 10:00", // _endTime.value?.format(DateTimeFormatter.ofPattern("YYYY.MM.DD HH:MM")) ?: "2025.06.15 10:00",
+                priority = "Средний", //_diff.value.name,
                 context = ""
             )
 
-            if (taskId != null) {
-                RemoteApi.retrofitService.updTaskById(CurrentUser.token, groupId, body).let {
-                    if (it.isSuccessful) {
-                        taskUseCases.addTask(
-                            Task(
-                                task_id = taskId,
-                                group_id = groupId,
-                                title = _name.value,
-                                description = _desc.value,
-                                created_by = CurrentUser.id,
-                                start_time = _startTime.value.toString(),
-                                end_time = _endTime.value.toString(),
-                                reminderTime = _reminderTime.value.toString(),
-                                difficult = _diff.value.name
-                            )
-                        ).let { id ->
-                            _files.value.forEach { file ->
-                                fileUseCases.addFile(
-                                    File(
-                                        group_id = groupId,
-                                        task_id = id!!,
-                                        path = file
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
-            } else {
-                RemoteApi.retrofitService.addTaskToGroup(CurrentUser.token, groupId, body).let {
-                    if (it.isSuccessful) {
-                        it.body().let { task ->
+            try {
+                if (taskId != null) {
+                    RemoteApi.retrofitService.updTaskById(CurrentUser.token, groupId, body).let {
+                        if (it.isSuccessful) {
                             taskUseCases.addTask(
                                 Task(
-                                    task_id = task!!.task_id,
+                                    task_id = taskId,
                                     group_id = groupId,
                                     title = _name.value,
                                     description = _desc.value,
                                     created_by = CurrentUser.id,
                                     start_time = _startTime.value.toString(),
                                     end_time = _endTime.value.toString(),
-                                    reminderTime = _reminderTime.value.toString(),
-                                    difficult = _diff.value.name
+//                                reminderTime = _reminderTime.value.toString(),
+                                    priority = _diff.value.name
                                 )
                             ).let { id ->
                                 _files.value.forEach { file ->
@@ -187,9 +166,56 @@ class AddEditTaskViewModel @Inject constructor(
                                     )
                                 }
                             }
+
+                            _response.value = true
+                        } else {
+                            _response.value = true
+                            _error.value = it.body()?.toString() ?: "42"
+                        }
+                    }
+                } else {
+                    RemoteApi.retrofitService.addTaskToGroup(CurrentUser.token, groupId, body).let {
+                        if (it.isSuccessful) {
+                            runBlocking {
+                                it.body().let { task ->
+                                    taskUseCases.addTask(
+                                        Task(
+                                            task_id = task!!.task_id,
+                                            group_id = groupId,
+                                            title = _name.value,
+                                            description = _desc.value,
+                                            created_by = CurrentUser.id,
+                                            start_time = _startTime.value.toString()
+                                                .format("YYYY.MM.DD HH:MM"),
+                                            end_time = _endTime.value.toString()
+                                                .format("YYYY.MM.DD HH:MM"),
+//                                    reminderTime = _reminderTime.value.toString(),
+                                            priority = _diff.value.name.lowercase()
+                                        )
+                                    )
+//                                .let { id ->
+//                                    _files.value.forEach { file ->
+//                                        fileUseCases.addFile(
+//                                            File(
+//                                                group_id = groupId,
+//                                                task_id = id!!,
+//                                                path = file
+//                                            )
+//                                        )
+//                                    }
+//                                }
+                                }
+                            }
+
+                            _response.value = true
+                        } else {
+                            _response.value = true
+                            _error.value = it.errorBody()?.string() ?: "42"
                         }
                     }
                 }
+            } catch (e: Exception) {
+                _error.value = e.message ?: "42"
             }
         }
     }

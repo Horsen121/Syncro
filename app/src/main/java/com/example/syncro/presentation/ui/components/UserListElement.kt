@@ -52,7 +52,7 @@ fun UserListElement(
                 modifier = Modifier.padding(10.dp, 0.dp)
             ) {
                 TextHeadMedium(
-                    text = user.name,
+                    text = user.full_name,
                     textAlign = TextAlign.Start,
                     fillMaxWidth = false
                 )
@@ -66,7 +66,7 @@ fun UserListElement(
 
                 Row {
                     CheckTextButton(
-                        checked = user.isAdmin,
+                        checked = user.is_admin,
                         onCheckedChange = { onClick() },
                         text = stringResource(R.string.card_user),
                         leftTextPosition = true,

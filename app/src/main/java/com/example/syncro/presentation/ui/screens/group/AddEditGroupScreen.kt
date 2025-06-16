@@ -84,18 +84,18 @@ fun AddEditGroupScreen(
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 
-                CheckTextButton(
-                    text = stringResource(R.string.add_edit_group_private),
-                    checked = viewModel.isPrivate.value,
-                    onCheckedChange = { viewModel.onPrivateChange() }
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-
-                CheckTextButton(
-                    text = "isAdmin",
-                    checked = viewModel.isAdmin.value,
-                    onCheckedChange = { viewModel.onAdminChange() }
-                )
+//                CheckTextButton(
+//                    text = stringResource(R.string.add_edit_group_private),
+//                    checked = viewModel.isPrivate.value,
+//                    onCheckedChange = { viewModel.onPrivateChange() }
+//                )
+//                Spacer(modifier = Modifier.height(24.dp))
+//
+//                CheckTextButton(
+//                    text = "isAdmin",
+//                    checked = viewModel.isAdmin.value,
+//                    onCheckedChange = { viewModel.onAdminChange() }
+//                )
             }
 
             val context = LocalContext.current

@@ -39,7 +39,7 @@ fun GroupTask(
     Card(
         onClick = onClick,
         shape = MaterialTheme.shapes.medium,
-        border = BorderStroke(1.dp, when (task.difficult) {
+        border = BorderStroke(1.dp, when (task.priority) {
                 TaskDifficult.Easy.name -> { Color.Green }
                 TaskDifficult.Medium.name -> { Color.Yellow }
                 TaskDifficult.Hard.name -> { Color.Red }
@@ -78,7 +78,7 @@ private fun GroupListElementPreview() {
     SyncroTheme {
         Scaffold { _ ->
             GroupTask(
-                task = Task(1, 1, "Task", "desk", 1, "25/03/25","31/03/25", "",TaskDifficult.Easy.name),
+                task = Task(1, 1, "Task", "desk", 1, "25/03/25","31/03/25", TaskDifficult.Easy.name),
                 onClick = {  },
                 onSolutionClick = {  }
             )

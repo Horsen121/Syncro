@@ -4,17 +4,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.syncro.application.CurrentUser
 import com.example.syncro.data.datasourse.remote.RemoteApi
 import com.example.syncro.data.datasourse.remote.models.CreateSolutionRequest
 import com.example.syncro.data.datasourse.remote.models.UpdSolutionRequest
 import com.example.syncro.data.models.Solution
-import com.example.syncro.data.models.SourceFile
 import com.example.syncro.domain.usecases.SolutionUseCases
 import com.example.syncro.domain.usecases.SourceFileUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -54,12 +51,14 @@ class AddEditSolutionViewModel @Inject constructor(
         }
 
         if (solutionId != null) {
-            viewModelScope.launch {
+            runBlocking {
                 RemoteApi.retrofitService.getSolutionById(CurrentUser.token, groupId, taskId, solutionId!!).let {
                     if (it.isSuccessful) {
-                        it.body().let { solution ->
-                            _name.value = solution!!.title
-                            _desc.value = solution.description
+                        runBlocking {
+                            it.body().let { solution ->
+                                _name.value = solution!!.title
+                                _desc.value = solution.description
+                            }
                         }
                     } else {
                         solutionUseCases.getSolution(groupId, taskId, solutionId!!).let { solution ->
@@ -93,7 +92,7 @@ class AddEditSolutionViewModel @Inject constructor(
     }
 
     fun onSave() {
-        viewModelScope.launch {
+        runBlocking {
             if (solutionId != null) {
                 val body = UpdSolutionRequest(
                     title = _name.value,
@@ -101,27 +100,30 @@ class AddEditSolutionViewModel @Inject constructor(
                 )
                 RemoteApi.retrofitService.updSolutionById(CurrentUser.token, groupId, taskId, solutionId!!, body).let {
                     if (it.isSuccessful) {
-                        solutionUseCases.addSolution(
-                            Solution(
-                                solution_id = solutionId,
-                                group_id = groupId,
-                                task_id = taskId,
-                                user_id = CurrentUser.id,
-                                title = _name.value,
-                                description = _desc.value
-                            )
-                        ).let { id ->
-                            _sources.value.forEach { file ->
-                                sourceFileUseCases.addSourceFile(
-                                    SourceFile(
-                                        group_id = groupId,
-                                        task_id = taskId,
-                                        solution_id = id!!,
-                                        path = file
-                                    )
+                        runBlocking {
+                            solutionUseCases.addSolution(
+                                Solution(
+                                    solution_id = solutionId,
+                                    group_id = groupId,
+                                    task_id = taskId,
+                                    user_id = CurrentUser.id,
+                                    title = _name.value,
+                                    description = _desc.value
                                 )
-                            }
+                            )
                         }
+//                            .let { id ->
+//                            _sources.value.forEach { file ->
+//                                sourceFileUseCases.addSourceFile(
+//                                    SourceFile(
+//                                        group_id = groupId,
+//                                        task_id = taskId,
+//                                        solution_id = id!!,
+//                                        path = file
+//                                    )
+//                                )
+//                            }
+//                        }
                     }
                 }
             } else {
@@ -131,6 +133,7 @@ class AddEditSolutionViewModel @Inject constructor(
                 )
                 RemoteApi.retrofitService.addSolutionToTask(CurrentUser.token, groupId, taskId, body).let {
                     if (it.isSuccessful) {
+                        runBlocking {
                         it.body().let { solution ->
                             solutionUseCases.addSolution(
                                 Solution(
@@ -141,18 +144,20 @@ class AddEditSolutionViewModel @Inject constructor(
                                     title = _name.value,
                                     description = _desc.value
                                 )
-                            ).let { id ->
-                                _sources.value.forEach { file ->
-                                    sourceFileUseCases.addSourceFile(
-                                        SourceFile(
-                                            group_id = groupId,
-                                            task_id = taskId,
-                                            solution_id = id!!,
-                                            path = file
-                                        )
-                                    )
-                                }
-                            }
+                            )
+                        }
+//                                .let { id ->
+//                                _sources.value.forEach { file ->
+//                                    sourceFileUseCases.addSourceFile(
+//                                        SourceFile(
+//                                            group_id = groupId,
+//                                            task_id = taskId,
+//                                            solution_id = id!!,
+//                                            path = file
+//                                        )
+//                                    )
+//                                }
+//                            }
                         }
                     }
                 }

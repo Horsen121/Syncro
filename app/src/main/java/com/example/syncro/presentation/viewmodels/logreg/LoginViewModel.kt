@@ -48,7 +48,8 @@ class LoginViewModel @Inject constructor(
 
                         CurrentUser.id = response.user_id
                         CurrentUser.email = _login.value
-                        CurrentUser.name = "42" // response.full_name
+                        CurrentUser.name = response.full_name
+                        CurrentUser.password = _password.value
                         CurrentUser.token = response.access_token
 
                         useCases.addToken(

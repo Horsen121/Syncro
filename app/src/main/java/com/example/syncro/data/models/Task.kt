@@ -14,7 +14,6 @@ data class Task(
     val created_by: Long,
     val start_time: String,
     val end_time: String,
-    val difficult: String,
-    val reminderTime: String,
+    val priority: String,
     val isComplited: Boolean = false
 )

@@ -4,15 +4,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.syncro.application.CurrentUser
 import com.example.syncro.data.datasourse.remote.RemoteApi
 import com.example.syncro.data.models.Solution
 import com.example.syncro.domain.usecases.SolutionUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -51,7 +48,7 @@ class SolutionsViewModel @Inject constructor(
     }
 
     private fun loadSolutions() {
-        viewModelScope.launch {
+        runBlocking {
             RemoteApi.retrofitService.getSolutionsByTask(CurrentUser.token, groupId, taskId).let {
                 if (it.isSuccessful) {
                     _solutions.value = it.body()!!

@@ -4,7 +4,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.syncro.application.CurrentUser
 import com.example.syncro.data.datasourse.remote.RemoteApi
 import com.example.syncro.data.datasourse.remote.models.AddMemberRequest
@@ -13,7 +12,6 @@ import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.domain.usecases.UserUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -30,8 +28,10 @@ class PeoplesViewModel @Inject constructor(
     private var _users = mutableStateOf<List<User>>(emptyList())
     val users: State<List<User>> = _users
 
-    private var _search = mutableStateOf<List<Pair<String,String>>>(emptyList())
-    val search: State<List<Pair<String,String>>> = _search
+//    private var _search = mutableStateOf<List<Pair<String,String>>>(emptyList())
+//    val search: State<List<Pair<String,String>>> = _search
+    private var _search = mutableStateOf("")
+    val search: State<String> = _search
 
     init {
         runBlocking {
@@ -55,18 +55,22 @@ class PeoplesViewModel @Inject constructor(
     }
 
     fun search(user: String) {
-        _search.value += Pair(user, "$user.email@mail.ru")
+        _search.value = user
+
+//        runBlocking {
+////            RemoteApi.retrofitService
+//        }
     }
 
     fun invite(user: String) {
-        viewModelScope.launch {
+        runBlocking {
             RemoteApi.retrofitService.addMemberToGroup(CurrentUser.token, groupId, AddMemberRequest(user, false)).let {
                 if (it.isSuccessful) {
-                    userUseCases.addUser(it.body()!!)
+//                    userUseCases.addUser(it.body()!!)
 
                     val group = groupUseCases.getGroup(groupId)!!
                     groupUseCases.addGroup(
-                        group.copy(countPeople = group.countPeople + 1)
+                        group.copy(members_count = group.members_count + 1)
                     )
                 }
             }
@@ -74,13 +78,13 @@ class PeoplesViewModel @Inject constructor(
     }
 
     fun changeIsAdmin(id: Long) {
-        viewModelScope.launch {
+        runBlocking {
             _users.value.find { u -> u.user_id == id }?.let { user ->
-                if (user.isAdmin) {
+                if (user.is_admin) {
                     RemoteApi.retrofitService.addAdminToGroup(CurrentUser.token, groupId, id).let {
                         if (it.isSuccessful) {
                             userUseCases.addUser(
-                                user.copy(isAdmin = true)
+                                user.copy(is_admin = true)
                             )
                         }
                     }
@@ -88,7 +92,7 @@ class PeoplesViewModel @Inject constructor(
                     RemoteApi.retrofitService.deleteAdminOfGroup(CurrentUser.token, groupId, id).let {
                         if (it.isSuccessful) {
                             userUseCases.addUser(
-                                user.copy(isAdmin = false)
+                                user.copy(is_admin = false)
                             )
                         }
                     }
@@ -105,7 +109,7 @@ class PeoplesViewModel @Inject constructor(
     }
 
     private fun loadUsers() {
-        viewModelScope.launch {
+        runBlocking {
             RemoteApi.retrofitService.getMembersOfGroup(CurrentUser.token, groupId).let {
                 if(it.isSuccessful) {
                     _users.value = it.body() ?: emptyList()

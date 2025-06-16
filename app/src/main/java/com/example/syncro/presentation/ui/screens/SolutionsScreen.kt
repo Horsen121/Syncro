@@ -16,6 +16,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,6 +32,9 @@ import com.example.syncro.application.Routing
 import com.example.syncro.presentation.ui.components.SolutionListElement
 import com.example.syncro.presentation.ui.components.TopBarBackButton
 import com.example.syncro.presentation.viewmodels.SolutionsViewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -34,46 +42,76 @@ fun SolutionsScreen(
     navController: NavController,
     viewModel: SolutionsViewModel = hiltViewModel()
 ) {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = { TopBarBackButton(text = stringResource(R.string.routing_solutions), navController) }
-    ) { paddingValues ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    0.dp,
-                    paddingValues.calculateTopPadding(),
-                    0.dp,
-                    paddingValues.calculateBottomPadding()
+
+    var refreshing by remember { mutableStateOf(false) }
+    LaunchedEffect(refreshing) {
+        if (refreshing) {
+            viewModel.update()
+            delay(1000)
+            refreshing = false
+        }
+    }
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing = refreshing),
+        onRefresh = { refreshing = true },
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                TopBarBackButton(
+                    text = stringResource(R.string.routing_solutions),
+                    navController
                 )
-        ) {
-            LazyColumn(
-                contentPadding = PaddingValues(10.dp)
-            ) {
-                items(viewModel.solutions.value) { solution ->
-                    SolutionListElement(
-                        solution = solution,
-                        onClick = { navController.navigate(Routing.SolutionScreen.route
-                                + "?groupId=${viewModel.getGroupId()}&taskId=${viewModel.getTaskId()}&solutionId=${solution.solution_id}") }
+            }
+        ) { paddingValues ->
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        0.dp,
+                        paddingValues.calculateTopPadding(),
+                        0.dp,
+                        paddingValues.calculateBottomPadding()
                     )
-                    Spacer(Modifier.height(10.dp))
+            ) {
+                LazyColumn(
+                    contentPadding = PaddingValues(10.dp)
+                ) {
+                    items(viewModel.solutions.value) { solution ->
+                        SolutionListElement(
+                            solution = solution,
+                            onClick = {
+                                navController.navigate(
+                                    Routing.SolutionScreen.route
+                                            + "?groupId=${viewModel.getGroupId()}&taskId=${viewModel.getTaskId()}&solutionId=${solution.solution_id}"
+                                )
+                            }
+                        )
+                        Spacer(Modifier.height(10.dp))
+                    }
                 }
             }
-        }
-        BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(end = 8.dp, bottom = 64.dp),
-            contentAlignment = Alignment.BottomEnd
-        ) {
-            FloatingActionButton(
-                onClick = { navController.navigate(Routing.AddEditSolutionScreen.route +
-                        "?groupId=${viewModel.getGroupId()}&taskId=${viewModel.getTaskId()}")
-                }
+            BoxWithConstraints(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(end = 8.dp, bottom = 64.dp),
+                contentAlignment = Alignment.BottomEnd
             ) {
-                Image(Icons.Default.Add, null)
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate(
+                            Routing.AddEditSolutionScreen.route +
+                                    "?groupId=${viewModel.getGroupId()}&taskId=${viewModel.getTaskId()}"
+                        )
+                    }
+                ) {
+                    Image(Icons.Default.Add, null)
+                }
             }
         }
     }

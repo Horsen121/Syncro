@@ -4,16 +4,15 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.syncro.application.CurrentUser
 import com.example.syncro.data.datasourse.remote.RemoteApi
+import com.example.syncro.data.datasourse.remote.models.JoinGroupRequest
 import com.example.syncro.data.models.Group
 import com.example.syncro.data.models.Task
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.domain.usecases.TaskUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -42,12 +41,14 @@ class GroupViewModel @Inject constructor(
     private var _isMember = mutableStateOf<Boolean>(false)
     val isMember: State<Boolean> = _isMember
 
+    private var _response = mutableStateOf<Boolean>(false)
+    val response: State<Boolean> = _response
+
     init {
         savedStateHandle.get<Long>("groupId")?.let {
             if (it != -1L) {
                 groupId = it
                 runBlocking {
-//                viewModelScope.launch {
                     RemoteApi.retrofitService.getGroup(CurrentUser.token, groupId).let { res ->
                         if (res.isSuccessful) {
                             res.body().let { group ->
@@ -92,8 +93,11 @@ class GroupViewModel @Inject constructor(
 
     fun join() {
         runBlocking {
-            RemoteApi.retrofitService.joinGroup(CurrentUser.token, _group.value!!.group_id!!).let {
-                _isMember.value = it
+            val body = JoinGroupRequest(CurrentUser.email, CurrentUser.name, CurrentUser.password)
+
+            RemoteApi.retrofitService.joinGroup(CurrentUser.token, groupId, body).let {
+                if(it.isSuccessful)
+                    _isMember.value = true
             }
         }
     }
@@ -101,20 +105,25 @@ class GroupViewModel @Inject constructor(
     fun disJoin() {
         runBlocking {
             RemoteApi.retrofitService.disJoinGroup(CurrentUser.token, _group.value!!.group_id!!).let {
-                _isMember.value = it
-
-                if (it) {
+                if (it.isSuccessful) {
                     groupUseCases.deleteGroup(group.value!!)
+
+                    _response.value = true
                 }
             }
         }
     }
 
+    fun update() = loadTasks()
+
     private fun loadTasks() {
         runBlocking {
             RemoteApi.retrofitService.getTasksByGroup(CurrentUser.token, groupId).also {
                 if (it.isSuccessful) {
-                    _currentData.value = it.body()!!
+                    _currentData.value = it.body() ?: emptyList()
+                    _currentData.value.forEach { task ->
+                        taskUseCases.addTask(task)
+                    }
                 } else {
                     if (_group.value != null) {
                         taskUseCases.getTasks(_group.value!!.group_id!!).onEach { tasks ->

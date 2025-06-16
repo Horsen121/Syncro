@@ -52,16 +52,16 @@ class AddEditGroupViewModel @Inject constructor(
                                 _name.value = group!!.name
                                 _desc.value = group.description
 //                        _isPrivate.value = group.isPrivate
-                                _isAdmin.value = group.isAdmin
-                                countPeople = group.countPeople
+                                _isAdmin.value = group.is_admin
+                                countPeople = group.members_count
                             }
                         } else {
                             groupUseCases.getGroup(groupId)?.also { group ->
                                 _name.value = group.name
                                 _desc.value = group.description
 //                        _isPrivate.value = group.isPrivate
-                                _isAdmin.value = group.isAdmin
-                                countPeople = group.countPeople
+                                _isAdmin.value = group.is_admin
+                                countPeople = group.members_count
                             }
                         }
                     }
@@ -106,16 +106,18 @@ class AddEditGroupViewModel @Inject constructor(
                         if (it.isSuccessful) {
                             val response = it.body()!!
 
-                            groupUseCases.addGroup(
-                                Group(
-                                    group_id = response.group_id,
-                                    name = response.name,
-                                    description = response.description,
-                                    isAdmin = response.is_admin,
-                                    created_by = CurrentUser.id,
-                                    countPeople = countPeople
+                            runBlocking {
+                                groupUseCases.addGroup(
+                                    Group(
+                                        group_id = response.group_id,
+                                        name = response.name,
+                                        description = response.description,
+                                        is_admin = response.is_admin,
+                                        created_by = CurrentUser.id,
+                                        members_count = 1
+                                    )
                                 )
-                            )
+                            }
 
                             _response.value = true
                         } else {

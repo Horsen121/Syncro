@@ -31,6 +31,7 @@ object CurrentUser {
     var id = 1L
     var name = "UserName"
     var email = "e.mail@mail.ru"
+    var password = ""
     var token = "token"
 }
 

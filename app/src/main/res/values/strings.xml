@@ -90,6 +90,7 @@
 
     <!--  Peoples page  -->
     <string name="users_add">Пригласить</string>
+    <string name="users_add_placeholder">Введите email</string>
 
     <!--  Settings page  -->
     <string name="settings_logout">Выйти из учётной записи</string>

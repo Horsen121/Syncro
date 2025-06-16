@@ -1,18 +1,19 @@
 package com.example.syncro.presentation.ui.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,7 +31,9 @@ import androidx.navigation.NavController
 import com.example.syncro.R
 import com.example.syncro.presentation.ui.components.TopBarText
 import com.example.syncro.presentation.ui.components.UserListElement
-import com.example.syncro.presentation.ui.elements.SimpleSearchBar
+import com.example.syncro.presentation.ui.elements.SimpleTextField
+import com.example.syncro.presentation.ui.elements.TextBodyMedium
+import com.example.syncro.presentation.ui.elements.TextHeadSmall
 import com.example.syncro.presentation.viewmodels.PeoplesViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -86,24 +89,39 @@ fun PeoplesScreen(
                     Dialog(
                         onDismissRequest = { openInviteDialog.value = false }
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .defaultMinSize(Dp.Unspecified, 200.dp)
-                        ) {
-                            val searchState = remember { TextFieldState() }
-                            SimpleSearchBar(
-                                textFieldState = searchState,
-                                onSearch = {
-                                    searchState.edit { replace(0, length, it) }
-                                    viewModel.search(it)
-                                },
-                                onClick = {
-                                    viewModel.invite(it)
-                                    openInviteDialog.value = false
-                                },
-                                searchResults = viewModel.search.value
-                            )
+                        Surface {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth(0.8f)
+//                                    .defaultMinSize(Dp.Unspecified, 100.dp)
+                            ) {
+                                SimpleTextField(
+                                    value = viewModel.search.value,
+                                    placeholder = { TextBodyMedium(stringResource(R.string.users_add_placeholder)) },
+                                    onValueChange = { viewModel.search(it) },
+                                    maxLength = 30
+                                )
+                                Button(
+                                    onClick = {
+                                        viewModel.invite(viewModel.search.value)
+                                        openInviteDialog.value = false
+                                    }
+                                ) {
+                                    TextHeadSmall(stringResource(R.string.users_add))
+                                }
+                            }
+//                            SimpleSearchBar(
+//                                textFieldState = searchState,
+//                                onSearch = {
+//                                    searchState.edit { replace(0, length, it) }
+//                                    viewModel.search(it)
+//                                },
+//                                onClick = {
+//                                    viewModel.invite(it)
+//                                    openInviteDialog.value = false
+//                                },
+//                                searchResults = viewModel.search.value
+//                            )
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 package com.example.syncro.presentation.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.data.models.Solution
 import com.example.syncro.presentation.ui.elements.TextBodyMedium
+import com.example.syncro.presentation.ui.elements.TextHeadSmall
 
 @Composable
 fun SolutionListElement(
@@ -39,7 +41,7 @@ fun SolutionListElement(
                     .fillMaxWidth()
                     .padding(10.dp, 0.dp)
             ) {
-                TextBodyMedium(
+                TextHeadSmall(
                     text = solution.title,
                     textAlign = TextAlign.Start,
                 )
@@ -53,6 +55,7 @@ fun SolutionListElement(
 
 @Preview
 @Composable
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 private fun SolutionListElementPreview() {
     SyncroTheme {
         Scaffold { _ ->

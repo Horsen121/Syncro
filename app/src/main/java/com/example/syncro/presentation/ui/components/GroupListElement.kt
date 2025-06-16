@@ -64,7 +64,7 @@ fun GroupListElement(
             Spacer(Modifier.width(24.dp))
 
             Row {
-                TextBodyMedium(group.countPeople.toString())
+                TextBodyMedium(group.members_count.toString())
                 Image(Icons.Default.Person, null)
             }
         }

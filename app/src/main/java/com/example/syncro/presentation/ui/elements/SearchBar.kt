@@ -52,7 +52,7 @@ fun SimpleSearchBar(
                     query = textFieldState.text.toString(),
                     onQueryChange = {
                         textFieldState.edit { replace(0, length, it) }
-//                        onSearch(textFieldState.text.toString())
+                        onSearch(textFieldState.text.toString())
                     },
                     onSearch = {
                         onSearch(textFieldState.text.toString())

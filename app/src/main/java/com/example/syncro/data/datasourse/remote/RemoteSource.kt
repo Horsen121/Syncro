@@ -6,6 +6,9 @@ import com.example.syncro.data.datasourse.remote.models.CreateGroupResponse
 import com.example.syncro.data.datasourse.remote.models.CreateSolutionRequest
 import com.example.syncro.data.datasourse.remote.models.CreateTaskRequest
 import com.example.syncro.data.datasourse.remote.models.FindGroupResponse
+import com.example.syncro.data.datasourse.remote.models.JoinGroupRequest
+import com.example.syncro.data.datasourse.remote.models.JoinGroupResponse
+import com.example.syncro.data.datasourse.remote.models.LeaveGroupResponse
 import com.example.syncro.data.datasourse.remote.models.LoginRequest
 import com.example.syncro.data.datasourse.remote.models.LoginResponse
 import com.example.syncro.data.datasourse.remote.models.RegisterRequest
@@ -29,7 +32,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-private const val BASE_URL = "http://80.90.179.160:3000/"
+private const val BASE_URL = "http://147.45.226.88:3000/"
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create())
@@ -45,17 +48,18 @@ interface RemoteApiService {
     suspend fun login(@Body body: LoginRequest): Response<LoginResponse>
 
     // Groups
-    @PUT("")
+    @PUT("public/groups/{group_id}/join")
     suspend fun joinGroup(
         @Header("Authorization:Bearer") token: String,
-        groupId: Long
-    ): Boolean
+        @Path("group_id") group_id: Long,
+        @Body body: JoinGroupRequest
+    ): Response<JoinGroupResponse>
 
-    @PUT("")
+    @PUT("/api/groups/{groupId}/leave")
     suspend fun disJoinGroup(
         @Header("Authorization:Bearer") token: String,
-        groupId: Long
-    ): Boolean
+        @Path("groupId") groupId: Long
+    ): Response<LeaveGroupResponse>
 
     @GET("api/groups/search")
     suspend fun findGroup(
@@ -97,7 +101,7 @@ interface RemoteApiService {
         @Header("Authorization:Bearer") token: String,
         @Path("group_id") groupId: Long,
         @Body body: AddMemberRequest
-    ): Response<User>
+    ): Response<JoinGroupResponse> // User
 
     @PUT("api/groups/{group_id}/members/{user_id}")
     suspend fun addAdminToGroup(

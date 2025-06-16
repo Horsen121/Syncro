@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,10 +59,13 @@ class TaskViewModel @Inject constructor(
                         taskUseCases.getTask(groupId,id)?.also { task ->
                             _name.value = task.title
                             _desc.value = task.description
-                            if (task.start_time != "null") _startTime.value = LocalDateTime.parse(task.start_time)
-                            if (task.end_time != "null") _endTime.value = LocalDateTime.parse(task.end_time)
-                            if (task.reminderTime != "null") _reminderTime.value = LocalDateTime.parse(task.reminderTime)
-                            _diff.value = task.difficult
+                            if (task.start_time != "null") _startTime.value = LocalDateTime.parse(task.start_time,
+                                DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
+                            if (task.end_time != "null") _endTime.value = LocalDateTime.parse(task.end_time,
+                                DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
+//                            if (task.reminderTime != "null") _reminderTime.value = LocalDateTime.parse(task.reminderTime,
+//                            DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"))
+                            _diff.value = task.priority
                         }
                     }
                 }

@@ -10,6 +10,6 @@ data class User(
     @PrimaryKey val user_id: Long? = null,
     val group_id: Long,
     val email: String,
-    val name: String,
-    val isAdmin: Boolean = false
+    val full_name: String,
+    val is_admin: Boolean = false
 )
