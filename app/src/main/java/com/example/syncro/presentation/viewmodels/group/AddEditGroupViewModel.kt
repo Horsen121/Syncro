@@ -1,6 +1,5 @@
 package com.example.syncro.presentation.viewmodels.group
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,59 +9,67 @@ import com.example.syncro.data.datasourse.remote.RemoteApi
 import com.example.syncro.data.datasourse.remote.models.CreateGroupRequest
 import com.example.syncro.data.models.Group
 import com.example.syncro.domain.usecases.GroupUseCases
+import com.example.syncro.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class AddEditGroupViewModel @Inject constructor(
+    private val tokenManager: TokenManager,
     private val groupUseCases: GroupUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    private val token = mutableStateOf("")
+
     private var groupId: Long? = null
     private var countPeople = 1
 
-    private var _response = mutableStateOf(false)
-    val response: State<Boolean> = _response
+    private var _response = MutableStateFlow(false)
+    val response: StateFlow<Boolean> = _response
 
-    private var _error = mutableStateOf("")
-    val error: State<String> = _error
+    private var _error = MutableStateFlow("")
+    val error: StateFlow<String> = _error
 
-    private var _name = mutableStateOf("")
-    val name: State<String> = _name
+    private var _name = MutableStateFlow("")
+    val name: StateFlow<String> = _name
 
-    private var _desc = mutableStateOf("")
-    val desc: State<String> = _desc
+    private var _desc = MutableStateFlow("")
+    val desc: StateFlow<String> = _desc
 
     private var _isPrivate = mutableStateOf(true)
-    val isPrivate: State<Boolean> = _isPrivate
+//    val isPrivate: State<Boolean> = _isPrivate
 
     private var _isAdmin= mutableStateOf(true)
-    val isAdmin: State<Boolean> = _isAdmin
+//    val isAdmin: State<Boolean> = _isAdmin
 
     init {
-        savedStateHandle.get<Long>("groupId")?.let { groupId ->
-            if (groupId != -1L) {
-                this.groupId = groupId
-                viewModelScope.launch {
-                    RemoteApi.retrofitService.getGroup(CurrentUser.token, groupId).let {
-                        if (it.isSuccessful) {
-                            it.body().let { group ->
-                                _name.value = group!!.name
-                                _desc.value = group.description
+        viewModelScope.launch {
+            token.value = tokenManager.getAccessToken() ?: ""
+        }
+        groupId = savedStateHandle["groupId"]
+
+        if (groupId != null) {
+            viewModelScope.launch {
+                RemoteApi.retrofitService.getGroup(token.value, groupId!!).let {
+                    if (it.isSuccessful) {
+                        it.body().let { group ->
+                            _name.value = group!!.name
+                            _desc.value = group.description
 //                        _isPrivate.value = group.isPrivate
-                                _isAdmin.value = group.is_admin
-                                countPeople = group.members_count
-                            }
-                        } else {
-                            groupUseCases.getGroup(groupId)?.also { group ->
-                                _name.value = group.name
-                                _desc.value = group.description
+                            _isAdmin.value = group.is_admin
+                            countPeople = group.members_count
+                        }
+                    } else {
+                        groupUseCases.getGroup(groupId!!)?.also { group ->
+                            _name.value = group.name
+                            _desc.value = group.description
 //                        _isPrivate.value = group.isPrivate
-                                _isAdmin.value = group.is_admin
-                                countPeople = group.members_count
-                            }
+                            _isAdmin.value = group.is_admin
+                            countPeople = group.members_count
                         }
                     }
                 }
@@ -78,21 +85,21 @@ class AddEditGroupViewModel @Inject constructor(
         _desc.value = text
     }
 
-    fun onPrivateChange() {
-        _isPrivate.value = !_isPrivate.value
-    }
-
-    fun onAdminChange() {
-        _isAdmin.value = !_isAdmin.value
-    }
+//    fun onPrivateChange() {
+//        _isPrivate.value = !_isPrivate.value
+//    }
+//
+//    fun onAdminChange() {
+//        _isAdmin.value = !_isAdmin.value
+//    }
 
     fun onSave() {
-        runBlocking {
+        viewModelScope.launch {
             val body = CreateGroupRequest(_name.value, _desc.value)
 
             try {
                 if (groupId != null) {
-                    RemoteApi.retrofitService.updGroupById(CurrentUser.token, body).let {
+                    RemoteApi.retrofitService.updGroupById(token.value, groupId!!, body).let {
                         if (it.isSuccessful) {
                             groupUseCases.addGroup(it.body()!!)
 
@@ -102,17 +109,17 @@ class AddEditGroupViewModel @Inject constructor(
                         }
                     }
                 } else {
-                    RemoteApi.retrofitService.createGroup(CurrentUser.token, body).let {
+                    RemoteApi.retrofitService.createGroup(token.value, body).let {
                         if (it.isSuccessful) {
                             val response = it.body()!!
 
                             runBlocking {
                                 groupUseCases.addGroup(
                                     Group(
-                                        group_id = response.group_id,
+                                        group_id = response.groupId,
                                         name = response.name,
                                         description = response.description,
-                                        is_admin = response.is_admin,
+                                        is_admin = response.isAdmin,
                                         created_by = CurrentUser.id,
                                         members_count = 1
                                     )

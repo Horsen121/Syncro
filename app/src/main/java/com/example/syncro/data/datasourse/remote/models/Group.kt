@@ -5,32 +5,31 @@ data class CreateGroupRequest(
     val description: String
 )
 data class CreateGroupResponse(
-    val group_id: Long,
+    val groupId: Long,
     val name: String,
     val description: String,
-    val is_admin: Boolean
+    val isAdmin: Boolean
 )
 
 data class AddMemberRequest(
     val email: String,
-    val is_admin: Boolean = false,
-    val skip_invitation: Boolean = true
+    val isAdmin: Boolean = false,
+    val skipInvitation: Boolean = true
 )
 
 data class FindGroupResponse(
     val name: String,
-    val group_id: Long
+    val groupId: Long
 )
 
 data class LeaveGroupResponse(
-    val group_id: Long,
+    val groupId: Long,
     val message: String
 )
 
 data class JoinGroupRequest(
     val email: String,
-    val full_name: String,
-    val password: String
+    val fullName: String
 )
 
 data class JoinGroupResponse(

@@ -19,6 +19,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,7 +47,6 @@ fun GroupsScreen(
     navController: NavController,
     viewModel: GroupsViewModel = hiltViewModel()
 ) {
-
     var refreshing by remember { mutableStateOf(false) }
     LaunchedEffect(refreshing) {
         if (refreshing) {
@@ -55,6 +55,9 @@ fun GroupsScreen(
             refreshing = false
         }
     }
+
+    val groups = viewModel.groups.collectAsState()
+    val search = viewModel.search.collectAsState()
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = refreshing),
@@ -110,13 +113,13 @@ fun GroupsScreen(
                         viewModel.clear()
                         navController.navigate(Routing.GroupScreen.route + "?groupId=${it.toLong()}")
                     },
-                    searchResults = viewModel.search.value
+                    searchResults = search.value
                 )
 
                 LazyColumn(
                     contentPadding = PaddingValues(10.dp)
                 ) {
-                    items(viewModel.groups.value) { group ->
+                    items(groups.value) { group ->
                         GroupListElement(
                             group = group,
                             onClick = { navController.navigate(Routing.GroupScreen.route + "?groupId=${group.group_id}") }

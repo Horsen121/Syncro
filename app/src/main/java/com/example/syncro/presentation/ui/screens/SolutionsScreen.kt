@@ -17,6 +17,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,7 +43,6 @@ fun SolutionsScreen(
     navController: NavController,
     viewModel: SolutionsViewModel = hiltViewModel()
 ) {
-
     var refreshing by remember { mutableStateOf(false) }
     LaunchedEffect(refreshing) {
         if (refreshing) {
@@ -51,6 +51,8 @@ fun SolutionsScreen(
             refreshing = false
         }
     }
+
+    val solutions = viewModel.solutions.collectAsState()
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = refreshing),
@@ -82,7 +84,7 @@ fun SolutionsScreen(
                 LazyColumn(
                     contentPadding = PaddingValues(10.dp)
                 ) {
-                    items(viewModel.solutions.value) { solution ->
+                    items(solutions.value) { solution ->
                         SolutionListElement(
                             solution = solution,
                             onClick = {

@@ -29,6 +29,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -72,6 +73,15 @@ fun AddEditTaskScreen(
 //    val openDateReminderDialog = remember { mutableStateOf(false) }
 //    val openTimeReminderDialog = remember { mutableStateOf(false) }
 
+    val name = viewModel.name.collectAsState()
+    val desc = viewModel.desc.collectAsState()
+    val startTime = viewModel.startTime.collectAsState()
+    val endTime = viewModel.endTime.collectAsState()
+    val diff = viewModel.diff.collectAsState()
+    val files = viewModel.files.collectAsState()
+//    val response = viewModel.response.collectAsState()
+    val error = viewModel.error.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { TopBarText(
@@ -103,7 +113,7 @@ fun AddEditTaskScreen(
                     text = stringResource(R.string.task_name_title)
                 )
                 SimpleTextField(
-                    value = viewModel.name.value,
+                    value = name.value,
                     placeholder = { TextBodyMedium(stringResource(R.string.task_name_place)) },
                     onValueChange = { viewModel.onNameChange(it) },
                     maxLength = 30
@@ -114,7 +124,7 @@ fun AddEditTaskScreen(
                     text = stringResource(R.string.task_description_title)
                 )
                 SimpleTextField(
-                    value = viewModel.desc.value,
+                    value = desc.value,
                     placeholder = { TextBodyMedium(stringResource(R.string.task_description_place)) },
                     onValueChange = { viewModel.onDescChange(it) },
                     maxLength = 100
@@ -124,7 +134,7 @@ fun AddEditTaskScreen(
                 DropMenu(
                     text = stringResource(R.string.task_difficulty),
                     elements = TaskDifficult.entries.map { el -> el.name },
-                    current = viewModel.diff.value.ordinal,
+                    current = diff.value.ordinal,
                     open = viewModel.diffOpen.value,
                     onClick = { viewModel.onDiffOpenChange(it) },
                     onValueSelect = {
@@ -135,7 +145,7 @@ fun AddEditTaskScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 // Time of start Task
-                var dateStartState by remember { mutableStateOf(viewModel.startTime.value) }
+                var dateStartState by remember { mutableStateOf(startTime.value) }
                 val pickerDateStartState = remember {DatePickerState(
                     initialSelectedDateMillis = dateStartState?.toEpochSecond(ZoneOffset.UTC),
                     locale = CalendarLocale(Locale.current.language)
@@ -169,7 +179,7 @@ fun AddEditTaskScreen(
                         dismissButton = {
                             TextButton(
                                 onClick = {
-                                    dateStartState = viewModel.startTime.value
+                                    dateStartState = startTime.value
                                     openDateStartDialog.value = false
                                 }
                             ) {
@@ -198,7 +208,7 @@ fun AddEditTaskScreen(
                         dismissButton = {
                             TextButton(
                                 onClick = {
-                                    dateStartState = viewModel.startTime.value
+                                    dateStartState = startTime.value
                                     openTimeStartDialog.value = false
                                     openDateStartDialog.value = true
                                 }
@@ -213,7 +223,7 @@ fun AddEditTaskScreen(
                 }
                 DrawChangeRow(
                     label = stringResource(id = R.string.task_start),
-                    value = if (viewModel.startTime.value != null) viewModel.startTime.value!!.toNormalString()
+                    value = if (startTime.value != null) startTime.value!!.toNormalString()
                         .replace('-', '.').replace("T", "  ") else "",
                     height = 48.dp
                 ) {
@@ -222,7 +232,7 @@ fun AddEditTaskScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 // Time of end Task
-                var dateEndState by remember { mutableStateOf(viewModel.endTime.value) }
+                var dateEndState by remember { mutableStateOf(endTime.value) }
                 val pickerDateEndState = remember {DatePickerState(
                     initialSelectedDateMillis = dateEndState?.toEpochSecond(ZoneOffset.UTC),
                     locale = CalendarLocale(Locale.current.language)
@@ -256,7 +266,7 @@ fun AddEditTaskScreen(
                         dismissButton = {
                             TextButton(
                                 onClick = {
-                                    dateEndState = viewModel.startTime.value
+                                    dateEndState = startTime.value
                                     openDateEndDialog.value = false
                                 }
                             ) {
@@ -278,7 +288,7 @@ fun AddEditTaskScreen(
 
                                     if(dateEndState != null && dateStartState != null && dateEndState!! > dateStartState) {
                                         viewModel.onEndTimeChange(dateEndState)
-                                    } else dateEndState = viewModel.endTime.value
+                                    } else dateEndState = endTime.value
 
 //                                    viewModel.onReminderTimeChange(
 //                                        dateEndState?.minusHours(1)
@@ -293,7 +303,7 @@ fun AddEditTaskScreen(
                         dismissButton = {
                             TextButton(
                                 onClick = {
-                                    dateEndState = viewModel.endTime.value
+                                    dateEndState = endTime.value
                                     openTimeEndDialog.value = false
                                     openDateEndDialog.value = true
                                 }
@@ -308,7 +318,7 @@ fun AddEditTaskScreen(
                 }
                 DrawChangeRow(
                     label = stringResource(id = R.string.task_deadline),
-                    value = if (viewModel.endTime.value != null) viewModel.endTime.value!!.toNormalString()
+                    value = if (endTime.value != null) endTime.value!!.toNormalString()
                         .replace('-', '.').replace("T", "  ") else "",
                     height = 48.dp
                 ) {
@@ -413,7 +423,7 @@ fun AddEditTaskScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    items(viewModel.files.value) { file ->
+                    items(files.value) { file ->
                         FileCard(
                             file,
                             onClick = { viewModel.onFileRemove(file) }
@@ -440,10 +450,10 @@ fun AddEditTaskScreen(
             Button(
                 onClick = {
                     viewModel.onSave().let {
-                        if(viewModel.error.value == "") {
+                        if(error.value == "") {
                             navController.navigateUp()
                         } else {
-                            Toast.makeText(context, viewModel.error.value, Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, error.value, Toast.LENGTH_LONG).show()
                         }
                     }
                 }

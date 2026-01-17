@@ -7,13 +7,13 @@ import androidx.room.PrimaryKey
 @Entity(indices = [Index(value = ["group_id"], unique = false)])
 @kotlinx.serialization.Serializable
 data class Task(
-    @PrimaryKey(autoGenerate = true) val task_id: Long? = null,
-    val group_id: Long,
+    @PrimaryKey(autoGenerate = true) val taskId: Long? = null,
+    val groupId: Long,
     val title: String,
     val description: String,
-    val created_by: Long,
-    val start_time: String,
-    val end_time: String,
+    val createdBy: Long,
+    val startTime: String,
+    val endTime: String,
     val priority: String,
-    val isComplited: Boolean = false
+    val isCompleted: Boolean = false
 )

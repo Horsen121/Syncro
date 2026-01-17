@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -40,6 +41,10 @@ fun AddEditSolutionScreen(
     navController: NavController,
     viewModel: AddEditSolutionViewModel = hiltViewModel()
 ) {
+    val name = viewModel.name.collectAsState()
+    val desc = viewModel.desc.collectAsState()
+    val sources = viewModel.sources.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { TopBarText(
@@ -71,7 +76,7 @@ fun AddEditSolutionScreen(
                     text = stringResource(R.string.solution_title_title)
                 )
                 SimpleTextField(
-                    value = viewModel.name.value,
+                    value = name.value,
                     placeholder = { TextBodyMedium(stringResource(R.string.solution_title_place)) },
                     onValueChange = { viewModel.onNameChange(it) },
                     maxLength = 30
@@ -82,7 +87,7 @@ fun AddEditSolutionScreen(
                     text = stringResource(R.string.solution_description_title)
                 )
                 SimpleTextField(
-                    value = viewModel.desc.value,
+                    value = desc.value,
                     placeholder = { TextBodyMedium(stringResource(R.string.solution_description_place)) },
                     onValueChange = { viewModel.onDescChange(it) },
                     maxLength = 100
@@ -96,7 +101,7 @@ fun AddEditSolutionScreen(
                 }
 
                 LazyColumn {
-                    items(viewModel.sources.value) { source ->
+                    items(sources.value) { source ->
                         FileCard(
                             source,
                             onClick = { viewModel.onSourceRemove(source) }

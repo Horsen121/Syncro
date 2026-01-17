@@ -1,31 +1,38 @@
 package com.example.syncro.presentation.viewmodels
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.example.syncro.application.CurrentUser
+import androidx.lifecycle.viewModelScope
 import com.example.syncro.data.datasourse.remote.RemoteApi
 import com.example.syncro.data.models.Solution
 import com.example.syncro.domain.usecases.SolutionUseCases
+import com.example.syncro.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SolutionsViewModel @Inject constructor(
+    private val tokenManager: TokenManager,
     private val solutionUseCases: SolutionUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    private val token = mutableStateOf("")
+
     private var groupId = -1L
     private var taskId = -1L
 
-    private var _solutions = mutableStateOf<List<Solution>>(emptyList())
-    val solutions: State<List<Solution>> = _solutions
+    private var _solutions = MutableStateFlow<List<Solution>>(emptyList())
+    val solutions: StateFlow<List<Solution>> = _solutions
 
     init {
-        runBlocking {
+        viewModelScope.launch {
+            token.value = tokenManager.getAccessToken() ?: ""
+
             savedStateHandle.get<Long?>("groupId").let { id ->
                 if (id != null && id != -1L) {
                     groupId = id
@@ -36,8 +43,9 @@ class SolutionsViewModel @Inject constructor(
                     taskId = id
                 }
             }
+        }.let {
+            loadSolutions()
         }
-        loadSolutions()
     }
 
     fun getGroupId() = groupId
@@ -48,8 +56,8 @@ class SolutionsViewModel @Inject constructor(
     }
 
     private fun loadSolutions() {
-        runBlocking {
-            RemoteApi.retrofitService.getSolutionsByTask(CurrentUser.token, groupId, taskId).let {
+        viewModelScope.launch {
+            RemoteApi.retrofitService.getSolutionsByTask(token.value, groupId, taskId).let {
                 if (it.isSuccessful) {
                     _solutions.value = it.body()!!
                 } else {

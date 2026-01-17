@@ -1,9 +1,9 @@
 package com.example.syncro.presentation.viewmodels.group
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.syncro.application.CurrentUser
 import com.example.syncro.data.datasourse.remote.RemoteApi
 import com.example.syncro.data.datasourse.remote.models.JoinGroupRequest
@@ -11,65 +11,71 @@ import com.example.syncro.data.models.Group
 import com.example.syncro.data.models.Task
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.domain.usecases.TaskUseCases
+import com.example.syncro.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class GroupViewModel @Inject constructor(
+    private val tokenManager: TokenManager,
     private val groupUseCases: GroupUseCases,
     private val taskUseCases: TaskUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    private val token = mutableStateOf("")
+
     enum class GroupData {
         Current,
         Plan,
         Done
     }
-    private var groupId = 0L
+    private var groupId: Long? = null
 
-    private var _currentTopNavBar = mutableStateOf(GroupData.Current)
-    val currentTopNavBar: State<GroupData> = _currentTopNavBar
+    private var _currentTopNavBar = MutableStateFlow(GroupData.Current)
+    val currentTopNavBar: StateFlow<GroupData> = _currentTopNavBar
 
-    private var _currentData = mutableStateOf<List<Task>>(emptyList())
-    val currentData: State<List<Task>> = _currentData
+    private var _currentData = MutableStateFlow<List<Task>>(emptyList())
+    val currentData: StateFlow<List<Task>> = _currentData
 
-    private var _group = mutableStateOf<Group?>(null)
-    val group: State<Group?> = _group
+    private var _group = MutableStateFlow<Group?>(null)
+    val group: StateFlow<Group?> = _group
 
-    private var _isMember = mutableStateOf<Boolean>(false)
-    val isMember: State<Boolean> = _isMember
+    private var _isMember = MutableStateFlow(false)
+    val isMember: StateFlow<Boolean> = _isMember
 
-    private var _response = mutableStateOf<Boolean>(false)
-    val response: State<Boolean> = _response
+    private var _response = MutableStateFlow(false)
+    val response: StateFlow<Boolean> = _response
 
     init {
-        savedStateHandle.get<Long>("groupId")?.let {
-            if (it != -1L) {
-                groupId = it
-                runBlocking {
-                    RemoteApi.retrofitService.getGroup(CurrentUser.token, groupId).let { res ->
-                        if (res.isSuccessful) {
-                            res.body().let { group ->
-                                _group.value = group
-                                _isMember.value = group!!.is_member
-                            }
-                        } else {
-                            groupUseCases.getGroup(groupId)?.also { group ->
-                                _group.value = group
-                                if (_group.value != null)
-                                    _isMember.value = group.is_member
-                            }
+        groupId = savedStateHandle["groupId"]
+        if (groupId != null) {
+            viewModelScope.launch {
+                RemoteApi.retrofitService.getGroup(token.value, groupId!!).let { res ->
+                    if (res.isSuccessful) {
+                        res.body().let { group ->
+                            _group.value = group
+                            _isMember.value = group!!.is_member
                         }
-                        loadTasks()
+                    } else {
+                        groupUseCases.getGroup(groupId!!)?.also { group ->
+                            _group.value = group
+                            if (_group.value != null)
+                                _isMember.value = group.is_member
+                        }
                     }
+                    loadTasks()
                 }
             }
+        } else {
+
         }
     }
 
-    fun getData(type: GroupData) { // TODO: get data from server / DB
+    fun getData(type: GroupData) {
         when (type) {
             GroupData.Current -> { // TODO: add more options in dao and repositories for getting data
                 loadTasks().also {
@@ -92,10 +98,10 @@ class GroupViewModel @Inject constructor(
     }
 
     fun join() {
-        runBlocking {
-            val body = JoinGroupRequest(CurrentUser.email, CurrentUser.name, CurrentUser.password)
+        viewModelScope.launch {
+            val body = JoinGroupRequest(CurrentUser.email, CurrentUser.name)
 
-            RemoteApi.retrofitService.joinGroup(CurrentUser.token, groupId, body).let {
+            RemoteApi.retrofitService.joinGroup(token.value, groupId!!, body).let {
                 if(it.isSuccessful)
                     _isMember.value = true
             }
@@ -103,8 +109,8 @@ class GroupViewModel @Inject constructor(
     }
 
     fun disJoin() {
-        runBlocking {
-            RemoteApi.retrofitService.disJoinGroup(CurrentUser.token, _group.value!!.group_id!!).let {
+        viewModelScope.launch {
+            RemoteApi.retrofitService.disJoinGroup(token.value, _group.value!!.group_id!!).let {
                 if (it.isSuccessful) {
                     groupUseCases.deleteGroup(group.value!!)
 
@@ -117,8 +123,8 @@ class GroupViewModel @Inject constructor(
     fun update() = loadTasks()
 
     private fun loadTasks() {
-        runBlocking {
-            RemoteApi.retrofitService.getTasksByGroup(CurrentUser.token, groupId).also {
+        viewModelScope.launch {
+            RemoteApi.retrofitService.getTasksByGroup(token.value, groupId!!).also {
                 if (it.isSuccessful) {
                     _currentData.value = it.body() ?: emptyList()
                     _currentData.value.forEach { task ->

@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,6 +47,7 @@ fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val isResponse = viewModel.response.collectAsState()
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
@@ -123,7 +125,7 @@ fun LoginScreen(
                     color = MaterialTheme.colorScheme.background
                 )
             }
-            if (viewModel.response.value) navController.navigate(Routing.GroupsScreen.route)
+            if (isResponse.value) navController.navigate(Routing.GroupsScreen.route)
             Spacer(modifier = Modifier.height(12.dp))
 
             TextBodyMedium(text = stringResource(id = R.string.login_register_text))

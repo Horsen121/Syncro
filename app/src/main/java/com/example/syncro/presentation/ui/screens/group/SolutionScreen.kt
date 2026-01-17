@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,6 +33,10 @@ fun SolutionScreen(
     navController: NavController,
     viewModel: SolutionViewModel = hiltViewModel()
 ) {
+    val name = viewModel.name.collectAsState()
+    val desc = viewModel.desc.collectAsState()
+    val sources = viewModel.sources.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { TopBarText(
@@ -65,7 +70,7 @@ fun SolutionScreen(
                     text = stringResource(R.string.solution_title_title)
                 )
                 TextHeadSmall(
-                    text = viewModel.name.value,
+                    text = name.value,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.padding(10.dp, 0.dp)
                 )
@@ -75,7 +80,7 @@ fun SolutionScreen(
                     text = stringResource(R.string.solution_description_title)
                 )
                 TextHeadSmall(
-                    text = viewModel.desc.value,
+                    text = desc.value,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.padding(10.dp, 0.dp)
                 )
@@ -88,7 +93,7 @@ fun SolutionScreen(
                 }
 
                 LazyColumn {
-                    items(viewModel.sources.value) { source ->
+                    items(sources.value) { source ->
                         FileCard(
                             source,
                             onClick = {  }

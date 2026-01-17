@@ -3,18 +3,20 @@ package com.example.syncro.presentation.viewmodels.logreg
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.syncro.application.CurrentUser
 import com.example.syncro.data.datasourse.remote.RemoteApi
 import com.example.syncro.data.datasourse.remote.models.LoginRequest
-import com.example.syncro.data.models.Token
-import com.example.syncro.domain.usecases.TokenUseCases
+import com.example.syncro.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val useCases: TokenUseCases
+    private val tokenManager: TokenManager
 ) : ViewModel() {
 
     private var _login = mutableStateOf("")
@@ -23,8 +25,8 @@ class LoginViewModel @Inject constructor(
     private var _password = mutableStateOf("")
     val password: State<String> = _password
 
-    private var _response = mutableStateOf(false)
-    val response: State<Boolean> = _response
+    private var _response = MutableStateFlow(false)
+    val response: StateFlow<Boolean> = _response
 
     private var _error = mutableStateOf("")
     val error: State<String> = _error
@@ -38,7 +40,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun signIn() {
-        runBlocking {
+        viewModelScope.launch {
             try {
                 val body = LoginRequest(_login.value, _password.value)
 
@@ -49,17 +51,9 @@ class LoginViewModel @Inject constructor(
                         CurrentUser.id = response.user_id
                         CurrentUser.email = _login.value
                         CurrentUser.name = response.full_name
-                        CurrentUser.password = _password.value
-                        CurrentUser.token = response.access_token
 
-                        useCases.addToken(
-                            Token(
-                                token = response.access_token,
-                                name = CurrentUser.name,
-                                email = _login.value,
-                                userId = CurrentUser.id
-                            )
-                        )
+                        tokenManager.saveToken(response.access_token, response.refresh_token)
+
                         _response.value = true
                     } else {
                         _error.value = it.body()?.toString() ?: "42"

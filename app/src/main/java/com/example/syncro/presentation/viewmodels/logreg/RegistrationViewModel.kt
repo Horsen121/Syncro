@@ -3,15 +3,17 @@ package com.example.syncro.presentation.viewmodels.logreg
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.syncro.data.datasourse.remote.RemoteApi
 import com.example.syncro.data.datasourse.remote.models.RegisterRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
-//    private val repository: MyRepository
 ) : ViewModel() {
 
     private var _name = mutableStateOf("")
@@ -29,8 +31,8 @@ class RegistrationViewModel @Inject constructor(
     private var _agreement = mutableStateOf(false)
     val agreement: State<Boolean> = _agreement
 
-    private var _response = mutableStateOf(false)
-    val response: State<Boolean> = _response
+    private var _response = MutableStateFlow(false)
+    val response: StateFlow<Boolean> = _response
 
     fun onNameChange(text: String) {
         _name.value = text
@@ -49,7 +51,7 @@ class RegistrationViewModel @Inject constructor(
     }
     
     fun registration() {
-        runBlocking {
+        viewModelScope.launch {
             try {
                 val body = RegisterRequest(_email.value, _password1.value, _name.value)
                 RemoteApi.retrofitService.register(body).let {

@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -34,6 +35,14 @@ fun TaskScreen(
     navController: NavController,
     viewModel: TaskViewModel = hiltViewModel()
 ) {
+    val name = viewModel.name.collectAsState()
+    val desc = viewModel.desc.collectAsState()
+    val startTime = viewModel.startTime.collectAsState()
+    val endTime = viewModel.endTime.collectAsState()
+    val reminderTime = viewModel.reminderTime.collectAsState()
+    val diff = viewModel.diff.collectAsState()
+    val files = viewModel.files.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { TopBarText(
@@ -66,7 +75,7 @@ fun TaskScreen(
                     text = stringResource(R.string.task_name_title)
                 )
                 TextHeadSmall(
-                    text = viewModel.name.value,
+                    text = name.value,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.padding(10.dp, 0.dp)
                 )
@@ -76,7 +85,7 @@ fun TaskScreen(
                     text = stringResource(R.string.task_description_title)
                 )
                 TextHeadSmall(
-                    text = viewModel.desc.value,
+                    text = desc.value,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.padding(10.dp, 0.dp)
                 )
@@ -84,14 +93,14 @@ fun TaskScreen(
 
                 DrawChangeRow(
                     label = stringResource(id = R.string.task_difficulty),
-                    value = viewModel.diff.value,
+                    value = diff.value,
                     height = 48.dp
                 ) { }
                 Spacer(modifier = Modifier.height(12.dp))
 
                 DrawChangeRow(
                     label = stringResource(id = R.string.task_start),
-                    value = if (viewModel.startTime.value != null) viewModel.startTime.value!!.toNormalString()
+                    value = if (startTime.value != null) startTime.value!!.toNormalString()
                         .replace('-', '.').replace("T", "  ") else "",
                     height = 48.dp
                 ) { }
@@ -99,7 +108,7 @@ fun TaskScreen(
 
                 DrawChangeRow(
                     label = stringResource(id = R.string.task_deadline),
-                    value = if (viewModel.endTime.value != null) viewModel.endTime.value!!.toNormalString()
+                    value = if (endTime.value != null) endTime.value!!.toNormalString()
                         .replace('-', '.').replace("T", "  ") else "",
                     height = 48.dp
                 ) { }
@@ -107,7 +116,7 @@ fun TaskScreen(
 
                 DrawChangeRow(
                     label = stringResource(id = R.string.task_reminder_date),
-                    value = if (viewModel.reminderTime.value != null) viewModel.reminderTime.value!!.toNormalString()
+                    value = if (reminderTime.value != null) reminderTime.value!!.toNormalString()
                         .replace('-', '.').replace("T", "  ") else "",
                     height = 48.dp
                 ) { }
@@ -123,7 +132,7 @@ fun TaskScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    items(viewModel.files.value) { file ->
+                    items(files.value) { file ->
                         FileCard(
                             file,
                             onClick = {  }

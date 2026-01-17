@@ -48,35 +48,36 @@ interface RemoteApiService {
     suspend fun login(@Body body: LoginRequest): Response<LoginResponse>
 
     // Groups
-    @PUT("public/groups/{group_id}/join")
+    @PUT("public/groups/{groupId}/join")
     suspend fun joinGroup(
         @Header("Authorization:Bearer") token: String,
-        @Path("group_id") group_id: Long,
-        @Body body: JoinGroupRequest
+        @Path("group_id") groupId: Long,
+        @Body body: JoinGroupRequest,
     ): Response<JoinGroupResponse>
 
-    @PUT("/api/groups/{groupId}/leave")
+    @PUT("/api/groups/{group_id}/leave")
     suspend fun disJoinGroup(
         @Header("Authorization:Bearer") token: String,
-        @Path("groupId") groupId: Long
+        @Path("group_id") groupId: Long,
     ): Response<LeaveGroupResponse>
 
     @GET("api/groups/search")
     suspend fun findGroup(
         @Header("Authorization:Bearer") token: String,
-        @Query("query") group: String
+        @Query("query") group: String,
     ): Response<List<FindGroupResponse>>
 
     @POST("api/groups")
     suspend fun createGroup(
         @Header("Authorization:Bearer") token: String,
-        @Body body: CreateGroupRequest
+        @Body body: CreateGroupRequest,
     ): Response<CreateGroupResponse>
 
     @PUT("api/groups/{group_id}")
     suspend fun updGroupById(
         @Header("Authorization:Bearer") token: String,
-        @Body body: CreateGroupRequest
+        @Path("group_id") groupId: Long,
+        @Body body: CreateGroupRequest,
     ): Response<Group>
 
     @GET("api/groups")
@@ -87,34 +88,34 @@ interface RemoteApiService {
     @GET("api/groups/{group_id}")
     suspend fun getGroup(
         @Header("Authorization:Bearer") token: String,
-        @Path("group_id") groupId: Long
+        @Path("group_id") groupId: Long,
     ): Response<Group>
 
     @GET("api/groups/{group_id}/members")
     suspend fun getMembersOfGroup(
         @Header("Authorization:Bearer") token: String,
-        @Path("group_id") groupId: Long
+        @Path("group_id") groupId: Long,
     ): Response<List<User>>
 
     @POST("api/groups/{group_id}/members")
     suspend fun addMemberToGroup(
         @Header("Authorization:Bearer") token: String,
         @Path("group_id") groupId: Long,
-        @Body body: AddMemberRequest
+        @Body body: AddMemberRequest,
     ): Response<JoinGroupResponse> // User
 
     @PUT("api/groups/{group_id}/members/{user_id}")
     suspend fun addAdminToGroup(
         @Header("Authorization:Bearer") token: String,
         @Path("group_id") groupId: Long,
-        @Path("user_id") user_id: Long
+        @Path("user_id") userId: Long,
     ): Response<String>
 
     @DELETE("api/groups/{group_id}/members/{user_id}")
     suspend fun deleteAdminOfGroup(
         @Header("Authorization:Bearer") token: String,
         @Path("group_id") groupId: Long,
-        @Path("user_id") user_id: Long
+        @Path("user_id") userId: Long,
     ): Response<String>
 
     // Tasks
@@ -122,45 +123,46 @@ interface RemoteApiService {
     suspend fun addTaskToGroup(
         @Header("Authorization:Bearer") token: String,
         @Path("group_id") groupId: Long,
-        @Body body: CreateTaskRequest
+        @Body body: CreateTaskRequest,
     ): Response<Task>
 
-    @PUT("api/groups/{groupID}/tasks/{taskID}")
+    @PUT("api/groups/{group_id}/tasks/{task_id}")
     suspend fun updTaskById(
         @Header("Authorization:Bearer") token: String,
         @Path("group_id") groupId: Long,
-        @Body body: CreateTaskRequest
+        @Path("task_id") taskId: Long,
+        @Body body: CreateTaskRequest,
     ): Response<Task>
 
     @GET("api/groups/{group_id}/tasks")
     suspend fun getTasksByGroup(
         @Header("Authorization:Bearer") token: String,
-        @Path("group_id") groupId: Long
+        @Path("group_id") groupId: Long,
     ): Response<List<Task>>
 
     @GET("api/groups/{group_id}/tasks/{task_id}")
     suspend fun getTaskById(
         @Header("Authorization:Bearer") token: String,
         @Path("group_id") groupId: Long,
-        @Path("task_id") task_id: Long
+        @Path("task_id") taskId: Long,
     ): Response<Task>
 
     @GET("")
     suspend fun getFilesByTask(
-
-    ): List<File>
+        @Header("Authorization:Bearer") token: String
+    ): Response<List<File>>
 
     @POST("")
     suspend fun addTaskFiles(
-
-    ): Boolean
+        @Header("Authorization:Bearer") token: String
+    ): Response<Unit>
 
     // Solutions
     @GET("api/groups/{group_id}/tasks/{task_id}/solutions")
     suspend fun getSolutionsByTask(
         @Header("Authorization:Bearer") token: String,
         @Path("group_id") groupId: Long,
-        @Path("task_id") taskId: Long
+        @Path("task_id") taskId: Long,
     ): Response<List<Solution>>
 
     @GET("api/groups/{group_id}/tasks/{task_id}/solutions/{solution_id}")
@@ -168,7 +170,7 @@ interface RemoteApiService {
         @Header("Authorization:Bearer") token: String,
         @Path("group_id") groupId: Long,
         @Path("task_id") taskId: Long,
-        @Path("solution_id") solution_id: Long
+        @Path("solution_id") solutionId: Long,
     ): Response<Solution>
 
     @POST("api/groups/{group_id}/tasks/{task_id}/solutions")
@@ -176,7 +178,7 @@ interface RemoteApiService {
         @Header("Authorization:Bearer") token: String,
         @Path("group_id") groupId: Long,
         @Path("task_id") taskId: Long,
-        @Body body: CreateSolutionRequest
+        @Body body: CreateSolutionRequest,
     ): Response<Solution>
 
     @PUT("api/groups/{group_id}/tasks/{task_id}/solutions/{solution_id}")
@@ -184,19 +186,19 @@ interface RemoteApiService {
         @Header("Authorization:Bearer") token: String,
         @Path("group_id") groupId: Long,
         @Path("task_id") taskId: Long,
-        @Path("solution_id") solution_id: Long,
-        @Body body: UpdSolutionRequest
+        @Path("solution_id") solutionId: Long,
+        @Body body: UpdSolutionRequest,
     ): Response<Solution>
 
     @GET("")
     suspend fun getSourcesBySolution(
-
-    ): List<SourceFile>
+        @Header("Authorization:Bearer") token: String
+    ): Response<List<SourceFile>>
 
     @POST("")
     suspend fun addSolutionSources(
-
-    ): Boolean
+        @Header("Authorization:Bearer") token: String
+    ): Response<Unit>
 }
 
 object RemoteApi {

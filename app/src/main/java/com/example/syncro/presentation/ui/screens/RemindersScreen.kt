@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,6 +27,8 @@ fun RemindersScreen(
     navController: NavController,
     viewModel: RemindersViewModel = hiltViewModel()
 ) {
+    val reminders = viewModel.reminders.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { TopBarBackButton(text = stringResource(R.string.routing_reminders), navController) }
@@ -42,7 +45,7 @@ fun RemindersScreen(
                 )
         ) {
             LazyColumn {
-                items(viewModel.reminders.value) { reminder ->
+                items(reminders.value) { reminder ->
                     ReminderListElement(
                         reminder = reminder,
                         onClick = { navController.navigate(Routing.TaskScreen.route + "?taskId=${reminder.first.task_id}") }

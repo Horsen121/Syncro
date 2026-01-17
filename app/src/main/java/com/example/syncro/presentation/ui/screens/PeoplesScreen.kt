@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,7 +46,6 @@ fun PeoplesScreen(
 ) {
     val openInviteDialog = remember { mutableStateOf(false) }
 
-
     var refreshing by remember { mutableStateOf(false) }
     LaunchedEffect(refreshing) {
         if (refreshing) {
@@ -56,6 +54,9 @@ fun PeoplesScreen(
             refreshing = false
         }
     }
+
+    val users = viewModel.users.collectAsState()
+    val search = viewModel.search.collectAsState()
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = refreshing),
@@ -96,7 +97,7 @@ fun PeoplesScreen(
 //                                    .defaultMinSize(Dp.Unspecified, 100.dp)
                             ) {
                                 SimpleTextField(
-                                    value = viewModel.search.value,
+                                    value = search.value,
                                     placeholder = { TextBodyMedium(stringResource(R.string.users_add_placeholder)) },
                                     onValueChange = { viewModel.search(it) },
                                     maxLength = 30
@@ -131,7 +132,7 @@ fun PeoplesScreen(
                     contentPadding = PaddingValues(10.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(viewModel.users.value) { user ->
+                    items(users.value) { user ->
                         UserListElement(
                             user = user,
                             isAdmin = viewModel.getIsAdmin(),

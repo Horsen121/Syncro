@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     id("com.google.dagger.hilt.android")
-//    id("org.jetbrains.kotlin.kapt")
     id("com.google.devtools.ksp")
     id("androidx.room")
     id("kotlinx-serialization")
@@ -59,14 +58,6 @@ android {
     }
 }
 
-//kapt {
-//    useBuildCache = true
-//    correctErrorTypes = true
-//    arguments {
-////        arg("dagger.formatGeneratedSource", "disabled")
-//    }
-//}
-
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -98,13 +89,13 @@ dependencies {
     ksp(libs.hilt.android.compiler) // kapt
     // For instrumentation tests
     androidTestImplementation(libs.hilt.android.testing)
-//    kaptAndroidTest(libs.hilt.android.compiler)
+//    kspAndroidTest(libs.hilt.android.compiler)
     // For local unit tests
     testImplementation(libs.hilt.android.testing)
-//    kaptTest(libs.hilt.android.compiler)
+//    kspTest(libs.hilt.android.compiler)
 
     implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler) // kapt
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.room.testing)
 
@@ -118,4 +109,9 @@ dependencies {
 
 //    implementation(libs.kotlin.metadata.jvm)
     implementation(libs.accompanist.swiperefresh)
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.tink.android)
+
 }

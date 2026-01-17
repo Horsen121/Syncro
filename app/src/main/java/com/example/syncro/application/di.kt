@@ -3,6 +3,9 @@ package com.example.syncro.application
 import android.app.Application
 import android.content.Context
 import androidx.annotation.StringRes
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.example.syncro.data.datasourse.local.SyncroDB
 import com.example.syncro.data.repository.FileRepositoryImpl
@@ -11,7 +14,6 @@ import com.example.syncro.data.repository.ReminderRepositoryImpl
 import com.example.syncro.data.repository.SolutionRepositoryImpl
 import com.example.syncro.data.repository.SourceFileRepositoryImpl
 import com.example.syncro.data.repository.TaskRepositoryImpl
-import com.example.syncro.data.repository.TokenRepositoryImpl
 import com.example.syncro.data.repository.UserRepositoryImpl
 import com.example.syncro.domain.repository.FileRepository
 import com.example.syncro.domain.repository.GroupRepository
@@ -19,7 +21,6 @@ import com.example.syncro.domain.repository.ReminderRepository
 import com.example.syncro.domain.repository.SolutionRepository
 import com.example.syncro.domain.repository.SourceFileRepository
 import com.example.syncro.domain.repository.TaskRepository
-import com.example.syncro.domain.repository.TokenRepository
 import com.example.syncro.domain.repository.UserRepository
 import com.example.syncro.domain.usecases.FileUseCases
 import com.example.syncro.domain.usecases.GroupUseCases
@@ -27,7 +28,6 @@ import com.example.syncro.domain.usecases.ReminderUseCases
 import com.example.syncro.domain.usecases.SolutionUseCases
 import com.example.syncro.domain.usecases.SourceFileUseCases
 import com.example.syncro.domain.usecases.TaskUseCases
-import com.example.syncro.domain.usecases.TokenUseCases
 import com.example.syncro.domain.usecases.UserUseCases
 import com.example.syncro.domain.usecases.file.AddFile
 import com.example.syncro.domain.usecases.file.GetFiles
@@ -50,12 +50,12 @@ import com.example.syncro.domain.usecases.task.DeleteTask
 import com.example.syncro.domain.usecases.task.GetAllTasks
 import com.example.syncro.domain.usecases.task.GetTask
 import com.example.syncro.domain.usecases.task.GetTasks
-import com.example.syncro.domain.usecases.token.AddToken
-import com.example.syncro.domain.usecases.token.GetToken
 import com.example.syncro.domain.usecases.user.AddUser
 import com.example.syncro.domain.usecases.user.DeleteUser
 import com.example.syncro.domain.usecases.user.GetUser
 import com.example.syncro.domain.usecases.user.GetUsers
+import com.example.syncro.utils.CryptoManager
+import com.example.syncro.utils.TokenManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -67,7 +67,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
     @Provides
     @Singleton
     fun provideSyncroDB(app: Application): SyncroDB {
@@ -199,18 +198,31 @@ object AppModule {
             deleteUser = DeleteUser(repository)
         )
     }
+}
+
+private val Context.dataStore by preferencesDataStore(name = "user_prefs")
+@Module
+@InstallIn(SingletonComponent::class)
+object SecurityModule {
 
     @Provides
     @Singleton
-    fun provideTokenRepository(db: SyncroDB): TokenRepository {
-        return TokenRepositoryImpl(db.tokenDao())
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+        return context.dataStore
     }
+
     @Provides
     @Singleton
-    fun provideTokenUseCases(repository: TokenRepository): TokenUseCases {
-        return TokenUseCases(
-            getToken = GetToken(repository),
-            addToken = AddToken(repository)
-        )
+    fun provideCryptoManager(@ApplicationContext context: Context): CryptoManager {
+        return CryptoManager(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTokenManager(
+        dataStore: DataStore<Preferences>,
+        cryptoManager: CryptoManager
+    ): TokenManager {
+        return TokenManager(dataStore, cryptoManager)
     }
 }

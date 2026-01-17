@@ -1,7 +1,5 @@
 package com.example.syncro.presentation.viewmodels
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +8,8 @@ import com.example.syncro.data.models.Task
 import com.example.syncro.domain.usecases.ReminderUseCases
 import com.example.syncro.domain.usecases.TaskUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -22,8 +22,8 @@ class RemindersViewModel @Inject constructor(
 ) : ViewModel() {
     private var groupId = -1L
 
-    private var _reminders = mutableStateOf<List<Pair<Reminder, String>>>(emptyList())
-    val reminders: State<List<Pair<Reminder, String>>> = _reminders
+    private var _reminders = MutableStateFlow<List<Pair<Reminder, String>>>(emptyList())
+    val reminders: StateFlow<List<Pair<Reminder, String>>> = _reminders
 
     init {
         savedStateHandle.get<Long?>("groupId").let { id ->
@@ -51,6 +51,6 @@ class RemindersViewModel @Inject constructor(
             tasks = it
         }.launchIn(viewModelScope)
 
-        _reminders.value = reminders.map { r -> Pair(r, tasks.filter { t -> t.task_id == r.task_id }[0].title)}
+        _reminders.value = reminders.map { r -> Pair(r, tasks.filter { t -> t.taskId == r.task_id }[0].title)}
     }
 }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.syncro.R
 import com.example.syncro.presentation.ui.components.TopBarText
-import com.example.syncro.presentation.ui.elements.CheckTextButton
 import com.example.syncro.presentation.ui.elements.SimpleTextField
 import com.example.syncro.presentation.ui.elements.TextBodyMedium
 import com.example.syncro.presentation.ui.elements.TextHeadMedium
@@ -33,12 +33,17 @@ fun AddEditGroupScreen(
     navController: NavController,
     viewModel: AddEditGroupViewModel = hiltViewModel()
 ) {
+    val name = viewModel.name.collectAsState()
+    val desc = viewModel.desc.collectAsState()
+    val response = viewModel.response.collectAsState()
+    val error = viewModel.error.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopBarText(
                 leftText = stringResource(R.string.cancel),
-                centerText = viewModel.name.value.ifEmpty { stringResource(R.string.add_edit_group_title) },
+                centerText = name.value.ifEmpty { stringResource(R.string.add_edit_group_title) },
                 rightText = stringResource(R.string.clear),
                 navController = navController
             ) { viewModel.clear() }
@@ -66,7 +71,7 @@ fun AddEditGroupScreen(
                     text = stringResource(R.string.add_edit_group_name_title)
                 )
                 SimpleTextField(
-                    value = viewModel.name.value,
+                    value = name.value,
                     placeholder = { TextBodyMedium(stringResource(R.string.add_edit_group_name_place)) },
                     onValueChange = { viewModel.onNameChange(it) },
                     maxLength = 30
@@ -77,7 +82,7 @@ fun AddEditGroupScreen(
                     text = stringResource(R.string.add_edit_group_description_title)
                 )
                 SimpleTextField(
-                    value = viewModel.desc.value,
+                    value = desc.value,
                     placeholder = { TextBodyMedium(stringResource(R.string.add_edit_group_description_place)) },
                     onValueChange = { viewModel.onDescChange(it) },
                     maxLength = 100
@@ -102,10 +107,10 @@ fun AddEditGroupScreen(
             Button(
                 onClick = {
                     viewModel.onSave().also {
-                        if(viewModel.response.value) {
+                        if(response.value) {
                             navController.navigateUp()
                         } else {
-                            Toast.makeText(context, viewModel.error.value, Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, error.value, Toast.LENGTH_LONG).show()
                         }
                     }
                 }

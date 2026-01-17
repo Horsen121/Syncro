@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
@@ -41,8 +43,9 @@ import com.example.syncro.presentation.viewmodels.logreg.RegistrationViewModel
 @Composable
 fun RegistrationScreen(
     navController: NavController,
+    viewModel: RegistrationViewModel = hiltViewModel()
 ) {
-    val viewModel = RegistrationViewModel()
+    val isResponse = viewModel.response.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -51,7 +54,12 @@ fun RegistrationScreen(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp, paddingValues.calculateTopPadding(), 20.dp, paddingValues.calculateBottomPadding())
+                .padding(
+                    20.dp,
+                    paddingValues.calculateTopPadding(),
+                    20.dp,
+                    paddingValues.calculateBottomPadding()
+                )
         ) {
             TextHeadMedium(
                 text = stringResource(id = R.string.reg_hello),
@@ -132,7 +140,7 @@ fun RegistrationScreen(
                     onClick = {
                         if (viewModel.password1.value == viewModel.password2.value) {
                             viewModel.registration()
-                            if (viewModel.response.value)
+                            if (isResponse.value)
                                 navController.navigate(Routing.LoginScreen.route)
                         }
                     },

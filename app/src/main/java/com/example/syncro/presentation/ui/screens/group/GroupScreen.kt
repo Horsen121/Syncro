@@ -36,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,6 +79,12 @@ fun GroupScreen(
         }
     }
 
+    val group = viewModel.group.collectAsState()
+    val isMember = viewModel.isMember.collectAsState()
+    val currentTopNavBar = viewModel.currentTopNavBar.collectAsState()
+    val response = viewModel.response.collectAsState()
+    val currentData = viewModel.currentData.collectAsState()
+
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = refreshing),
         onRefresh = { refreshing = true },
@@ -87,15 +94,15 @@ fun GroupScreen(
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
-                if (!viewModel.isMember.value) {
+                if (!isMember.value) {
                     TopBarBackButton(
-                        text = stringResource(R.string.group_title) + " \"${viewModel.group.value?.name}\"",
+                        text = stringResource(R.string.group_title) + " \"${group.value?.name}\"",
                         navController
                     )
                 } else {
                     TopBarText(
                         leftText = stringResource(R.string.back),
-                        centerText = stringResource(R.string.group_title) + " \"${viewModel.group.value?.name}\"",
+                        centerText = stringResource(R.string.group_title) + " \"${group.value?.name}\"",
                         rightText = stringResource(R.string.group_live),
                         navController = navController,
                         rightAction = { openLiveDialog.value = true }
@@ -106,12 +113,12 @@ fun GroupScreen(
                 val actions = mutableListOf(
                     Triple(
                         stringResource(R.string.group_menu_bottom_chat),
-                        { navController.navigate(Routing.GroupChatScreen.route + "?groupId=${viewModel.group.value?.group_id}") },
+                        { navController.navigate(Routing.GroupChatScreen.route + "?groupId=${group.value?.group_id}") },
                         Icons.Default.Email
                     ),
                     Triple(
                         stringResource(R.string.group_menu_bottom_notifications),
-                        { navController.navigate(Routing.RemindersScreen.route + "?groupId=${viewModel.group.value?.group_id}") },
+                        { navController.navigate(Routing.RemindersScreen.route + "?groupId=${group.value?.group_id}") },
                         Icons.Default.Notifications
                     ),
                     Triple(
@@ -119,17 +126,19 @@ fun GroupScreen(
                         {
                             navController.navigate(
                                 Routing.PeoplesScreen.route
-                                        + "?groupId=${viewModel.group.value?.group_id}&groupName=${viewModel.group.value?.name}&isAdmin=${viewModel.group.value?.is_admin}"
+                                        + "?groupId=${group.value?.group_id}" +
+                                        "&groupName=${group.value?.name}" +
+                                        "&isAdmin=${group.value?.is_admin}"
                             )
                         },
                         Icons.Default.Person
                     )
                 )
-                if (viewModel.group.value?.is_admin == true)
+                if (group.value?.is_admin == true)
                     actions.add(
                         Triple(
                             stringResource(R.string.group_menu_bottom_settings),
-                            { navController.navigate(Routing.AddEditGroupScreen.route + "?groupId=${viewModel.group.value?.group_id}") },
+                            { navController.navigate(Routing.AddEditGroupScreen.route + "?groupId=${group.value?.group_id}") },
                             Icons.Default.Build
                         )
                     )
@@ -138,8 +147,8 @@ fun GroupScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        if (viewModel.isMember.value)
-                            navController.navigate(Routing.AddEditTaskScreen.route + "?groupId=${viewModel.group.value?.group_id}")
+                        if (isMember.value)
+                            navController.navigate(Routing.AddEditTaskScreen.route + "?groupId=${group.value?.group_id}")
                     }
                 ) {
                     Image(Icons.Default.Add, null)
@@ -163,7 +172,7 @@ fun GroupScreen(
                             TextButton(
                                 onClick = {
                                     viewModel.disJoin().let {
-                                        if (viewModel.response.value) {
+                                        if (response.value) {
                                             openLiveDialog.value = false
                                             navController.navigateUp()
                                         }
@@ -197,19 +206,19 @@ fun GroupScreen(
                         .clip(MaterialTheme.shapes.large)
                 ) {
                     NavigationBarItem(
-                        selected = viewModel.currentTopNavBar.value == GroupData.Current,
+                        selected = currentTopNavBar.value == GroupData.Current,
                         onClick = { viewModel.getData(GroupData.Current) },
                         label = { TextBodySmall(stringResource(R.string.group_menu_top_current)) },
                         icon = { Image(Icons.Default.Notifications, null) }
                     )
                     NavigationBarItem(
-                        selected = viewModel.currentTopNavBar.value == GroupData.Plan,
+                        selected = currentTopNavBar.value == GroupData.Plan,
                         onClick = { viewModel.getData(GroupData.Plan) },
                         label = { TextBodySmall(stringResource(R.string.group_menu_top_plan)) },
                         icon = { Image(Icons.Default.DateRange, null) }
                     )
                     NavigationBarItem(
-                        selected = viewModel.currentTopNavBar.value == GroupData.Done,
+                        selected = currentTopNavBar.value == GroupData.Done,
                         onClick = { viewModel.getData(GroupData.Done) },
                         label = { TextBodySmall(stringResource(R.string.group_menu_top_done)) },
                         icon = { Image(Icons.Default.Check, null) }
@@ -221,24 +230,25 @@ fun GroupScreen(
                     modifier = Modifier
                         .fillMaxSize(0.9f)
                         .offset(
-                            y = -WindowInsets.navigationBars.asPaddingValues()
+                            y = -WindowInsets.navigationBars
+                                .asPaddingValues()
                                 .calculateBottomPadding()
                         )
                 ) {
-                    items(viewModel.currentData.value) { task ->
+                    items(currentData.value) { task ->
                         GroupTask(
                             task = task,
-                            onClick = { navController.navigate(Routing.TaskScreen.route + "?groupId=${viewModel.group.value?.group_id}&taskId=${task.task_id}") },
+                            onClick = { navController.navigate(Routing.TaskScreen.route + "?groupId=${group.value?.group_id}&taskId=${task.taskId}") },
                             onSolutionClick = {
-                                if (viewModel.isMember.value)
-                                    navController.navigate(Routing.SolutionsScreen.route + "?groupId=${viewModel.group.value?.group_id}&taskId=${task.task_id}")
+                                if (isMember.value)
+                                    navController.navigate(Routing.SolutionsScreen.route + "?groupId=${group.value?.group_id}&taskId=${task.taskId}")
                             }
                         )
                         Spacer(Modifier.height(10.dp))
                     }
                 }
 
-                if (!viewModel.isMember.value) {
+                if (!isMember.value) {
                     Button(
                         onClick = {
                             viewModel.join()

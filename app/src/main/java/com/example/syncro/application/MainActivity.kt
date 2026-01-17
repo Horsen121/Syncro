@@ -31,8 +31,7 @@ object CurrentUser {
     var id = 1L
     var name = "UserName"
     var email = "e.mail@mail.ru"
-    var password = ""
-    var token = "token"
+
 }
 
 @AndroidEntryPoint
@@ -68,7 +67,7 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument(name = "groupId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                         )
                     ) {
@@ -81,7 +80,7 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument(name = "groupId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                         )
                     ) {
@@ -94,7 +93,7 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument(name = "groupId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                         )
                     ) {
@@ -107,11 +106,11 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument(name = "groupId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                             navArgument(name = "taskId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                         )
                     ) {
@@ -124,11 +123,11 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument(name = "groupId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                             navArgument(name = "taskId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                         )
                     ) {
@@ -141,15 +140,15 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument(name = "groupId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                             navArgument(name = "taskId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                             navArgument(name = "solutionId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                         )
                     ) {
@@ -162,15 +161,15 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument(name = "groupId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                             navArgument(name = "taskId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                             navArgument(name = "solutionId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                         )
                     ) {
@@ -183,11 +182,11 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument(name = "taskId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                             navArgument(name = "groupId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                         )
                     ) {
@@ -200,7 +199,7 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument(name = "groupId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                         )
                     ) {
@@ -213,7 +212,7 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument(name = "groupId") {
                                 type = NavType.LongType
-                                defaultValue = -1L
+                                defaultValue = null
                             },
                             navArgument(name = "groupName") {
                                 type = NavType.StringType
