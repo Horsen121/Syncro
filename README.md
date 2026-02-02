@@ -9,8 +9,9 @@
   <img src="assets/screenshots/registration_screen.png" width="48.5%" alt="Экран регистрации">
   <img src="assets/screenshots/login_screen.png" width="49%" alt="Экран авторизации">
 </div>
+<div align="center">
   <img src="assets/screenshots/main_screen.png" width="48.5%" alt="Главный экран">
-  <img src="assets/screenshots/group_card_screen.png" width="49%" alt="Экран группы">
+  <img src="assets/screenshots/group_screen.png" width="49%" alt="Экран группы">
 </div>
 
 <video width="300" height="800" src="https://github.com/user-attachments/assets/f99000de-e9f8-45a1-b31e-0e09300b136f"></video>
