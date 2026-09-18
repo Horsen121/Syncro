@@ -23,13 +23,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.syncro.R
-import com.example.syncro.application.CurrentUser
-import com.example.syncro.application.MainActivity
-import com.example.syncro.application.Routing
-import com.example.syncro.presentation.ui.components.TopBarText
-import com.example.syncro.presentation.ui.elements.TextBodyMedium
-import com.example.syncro.presentation.ui.elements.TextHeadMedium
-import com.example.syncro.presentation.ui.elements.TextHeadSmall
+import com.example.syncro.CurrentUser
+import com.example.syncro.MainActivity
+import com.example.syncro.Routing
+import com.example.ui.elements.TopBarText
+import com.example.ui.components.TextBodyMedium
+import com.example.ui.components.TextHeadMedium
+import com.example.ui.components.TextHeadSmall
 import kotlin.system.exitProcess
 
 @OptIn(ExperimentalMaterial3Api::class)

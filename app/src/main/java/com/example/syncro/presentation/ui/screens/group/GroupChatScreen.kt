@@ -14,8 +14,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.application.ui.theme.SyncroTheme
-import com.example.syncro.presentation.ui.components.TopBarBackButton
-import com.example.syncro.presentation.ui.elements.TextHeadLarge
+import com.example.ui.elements.TopBarBackButton
+import com.example.ui.components.TextHeadLarge
 import com.example.syncro.presentation.viewmodels.group.GroupChatViewModel
 
 @Composable

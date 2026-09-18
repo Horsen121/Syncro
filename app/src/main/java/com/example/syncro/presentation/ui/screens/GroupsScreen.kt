@@ -31,11 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.syncro.R
-import com.example.syncro.application.Routing
+import com.example.syncro.Routing
 import com.example.syncro.presentation.ui.components.GroupListElement
-import com.example.syncro.presentation.ui.components.SimpleBottomBar
-import com.example.syncro.presentation.ui.components.TopBarSimple
-import com.example.syncro.presentation.ui.elements.SimpleSearchBar
+import com.example.ui.elements.SimpleBottomBar
+import com.example.ui.elements.TopBarSimple
+import com.example.ui.components.SimpleSearchBar
 import com.example.syncro.presentation.viewmodels.GroupsViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState

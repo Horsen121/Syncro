@@ -29,7 +29,7 @@ class TokenManager(
         val encryptedToken = prefs[ACCESS_TOKEN_KEY] ?: return null
         return try {
             cryptoManager.decrypt(encryptedToken)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
@@ -38,7 +38,7 @@ class TokenManager(
         val encryptedToken = prefs[REFRESH_TOKEN_KEY] ?: return null
         return try {
             cryptoManager.decrypt(encryptedToken)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

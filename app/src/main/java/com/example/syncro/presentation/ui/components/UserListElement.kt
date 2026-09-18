@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.dp
 import com.example.syncro.R
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.data.models.User
-import com.example.syncro.presentation.ui.elements.CheckTextButton
-import com.example.syncro.presentation.ui.elements.TextBodyMedium
-import com.example.syncro.presentation.ui.elements.TextHeadMedium
+import com.example.ui.components.CheckTextButton
+import com.example.ui.components.TextBodyMedium
+import com.example.ui.components.TextHeadMedium
 
 @Composable
 fun UserListElement(

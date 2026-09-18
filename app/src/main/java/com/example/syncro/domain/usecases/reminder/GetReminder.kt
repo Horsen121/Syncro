@@ -1,6 +1,6 @@
 package com.example.syncro.domain.usecases.reminder
 
-import com.example.syncro.data.models.Reminder
+import com.example.reminders.domain.Reminder
 import com.example.syncro.domain.repository.ReminderRepository
 
 class GetReminder(

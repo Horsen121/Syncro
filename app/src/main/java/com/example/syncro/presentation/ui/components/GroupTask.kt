@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import com.example.syncro.R
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.data.models.Task
-import com.example.syncro.presentation.ui.elements.TextBodyMedium
-import com.example.syncro.presentation.ui.elements.TextHeadSmall
+import com.example.ui.components.TextBodyMedium
+import com.example.ui.components.TextHeadSmall
 import com.example.syncro.utils.TaskDifficult
 
 @Composable

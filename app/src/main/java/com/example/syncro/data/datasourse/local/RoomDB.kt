@@ -13,7 +13,7 @@ import com.example.syncro.data.datasourse.local.dao.TaskDaoLocal
 import com.example.syncro.data.datasourse.local.dao.UserDaoLocal
 import com.example.syncro.data.models.File
 import com.example.syncro.data.models.Group
-import com.example.syncro.data.models.Reminder
+import com.example.reminders.domain.Reminder
 import com.example.syncro.data.models.Solution
 import com.example.syncro.data.models.SourceFile
 import com.example.syncro.data.models.Task

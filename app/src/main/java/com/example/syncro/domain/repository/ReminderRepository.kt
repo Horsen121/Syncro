@@ -1,6 +1,6 @@
 package com.example.syncro.domain.repository
 
-import com.example.syncro.data.models.Reminder
+import com.example.reminders.domain.Reminder
 import kotlinx.coroutines.flow.Flow
 
 interface ReminderRepository {

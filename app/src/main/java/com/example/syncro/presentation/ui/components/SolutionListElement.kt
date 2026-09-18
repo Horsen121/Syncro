@@ -16,8 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.syncro.application.ui.theme.SyncroTheme
 import com.example.syncro.data.models.Solution
-import com.example.syncro.presentation.ui.elements.TextBodyMedium
-import com.example.syncro.presentation.ui.elements.TextHeadSmall
+import com.example.ui.components.TextBodyMedium
+import com.example.ui.components.TextHeadSmall
 
 @Composable
 fun SolutionListElement(

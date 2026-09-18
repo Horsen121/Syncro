@@ -21,10 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.syncro.application.ui.theme.SyncroTheme
+import com.example.ui.theme.SyncroTheme
 import com.example.syncro.data.models.Group
-import com.example.syncro.presentation.ui.elements.TextBodyMedium
-import com.example.syncro.presentation.ui.elements.TextHeadMedium
+import com.example.ui.components.TextBodyMedium
+import com.example.ui.components.TextHeadMedium
 
 @Composable
 fun GroupListElement(
@@ -57,7 +57,7 @@ fun GroupListElement(
                     fillMaxWidth = false
                 )
                 TextBodyMedium(
-                    text = group.description ?: "",
+                    text = group.description,
                     textAlign = TextAlign.Start,
                 )
             }

@@ -29,9 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.syncro.R
-import com.example.syncro.application.Routing
+import com.example.syncro.Routing
 import com.example.syncro.presentation.ui.components.SolutionListElement
-import com.example.syncro.presentation.ui.components.TopBarBackButton
+import com.example.ui.elements.TopBarBackButton
 import com.example.syncro.presentation.viewmodels.SolutionsViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState

@@ -21,9 +21,6 @@ class SolutionViewModel @Inject constructor(
     var taskId: Long? = null
     var solutionId: Long? = null
 
-//    private var _task = MutableStateFlow("")
-//    val task: StateFlow<String> = _task
-
     private var _name = MutableStateFlow("")
     val name: StateFlow<String> = _name
 

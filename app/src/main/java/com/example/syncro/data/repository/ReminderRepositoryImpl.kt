@@ -1,7 +1,7 @@
 package com.example.syncro.data.repository
 
 import com.example.syncro.data.datasourse.local.dao.ReminderDaoLocal
-import com.example.syncro.data.models.Reminder
+import com.example.reminders.domain.Reminder
 import com.example.syncro.domain.repository.ReminderRepository
 import kotlinx.coroutines.flow.Flow
 

@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.syncro.presentation.ui.elements.TextBodyMedium
+import com.example.ui.components.TextBodyMedium
 
 @Composable
 fun FileCard(

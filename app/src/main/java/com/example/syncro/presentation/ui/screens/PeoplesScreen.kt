@@ -28,11 +28,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.syncro.R
-import com.example.syncro.presentation.ui.components.TopBarText
+import com.example.ui.elements.TopBarText
 import com.example.syncro.presentation.ui.components.UserListElement
-import com.example.syncro.presentation.ui.elements.SimpleTextField
-import com.example.syncro.presentation.ui.elements.TextBodyMedium
-import com.example.syncro.presentation.ui.elements.TextHeadSmall
+import com.example.ui.components.SimpleTextField
+import com.example.ui.components.TextBodyMedium
+import com.example.ui.components.TextHeadSmall
 import com.example.syncro.presentation.viewmodels.PeoplesViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState

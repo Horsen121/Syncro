@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.syncro.R
-import com.example.syncro.application.Routing
+import com.example.syncro.Routing
 import com.example.syncro.presentation.ui.components.FileCard
-import com.example.syncro.presentation.ui.components.TopBarText
-import com.example.syncro.presentation.ui.elements.TextHeadSmall
+import com.example.ui.elements.TopBarText
+import com.example.ui.components.TextHeadSmall
 import com.example.syncro.presentation.viewmodels.group.SolutionViewModel
 
 @Composable

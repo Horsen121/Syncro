@@ -30,14 +30,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.syncro.R
-import com.example.syncro.application.Routing
+import com.example.syncro.Routing
 import com.example.syncro.application.ui.theme.SyncroTheme
-import com.example.syncro.presentation.ui.elements.CheckTextButton
-import com.example.syncro.presentation.ui.elements.PasswordTextField
-import com.example.syncro.presentation.ui.elements.SimpleTextField
-import com.example.syncro.presentation.ui.elements.TextBodyMedium
-import com.example.syncro.presentation.ui.elements.TextHeadMedium
-import com.example.syncro.presentation.ui.elements.TextHeadSmall
+import com.example.ui.components.CheckTextButton
+import com.example.ui.components.PasswordTextField
+import com.example.ui.components.SimpleTextField
+import com.example.ui.components.TextBodyMedium
+import com.example.ui.components.TextHeadMedium
+import com.example.ui.components.TextHeadSmall
 import com.example.syncro.presentation.viewmodels.logreg.RegistrationViewModel
 
 @Composable
