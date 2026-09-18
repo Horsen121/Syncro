@@ -1,6 +1,6 @@
 package com.example.syncro.domain.repository
 
-import com.example.syncro.data.models.Task
+import com.example.database.entity.Task
 import kotlinx.coroutines.flow.Flow
 
 interface TaskRepository {

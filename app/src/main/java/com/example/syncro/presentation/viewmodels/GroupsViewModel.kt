@@ -3,8 +3,8 @@ package com.example.syncro.presentation.viewmodels
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.syncro.data.datasourse.remote.RemoteApi
-import com.example.syncro.data.models.Group
+import com.example.network.RemoteApi
+import com.example.database.entity.Group
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel

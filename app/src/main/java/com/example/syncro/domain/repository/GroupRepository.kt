@@ -1,6 +1,6 @@
 package com.example.syncro.domain.repository
 
-import com.example.syncro.data.models.Group
+import com.example.database.entity.Group
 import kotlinx.coroutines.flow.Flow
 
 interface GroupRepository {

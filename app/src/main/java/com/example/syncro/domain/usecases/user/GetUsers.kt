@@ -1,6 +1,6 @@
 package com.example.syncro.domain.usecases.user
 
-import com.example.syncro.data.models.User
+import com.example.database.entity.User
 import com.example.syncro.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 

@@ -1,6 +1,6 @@
 package com.example.syncro.domain.usecases.source_file
 
-import com.example.syncro.data.models.SourceFile
+import com.example.database.entity.SourceFile
 import com.example.syncro.domain.repository.SourceFileRepository
 import kotlinx.coroutines.flow.Flow
 

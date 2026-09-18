@@ -1,13 +1,8 @@
 package com.example.syncro
 
-import android.app.Application
 import android.content.Context
 import androidx.annotation.StringRes
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.room.Room
-import com.example.syncro.data.datasourse.local.SyncroDB
+import com.example.database.SyncroDB
 import com.example.syncro.data.repository.FileRepositoryImpl
 import com.example.syncro.data.repository.GroupRepositoryImpl
 import com.example.syncro.data.repository.ReminderRepositoryImpl
@@ -54,8 +49,6 @@ import com.example.syncro.domain.usecases.user.AddUser
 import com.example.syncro.domain.usecases.user.DeleteUser
 import com.example.syncro.domain.usecases.user.GetUser
 import com.example.syncro.domain.usecases.user.GetUsers
-import com.example.syncro.utils.CryptoManager
-import com.example.syncro.utils.TokenManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -67,15 +60,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    @Provides
-    @Singleton
-    fun provideSyncroDB(app: Application): SyncroDB {
-        return Room.databaseBuilder(
-            app,
-            SyncroDB::class.java,
-            SyncroDB.DATABASE_NAME
-        ).build()
-    }
 
     @Singleton
     class StringResourceProvider @Inject constructor(
@@ -90,11 +74,6 @@ object AppModule {
         }
     }
 
-    @Provides
-    @Singleton
-    fun provideTaskRepository(db: SyncroDB): TaskRepository {
-        return TaskRepositoryImpl(db.taskDao())
-    }
     @Provides
     @Singleton
     fun provideTaskUseCases(repository: TaskRepository): TaskUseCases {
@@ -197,32 +176,5 @@ object AppModule {
             getUser = GetUser(repository),
             deleteUser = DeleteUser(repository)
         )
-    }
-}
-
-private val Context.dataStore by preferencesDataStore(name = "user_prefs")
-@Module
-@InstallIn(SingletonComponent::class)
-object SecurityModule {
-
-    @Provides
-    @Singleton
-    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return context.dataStore
-    }
-
-    @Provides
-    @Singleton
-    fun provideCryptoManager(@ApplicationContext context: Context): CryptoManager {
-        return CryptoManager(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideTokenManager(
-        dataStore: DataStore<Preferences>,
-        cryptoManager: CryptoManager
-    ): TokenManager {
-        return TokenManager(dataStore, cryptoManager)
     }
 }

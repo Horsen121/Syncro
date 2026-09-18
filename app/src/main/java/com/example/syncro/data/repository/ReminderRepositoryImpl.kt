@@ -1,12 +1,12 @@
 package com.example.syncro.data.repository
 
-import com.example.syncro.data.datasourse.local.dao.ReminderDaoLocal
+import com.example.database.dao.ReminderDao
 import com.example.reminders.domain.Reminder
 import com.example.syncro.domain.repository.ReminderRepository
 import kotlinx.coroutines.flow.Flow
 
 class ReminderRepositoryImpl(
-    private val daoLocal: ReminderDaoLocal
+    private val daoLocal: ReminderDao
 ): ReminderRepository {
     override fun getRemindersByUser(): Flow<List<Reminder>> {
         return daoLocal.getReminders()

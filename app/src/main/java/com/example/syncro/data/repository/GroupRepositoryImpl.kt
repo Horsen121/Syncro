@@ -1,12 +1,12 @@
 package com.example.syncro.data.repository
 
-import com.example.syncro.data.datasourse.local.dao.GroupDaoLocal
-import com.example.syncro.data.models.Group
+import com.example.database.dao.GroupDao
+import com.example.database.entity.Group
 import com.example.syncro.domain.repository.GroupRepository
 import kotlinx.coroutines.flow.Flow
 
 class GroupRepositoryImpl(
-    private val daoLocal: GroupDaoLocal
+    private val daoLocal: GroupDao
 ): GroupRepository {
     override fun getGroups(): Flow<List<Group>> {
         return daoLocal.getGroups()

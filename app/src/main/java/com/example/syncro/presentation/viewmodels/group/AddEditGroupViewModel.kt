@@ -5,9 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.syncro.CurrentUser
-import com.example.syncro.data.datasourse.remote.RemoteApi
-import com.example.syncro.data.datasourse.remote.models.CreateGroupRequest
-import com.example.syncro.data.models.Group
+import com.example.network.RemoteApi
+import com.example.network.dto.CreateGroupRequest
+import com.example.database.entity.Group
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel

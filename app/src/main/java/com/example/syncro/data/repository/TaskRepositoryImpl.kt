@@ -1,12 +1,12 @@
 package com.example.syncro.data.repository
 
-import com.example.syncro.data.datasourse.local.dao.TaskDaoLocal
-import com.example.syncro.data.models.Task
+import com.example.database.dao.TaskDao
+import com.example.database.entity.Task
 import com.example.syncro.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
 
 class TaskRepositoryImpl(
-    private val daoLocal: TaskDaoLocal,
+    private val daoLocal: TaskDao,
 ): TaskRepository {
     override fun getAllTasks(): Flow<List<Task>> {
         return daoLocal.getAllTasks()

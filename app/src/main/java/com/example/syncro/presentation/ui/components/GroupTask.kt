@@ -24,10 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.syncro.R
 import com.example.syncro.application.ui.theme.SyncroTheme
-import com.example.syncro.data.models.Task
+import com.example.database.entity.Task
 import com.example.ui.components.TextBodyMedium
 import com.example.ui.components.TextHeadSmall
-import com.example.syncro.utils.TaskDifficult
+import com.example.shared_task.TaskDifficult
 
 @Composable
 fun GroupTask(

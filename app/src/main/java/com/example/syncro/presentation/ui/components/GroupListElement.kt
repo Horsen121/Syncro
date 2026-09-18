@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ui.theme.SyncroTheme
-import com.example.syncro.data.models.Group
+import com.example.database.entity.Group
 import com.example.ui.components.TextBodyMedium
 import com.example.ui.components.TextHeadMedium
 

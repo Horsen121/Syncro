@@ -5,10 +5,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.syncro.CurrentUser
-import com.example.syncro.data.datasourse.remote.RemoteApi
-import com.example.syncro.data.datasourse.remote.models.JoinGroupRequest
-import com.example.syncro.data.models.Group
-import com.example.syncro.data.models.Task
+import com.example.network.RemoteApi
+import com.example.network.dto.JoinGroupRequest
+import com.example.database.entity.Group
+import com.example.database.entity.Task
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.domain.usecases.TaskUseCases
 import com.example.syncro.utils.TokenManager

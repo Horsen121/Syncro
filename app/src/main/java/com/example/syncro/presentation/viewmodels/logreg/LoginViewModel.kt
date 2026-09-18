@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.syncro.CurrentUser
-import com.example.syncro.data.datasourse.remote.RemoteApi
-import com.example.syncro.data.datasourse.remote.models.LoginRequest
+import com.example.network.RemoteApi
+import com.example.network.dto.LoginRequest
 import com.example.syncro.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

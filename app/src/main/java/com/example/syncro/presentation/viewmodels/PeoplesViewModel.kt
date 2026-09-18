@@ -4,9 +4,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.syncro.data.datasourse.remote.RemoteApi
-import com.example.syncro.data.datasourse.remote.models.AddMemberRequest
-import com.example.syncro.data.models.User
+import com.example.network.RemoteApi
+import com.example.network.dto.AddMemberRequest
+import com.example.database.entity.User
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.domain.usecases.UserUseCases
 import com.example.syncro.utils.TokenManager

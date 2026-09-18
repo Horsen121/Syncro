@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.syncro.R
 import com.example.syncro.application.ui.theme.SyncroTheme
-import com.example.syncro.data.models.User
+import com.example.database.entity.User
 import com.example.ui.components.CheckTextButton
 import com.example.ui.components.TextBodyMedium
 import com.example.ui.components.TextHeadMedium

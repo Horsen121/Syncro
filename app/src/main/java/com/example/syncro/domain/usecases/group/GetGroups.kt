@@ -1,6 +1,6 @@
 package com.example.syncro.domain.usecases.group
 
-import com.example.syncro.data.models.Group
+import com.example.database.entity.Group
 import com.example.syncro.domain.repository.GroupRepository
 import kotlinx.coroutines.flow.Flow
 

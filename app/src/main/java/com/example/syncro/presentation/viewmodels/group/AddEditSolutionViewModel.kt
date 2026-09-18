@@ -5,10 +5,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.syncro.CurrentUser
-import com.example.syncro.data.datasourse.remote.RemoteApi
-import com.example.syncro.data.datasourse.remote.models.CreateSolutionRequest
-import com.example.syncro.data.datasourse.remote.models.UpdSolutionRequest
-import com.example.syncro.data.models.Solution
+import com.example.network.RemoteApi
+import com.example.network.dto.CreateSolutionRequest
+import com.example.network.dto.UpdSolutionRequest
+import com.example.database.entity.Solution
 import com.example.syncro.domain.usecases.SolutionUseCases
 import com.example.syncro.domain.usecases.SourceFileUseCases
 import com.example.syncro.utils.TokenManager

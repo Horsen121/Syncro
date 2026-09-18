@@ -2,6 +2,7 @@ plugins {
     id("myproject.android.library")
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -17,4 +18,7 @@ dependencies {
 
     implementation(libs.bundles.androidx.room)
     ksp(libs.androidx.room.compiler)
+
+    implementation(libs.bundles.androidx.hilt)
+    ksp(libs.hilt.android.compiler)
 }

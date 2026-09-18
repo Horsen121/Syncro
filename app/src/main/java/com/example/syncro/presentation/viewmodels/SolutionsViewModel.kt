@@ -4,8 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.syncro.data.datasourse.remote.RemoteApi
-import com.example.syncro.data.models.Solution
+import com.example.network.RemoteApi
+import com.example.database.entity.Solution
 import com.example.syncro.domain.usecases.SolutionUseCases
 import com.example.syncro.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel

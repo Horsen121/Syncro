@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.syncro.application.ui.theme.SyncroTheme
-import com.example.syncro.data.models.Solution
+import com.example.database.entity.Solution
 import com.example.ui.components.TextBodyMedium
 import com.example.ui.components.TextHeadSmall
 

@@ -7,6 +7,7 @@ ksp = "2.3.4"
 coreKtx = "1.19.0"
 lifecycle = "2.11.0"
 activityCompose = "1.13.0"
+navigationCompose = "1.1.0"
 composeBom = "2026.09.00"
 coroutines = "1.11.0"
 room = "2.8.5"
@@ -33,6 +34,7 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 # AndroidX & Lifecycle
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-activity-navigation = { group = "androidx.activity", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
@@ -96,6 +98,10 @@ compose = [
     "androidx-material3",
     "androidx-foundation",
     "androidx-material-icons-extended"
+]
+androidx-hilt = [
+    "hilt-android",
+    "androidx-hilt-navigation-compose"
 ]
 androidx-room = [
     "androidx-room-runtime",

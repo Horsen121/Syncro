@@ -1,6 +1,6 @@
 package com.example.syncro.domain.repository
 
-import com.example.syncro.data.models.File
+import com.example.database.entity.File
 import kotlinx.coroutines.flow.Flow
 
 interface FileRepository {

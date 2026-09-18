@@ -1,12 +1,12 @@
 package com.example.syncro.data.repository
 
-import com.example.syncro.data.datasourse.local.dao.UserDaoLocal
-import com.example.syncro.data.models.User
+import com.example.database.dao.UserDao
+import com.example.database.entity.User
 import com.example.syncro.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 
 class UserRepositoryImpl(
-    private val daoLocal: UserDaoLocal
+    private val daoLocal: UserDao
 ): UserRepository {
     override fun getUsersByGroup(id: Long): Flow<List<User>> {
         return daoLocal.getUsers(id)

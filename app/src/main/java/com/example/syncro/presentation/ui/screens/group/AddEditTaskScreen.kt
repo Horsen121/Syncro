@@ -52,7 +52,7 @@ import com.example.ui.components.TextBodyMedium
 import com.example.ui.components.TextHeadMedium
 import com.example.ui.components.TextHeadSmall
 import com.example.syncro.presentation.viewmodels.group.AddEditTaskViewModel
-import com.example.syncro.utils.TaskDifficult
+import com.example.shared_task.TaskDifficult
 import com.example.syncro.utils.toNormalString
 import java.time.LocalDateTime
 import java.time.LocalTime

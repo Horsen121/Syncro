@@ -45,4 +45,9 @@ dependencies {
     implementation(project(":feature:solution_modules:add_edit_solution"))
     implementation(project(":feature:solution_modules:solution"))
     implementation(project(":feature:solution_modules:solutions"))
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.activity.navigation)
+
+    implementation(libs.bundles.androidx.hilt)
 }
