@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reg_hello">Регистрация</string>
+    <string name="reg_desc">Создайте аккаунт, чтобы начать</string>
+    <string name="reg_name_head">Логин</string>
+    <string name="reg_name_pl">Введите логин</string>
+    <string name="reg_email_head">Email</string>
+    <string name="reg_email_pl">Введите email</string>
+    <string name="reg_pass_head">Пароль</string>
+    <string name="reg_pass_pl1">Введите пароль</string>
+    <string name="reg_pass_pl2">Повторите пароль</string>
+    <string name="reg_agreement_1">Я прочитал и согласен с </string>
+    <string name="reg_agreement_2"> Условиями </string>
+    <string name="reg_agreement_3"> и </string>
+    <string name="reg_agreement_4"> Политикой конфиденциальности</string>
+    <string name="reg_button_text">Зарегистрироваться</string>
+
+    <string name="reg_repository_error">Ошибка регистрации: %1$s</string>
+
+    <string name="reg_vm_unknown_error">Ошибка регистрации: %1$s</string>
+    <string name="reg_vm_password_confirm_error">Пароли не совпадают</string>
+
+    <string name="reg_use_case_email_is_blank">Поле почты не должно быть пустым</string>
+    <string name="reg_use_case_password_is_blank">Поле пароля не должно быть пустым</string>
+    <string name="reg_use_case_full_name_is_blank">Поле ФИО не должно быть пустым</string>
+</resources>

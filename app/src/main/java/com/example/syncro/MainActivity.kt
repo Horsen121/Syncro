@@ -10,9 +10,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.login.presentation.LoginScreen
+import com.example.reminders.ui.RemindersScreen
 import com.example.syncro.presentation.ui.screens.GroupsScreen
 import com.example.syncro.presentation.ui.screens.PeoplesScreen
-import com.example.reminders.ui.RemindersScreen
 import com.example.syncro.presentation.ui.screens.SettingsScreen
 import com.example.syncro.presentation.ui.screens.SolutionsScreen
 import com.example.syncro.presentation.ui.screens.group.AddEditGroupScreen
@@ -22,16 +23,9 @@ import com.example.syncro.presentation.ui.screens.group.GroupChatScreen
 import com.example.syncro.presentation.ui.screens.group.GroupScreen
 import com.example.syncro.presentation.ui.screens.group.SolutionScreen
 import com.example.syncro.presentation.ui.screens.group.TaskScreen
-import com.example.syncro.presentation.ui.screens.logreg.LoginScreen
-import com.example.syncro.presentation.ui.screens.logreg.RegistrationScreen
+import com.example.registration.presentation.RegistrationScreen
 import com.example.ui.theme.SyncroTheme
 import dagger.hilt.android.AndroidEntryPoint
-
-object CurrentUser {
-    var id = 1L
-    var name = "UserName"
-    var email = "e.mail@mail.ru"
-}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -48,14 +42,17 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable(route = Routing.LoginScreen.route) {
                         LoginScreen(
-                            navController = navController
+                            onLoginSuccess = { navController.navigate(Routing.GroupsScreen.route) },
+                            onRegistrationClick = { navController.navigate(Routing.RegistrationScreen.route) }
                         )
                     }
                     composable(route = Routing.RegistrationScreen.route) {
                         RegistrationScreen(
-                            navController = navController
+                            toLoginScreen = { navController.navigate(Routing.LoginScreen.route) },
+                            onRegistrationSuccess = { navController.navigate(Routing.GroupsScreen.route) }
                         )
                     }
+
                     composable(route = Routing.GroupsScreen.route) {
                         GroupsScreen(
                             navController = navController
@@ -100,6 +97,7 @@ class MainActivity : ComponentActivity() {
                             navController = navController
                         )
                     }
+
                     composable(
                         route = Routing.AddEditTaskScreen.route + "?groupId={groupId}&taskId={taskId}",
                         arguments = listOf(
