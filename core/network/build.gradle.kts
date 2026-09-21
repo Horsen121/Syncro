@@ -12,7 +12,7 @@ android {
 dependencies {
     implementation(project(":core:utils"))
 
-    implementation(libs.bundles.androidx.retrofit)
+    api(libs.bundles.androidx.retrofit)
 
     implementation(libs.bundles.androidx.hilt)
     ksp(libs.hilt.android.compiler)

@@ -4,6 +4,11 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.utils.data.CryptoManager
+import com.example.utils.data.TokenManager
+import com.example.utils.strings.AndroidStringResourceProvider
+import com.example.utils.strings.StringResourceProvider
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,4 +41,14 @@ object SecurityModule {
     ): TokenManager {
         return TokenManager(dataStore, cryptoManager)
     }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class UiModule {
+    @Binds
+    @Singleton
+    abstract fun bindStringResourceProvider(
+        impl: AndroidStringResourceProvider
+    ): StringResourceProvider
 }

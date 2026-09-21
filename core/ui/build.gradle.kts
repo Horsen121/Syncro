@@ -12,8 +12,6 @@ android {
 
 dependencies {
     api(platform(libs.androidx.compose.bom))
-    api(libs.androidx.compose.ui)
-    api(libs.androidx.compose.material3)
-    api(libs.androidx.compose.ui.tooling.preview)
+    api(libs.bundles.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

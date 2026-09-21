@@ -1,4 +1,4 @@
-package com.example.utils
+package com.example.utils.data
 
 import android.content.Context
 import android.util.Base64

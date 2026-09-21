@@ -14,6 +14,8 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             pluginManager.apply {
                 apply("myproject.android.library")
                 apply("org.jetbrains.kotlin.plugin.compose")
+                apply("com.google.devtools.ksp")
+                apply("com.google.dagger.hilt.android")
             }
 
             extensions.configure<LibraryExtension> {
@@ -25,10 +27,13 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
             dependencies {
+                add("implementation", project(":core:current_user"))
                 add("implementation", project(":core:ui"))
                 add("implementation", project(":core:utils"))
                 add("implementation", project(":core:database"))
                 add("implementation", project(":core:network"))
+                add("implementation", libs.findBundle("androidx.hilt").get())
+                add("ksp", libs.findLibrary("hilt.android.compiler").get())
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
             }
         }

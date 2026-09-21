@@ -47,7 +47,7 @@ dependencies {
     implementation(project(":feature:solution_modules:solutions"))
 
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.activity.navigation)
+    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.bundles.androidx.hilt)
 }

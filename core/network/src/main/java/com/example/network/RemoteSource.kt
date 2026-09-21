@@ -5,6 +5,7 @@ import com.example.network.dto.CreateGroupRequest
 import com.example.network.dto.CreateGroupResponse
 import com.example.network.dto.CreateSolutionRequest
 import com.example.network.dto.CreateTaskRequest
+import com.example.network.dto.CurrentUser
 import com.example.network.dto.File
 import com.example.network.dto.FindGroupResponse
 import com.example.network.dto.Group
@@ -12,9 +13,7 @@ import com.example.network.dto.JoinGroupRequest
 import com.example.network.dto.JoinGroupResponse
 import com.example.network.dto.LeaveGroupResponse
 import com.example.network.dto.LoginRequest
-import com.example.network.dto.LoginResponse
 import com.example.network.dto.RegisterRequest
-import com.example.network.dto.RegisterResponse
 import com.example.network.dto.Solution
 import com.example.network.dto.SourceFile
 import com.example.network.dto.Task
@@ -30,14 +29,16 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface RemoteApiService {
-    // Auth
-    @POST("auth/register")
-    suspend fun register(@Body body: RegisterRequest): Response<RegisterResponse>
+interface AuthApi {
 
     @POST("auth/login-pwd")
-    suspend fun login(@Body body: LoginRequest): Response<LoginResponse>
+    suspend fun login(@Body body: LoginRequest): Response<CurrentUser>
 
+    @POST("auth/register")
+    suspend fun register(@Body body: RegisterRequest): Response<CurrentUser>
+}
+
+interface RemoteApiService {
     // Groups
     @PUT("public/groups/{groupId}/join")
     suspend fun joinGroup(
