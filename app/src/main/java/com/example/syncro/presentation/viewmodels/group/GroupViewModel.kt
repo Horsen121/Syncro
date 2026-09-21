@@ -5,13 +5,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.syncro.CurrentUser
-import com.example.network.RemoteApi
 import com.example.network.dto.JoinGroupRequest
 import com.example.database.entity.Group
 import com.example.database.entity.Task
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.domain.usecases.TaskUseCases
-import com.example.syncro.utils.TokenManager
+import com.example.utils.data.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

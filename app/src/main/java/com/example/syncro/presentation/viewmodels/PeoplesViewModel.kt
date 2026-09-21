@@ -9,7 +9,7 @@ import com.example.network.dto.AddMemberRequest
 import com.example.database.entity.User
 import com.example.syncro.domain.usecases.GroupUseCases
 import com.example.syncro.domain.usecases.UserUseCases
-import com.example.syncro.utils.TokenManager
+import com.example.utils.data.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
