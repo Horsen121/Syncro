@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_hello">Добро пожаловать!</string>
+    <string name="login_placeholder_email">Введите свой email</string>
+    <string name="login_placeholder_password">Введите свой пароль</string>
+    <string name="login_forgot">Забыли пароль?</string>
+    <string name="login_button_text">Войти</string>
+    <string name="login_register_text">Нет аккаунта?</string>
+    <string name="login_register_link">Зарегистрируйтесь сейчас!</string>
+    <string name="login_continue_variants">Или войдите с помощью:</string>
+
+    <string name="login_vm_unknown_error">Произошла неизвестная ошибка</string>
+
+    <string name="login_use_case_email_is_blank">Поле почты не должно быть пустым</string>
+    <string name="login_use_case_password_is_blank">Поле пароля не должно быть пустым</string>
+
+    <string name="login_repository_error">Ошибка авторизации: %1$s</string>
+</resources>

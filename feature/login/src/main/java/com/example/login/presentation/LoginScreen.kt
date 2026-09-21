@@ -1,4 +1,4 @@
-package com.example.syncro.presentation.ui.screens.logreg
+package com.example.login.presentation
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -21,7 +21,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,22 +34,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.example.syncro.R
-import com.example.syncro.Routing
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.feature.login.R
 import com.example.ui.components.PasswordTextField
 import com.example.ui.components.SimpleTextField
 import com.example.ui.components.TextBodyMedium
 import com.example.ui.components.TextHeadLarge
 import com.example.ui.components.TextHeadSmall
-import com.example.syncro.presentation.viewmodels.logreg.LoginViewModel
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    onLoginSuccess: () -> Unit,
+    onRegistrationClick: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val isResponse = viewModel.response.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is LoginUiEvent.NavigateToHome -> onLoginSuccess()
+                is LoginUiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
@@ -80,15 +92,15 @@ fun LoginScreen(
                     .padding(10.dp, 20.dp)
             ) {
                 SimpleTextField(
-                    value = viewModel.login.value,
-                    onValueChange = { viewModel.onLoginChange(it) },
+                    value = uiState.email,
+                    onValueChange = { viewModel.onEmailChange(it) },
                     placeholder = { TextBodyMedium(text = stringResource(id = R.string.login_placeholder_email)) },
                     modifier = Modifier.padding(5.dp, 0.dp)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
                 PasswordTextField(
-                    value = viewModel.password.value,
+                    value = uiState.password,
                     onValueChange = { viewModel.onPasswordChange(it) },
                     placeholder = { TextBodyMedium(text = stringResource(id = R.string.login_placeholder_password)) },
                     modifier = Modifier.padding(5.dp, 0.dp)
@@ -106,17 +118,9 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
-            val context = LocalContext.current
             Button(
-                onClick = {
-                    viewModel.signIn().let {
-                        if(viewModel.response.value) {
-                            navController.navigate(Routing.GroupsScreen.route)
-                        } else {
-                            Toast.makeText(context, viewModel.error.value, Toast.LENGTH_LONG).show()
-                        }
-                    }
-                },
+                onClick = { viewModel.signIn() },
+                enabled = !uiState.isLoading,
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
             ) {
@@ -125,11 +129,10 @@ fun LoginScreen(
                     color = MaterialTheme.colorScheme.background
                 )
             }
-            if (isResponse.value) navController.navigate(Routing.GroupsScreen.route)
             Spacer(modifier = Modifier.height(12.dp))
 
             TextBodyMedium(text = stringResource(id = R.string.login_register_text))
-            TextButton(onClick = { navController.navigate(Routing.RegistrationScreen.route) }) {
+            TextButton(onClick = { onRegistrationClick() }) {
                 TextBodyMedium(
                     text = stringResource(id = R.string.login_register_link),
                     color = Color.Blue
